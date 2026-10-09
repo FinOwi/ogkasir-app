@@ -7,6 +7,13 @@ var Lic = {
     if (!s.lic) s.lic = {};
     var lic = s.lic, now = Date.now();
     if (!lic.trialStart) lic.trialStart = now; // install lama: trial mulai dari versi ini
+    // verifikasi ulang kode tersimpan — mis. habis restore backup di device lain,
+    // kode device lain tidak boleh ikut aktif
+    if (lic.code) {
+      var vr = LicCrypto.verifyCode(lic.code, this.deviceCode(), this.todayDays());
+      if (vr.ok) lic.expDays = vr.expDays;
+      else { delete lic.code; delete lic.expDays; }
+    }
     if (!lic.lastSeen || now > lic.lastSeen) lic.lastSeen = now;
     KDB.save();
   },
@@ -80,7 +87,7 @@ var Lic = {
     if (r.ok) {
       UI.closeModal();
       UI.toast('Aktif sampai ' + K.fmtDate(r.expDays * 864e5) + ' 🎉');
-      App.boot();
+      if (App._booted) App.rerender(); else App.boot();
     } else {
       UI.toast(r.msg);
     }

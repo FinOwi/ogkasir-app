@@ -8,8 +8,6 @@ var App = {
     KDB.load();
     this.applyTheme();
     this.renderHeader();
-    Lic.init();
-    if (!Lic.valid()) { Lic.showLock(); return; }
     var fp = document.getElementById('kFilePick');
     fp.addEventListener('change', function () {
       if (!fp.files || !fp.files[0]) return;
@@ -17,6 +15,8 @@ var App = {
       rd.onload = function () { Set.doRestore(rd.result); fp.value = ''; };
       rd.readAsText(fp.files[0]);
     });
+    Lic.init();
+    if (!Lic.valid()) { Lic.showLock(); return; }
     this.boot();
   },
 
@@ -33,6 +33,7 @@ var App = {
     var pin = KDB.data.settings.pin;
     if (pin) this.pinGate();
     else { this.unlocked = true; this.rerender(); }
+    this._booted = true;
   },
 
   applyTheme: function () {

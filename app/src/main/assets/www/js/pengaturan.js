@@ -61,6 +61,7 @@ var Set = {
       var self = this;
       UI.confirm('Restore akan MENGGANTI semua data saat ini dengan file backup. Lanjut?', 'Restore', function () {
         KDB.data = d;
+        Lic.init(); // verifikasi ulang lisensi untuk device ini
         KDB.save();
         App.applyTheme();
         App.renderHeader();

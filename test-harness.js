@@ -128,6 +128,31 @@ try {
   KDB.data.settings.lic = { trialStart: Date.now(), lastSeen: Date.now() + 30 * 864e5 };
   ok(Lic.status().state === 'expired', 'anti-mundur-jam');
 
+  /* ---- fix audit: lisensi device lain tidak ikut via backup/restore ---- */
+  var devA = LicCrypto.deviceCode('and:device-A');
+  var codeA = LicCrypto.genCode(devA, today + 30);
+  KDB.data.settings.lic = { trialStart: Date.now() - 8 * 864e5, code: codeA, expDays: today + 30, lastSeen: Date.now() };
+  KDB.save();
+  Lic.init();
+  var licAfter = KDB.data.settings.lic;
+  ok(!licAfter.code && !licAfter.expDays && Lic.status().state === 'expired',
+    'kode device lain dibersihkan saat init (anti-bypass backup)');
+  var dcNow = Lic.deviceCode();
+  var codeNow = LicCrypto.genCode(dcNow, today + 30);
+  KDB.data.settings.lic = { trialStart: Date.now(), code: codeNow, expDays: today + 30, lastSeen: Date.now() };
+  KDB.save();
+  Lic.init();
+  ok(Lic.status().state === 'active', 'kode device sendiri tetap valid setelah init');
+
+  /* ---- fix audit: doActivate saat app sudah jalan tidak reboot PIN ---- */
+  App._booted = true;
+  var bootCalled = false, origBoot = App.boot;
+  App.boot = function () { bootCalled = true; };
+  document.getElementById('kLicCode').value = LicCrypto.genCode(Lic.deviceCode(), Lic.todayDays() + 60);
+  Lic.doActivate();
+  App.boot = origBoot;
+  ok(!bootCalled && Lic.valid(), 'aktivasi dari pengaturan tidak memanggil boot ulang');
+
   console.log(fails.length ? '\n' + fails.length + ' GAGAL' : '\nSEMUA LOLOS ✓');
   process.exit(fails.length ? 1 : 0);
 } catch (e) {
