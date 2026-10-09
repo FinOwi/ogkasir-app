@@ -2,7 +2,7 @@
 var LicCrypto = (function () {
   /* Kunci rahasia: dipecah agar tidak terbaca sekilas (obfuskasi ringan).
      CATATAN: diganti => semua kode lama tidak berlaku. */
-  var SECRET = ['kasir', 'ku', '-', 'lic', '-', 's3cr3t', '-', '2026', '!', 'bw'].join('');
+  var SECRET = ['ogka', 'sir', '-', 'lic', '-', 'pr0', 's3cr3t', '-', '2026', '!', 'og'].join('');
   var DEV_ALPHA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // tanpa I,L,O,0,1
 
   /* SHA-256 (ASCII/Latin-1) */
@@ -83,8 +83,8 @@ var LicCrypto = (function () {
 
   /* Kode device 8 char dari ID mentah */
   function deviceCode(rawId) {
-    var h = sha256('KKU|' + rawId), out = '';
-    for (var i = 0; i < 8; i++) out += DEV_ALPHA[parseInt(h.substr(i * 2, 2), 16) % 32];
+    var h = sha256('OGK|' + rawId), out = '';
+    for (var i = 0; i < 8; i++) out += DEV_ALPHA[parseInt(h.substr(i * 2, 2), 16) % DEV_ALPHA.length];
     return out;
   }
   function fmtDevice(d) { return d.substr(0, 4) + '-' + d.substr(4, 4); }
