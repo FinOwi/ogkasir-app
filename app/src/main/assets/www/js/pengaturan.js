@@ -3,6 +3,7 @@ var Set = {
   render: function () {
     var s = KDB.data.settings;
     var h = Lic.licCard();
+    h += Upd.card();
     h += '<div class="k-card"><h3>🏪 Profil Toko</h3>' +
       '<div class="k-fld"><label>Nama toko</label><input class="k-in" id="sShop" value="' + K.esc(s.shop) + '"></div>' +
       '<div class="k-fld"><label>Alamat (muncul di struk)</label><input class="k-in" id="sAddr" value="' + K.esc(s.addr) + '" placeholder="cth: Jl. Merdeka No. 10"></div>' +

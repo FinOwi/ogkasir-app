@@ -180,12 +180,135 @@ public class MainActivity extends Activity {
                 } catch (Exception e) { return "?"; }
             }
         }, "KasirKuNative");
+        setupUpdater();
         setContentView(webView);
         if (savedInstanceState != null) {
             webView.restoreState(savedInstanceState);
         } else {
             webView.loadUrl("file:///android_asset/www/index.html");
         }
+    }
+
+    /* ----- Auto-update via GitHub Releases ----- */
+    private void setupUpdater() {
+        webView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void checkUpdate() {
+                new Thread(() -> {
+                    try {
+                        java.net.HttpURLConnection con = (java.net.HttpURLConnection)
+                                new java.net.URL("https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest").openConnection();
+                        con.setRequestProperty("Accept", "application/vnd.github+json");
+                        con.setRequestProperty("User-Agent", "OGKasir-Updater");
+                        con.setConnectTimeout(15000);
+                        con.setReadTimeout(15000);
+                        if (con.getResponseCode() != 200) { updResult("{\"error\":\"HTTP " + con.getResponseCode() + "\"}"); return; }
+                        java.util.Scanner sc = new java.util.Scanner(con.getInputStream(), "UTF-8").useDelimiter("\\A");
+                        String body = sc.hasNext() ? sc.next() : "{}";
+                        sc.close();
+                        JSONObject rel = new JSONObject(body);
+                        int latestCode = Integer.parseInt(rel.optString("tag_name", "0").replaceAll("[^0-9]", ""));
+                        String apkUrl = "";
+                        org.json.JSONArray assets = rel.optJSONArray("assets");
+                        if (assets != null) for (int i = 0; i < assets.length(); i++) {
+                            JSONObject a = assets.getJSONObject(i);
+                            if (a.optString("name", "").endsWith(".apk")) { apkUrl = a.optString("browser_download_url", ""); break; }
+                        }
+                        int cur = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                        JSONObject out = new JSONObject();
+                        out.put("hasUpdate", latestCode > cur && !apkUrl.isEmpty());
+                        out.put("versionCode", latestCode);
+                        out.put("versionName", rel.optString("name", ""));
+                        out.put("notes", rel.optString("body", ""));
+                        out.put("url", apkUrl);
+                        out.put("current", cur);
+                        updResult(out.toString());
+                    } catch (Exception e) {
+                        updResult("{\"error\":\"" + String.valueOf(e.getMessage()).replace("\"", "") + "\"}");
+                    }
+                }).start();
+            }
+
+            @JavascriptInterface
+            public void downloadUpdate(final String url, final String fileName) {
+                new Thread(() -> {
+                    java.io.InputStream in = null;
+                    java.io.FileOutputStream fos = null;
+                    try {
+                        java.io.File dir = getExternalFilesDir("updates");
+                        if (dir != null) dir.mkdirs();
+                        java.io.File out = new java.io.File(dir, fileName);
+                        java.net.HttpURLConnection con = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
+                        con.setRequestProperty("User-Agent", "OGKasir-Updater");
+                        con.setRequestProperty("Accept", "application/octet-stream");
+                        con.setConnectTimeout(15000);
+                        con.setReadTimeout(30000);
+                        con.connect();
+                        int total = con.getContentLength();
+                        in = con.getInputStream();
+                        fos = new java.io.FileOutputStream(out);
+                        byte[] buf = new byte[8192];
+                        int n, lastPct = -1;
+                        long done = 0;
+                        while ((n = in.read(buf)) > 0) {
+                            fos.write(buf, 0, n);
+                            done += n;
+                            if (total > 0) {
+                                int pct = (int) (done * 100 / total);
+                                if (pct != lastPct) { lastPct = pct; updProgress(pct); }
+                            }
+                        }
+                        updProgress(100);
+                        installApk(fileName);
+                    } catch (Exception e) {
+                        updError(String.valueOf(e.getMessage()));
+                    } finally {
+                        try { if (fos != null) fos.close(); } catch (Exception ignored) {}
+                        try { if (in != null) in.close(); } catch (Exception ignored) {}
+                    }
+                }).start();
+            }
+        }, "OGKasirUpdater");
+    }
+
+    private void updResult(final String json) {
+        if (webView == null) return;
+        webView.post(() -> webView.evaluateJavascript(
+                "window.ogkasirUpdateResult && window.ogkasirUpdateResult(" + JSONObject.quote(json) + ")", null));
+    }
+
+    private void updProgress(final int pct) {
+        if (webView == null) return;
+        webView.post(() -> webView.evaluateJavascript(
+                "window.ogkasirUpdateProgress && window.ogkasirUpdateProgress(" + pct + ")", null));
+    }
+
+    private void updError(final String msg) {
+        if (webView == null) return;
+        final String m = msg == null ? "?" : msg.replace("\"", "");
+        webView.post(() -> webView.evaluateJavascript(
+                "window.ogkasirUpdateError && window.ogkasirUpdateError(" + JSONObject.quote(m) + ")", null));
+    }
+
+    private void installApk(final String fileName) {
+        runOnUiThread(() -> {
+            try {
+                if (android.os.Build.VERSION.SDK_INT >= 26 && !getPackageManager().canRequestPackageInstalls()) {
+                    Intent s = new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                            Uri.parse("package:" + getPackageName()));
+                    startActivity(s);
+                    webView.evaluateJavascript("window.ogkasirNeedPermission && window.ogkasirNeedPermission()", null);
+                    return;
+                }
+                Uri uri = Uri.parse("content://com.kasirku.app.update/updates/" + fileName);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, "application/vnd.android.package-archive");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } catch (Exception e) {
+                updError(String.valueOf(e.getMessage()));
+            }
+        });
     }
 
     private void saveResult(final boolean ok, final String name, final String err, final String uri) {

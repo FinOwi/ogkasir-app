@@ -213,3 +213,7 @@ html[data-theme="dark"] .k-tag { color: var(--brand); }
   .k-grid { grid-template-columns: repeat(4, 1fr); }
   .k-fab { right: max(24px, calc(50% - 576px)); }
 }
+
+/* progress bar unduhan update */
+.prog{height:10px;background:var(--bg);border-radius:6px;overflow:hidden;margin-top:8px;border:1px solid var(--border);}
+.prog > div{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--primary),#e8a83e);transition:width .4s;}

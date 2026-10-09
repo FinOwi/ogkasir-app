@@ -50,7 +50,7 @@ global.KasirKuNative = { deviceId: function () { return 'test-android-id-123'; }
 var fs = require('fs');
 var dir = '/home/hatch/workspace/kasirku/app/src/main/assets/www/js/';
 var all = ['store.js', 'ui.js', 'kasir.js', 'menu.js', 'stok.js', 'laporan.js', 'xlsx.js',
-  'pengaturan.js', 'lic-crypto.js', 'license.js', 'app.js']
+  'pengaturan.js', 'lic-crypto.js', 'license.js', 'update.js', 'app.js']
   .map(function (f) { return fs.readFileSync(dir + f, 'utf8'); }).join('\n');
 eval(all);
 
