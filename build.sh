@@ -11,7 +11,7 @@ VN=$(grep -oP 'versionName="\K[^"]+' app/src/main/AndroidManifest.xml)
 echo "== Build OGKasir v$VN (code $VC) =="
 rm -rf build && mkdir -p build/classes build/dex build/gen
 javac -source 17 -target 17 -cp ~/android-sdk/platforms/android-34/android.jar -d build/classes \
-  app/src/main/java/com/kasirku/app/MainActivity.java
+  $(find app/src/main/java -name "*.java")
 CLASSES=$(find build/classes -name "*.class" | tr '\n' ' ')
 java -cp $BT/lib/d8.jar com.android.tools.r8.D8 --min-api 29 --release --output build/dex $CLASSES
 $BT/aapt2 compile --dir app/src/main/res -o build/compiled_res.zip
