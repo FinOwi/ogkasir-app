@@ -44,7 +44,8 @@ var Lap = {
       '<div class="k-stat k-grn"><div class="k-l">📈 Laba kotor</div><div class="k-v">' + K.rp(laba) + '</div></div>' +
       '<div class="k-stat"><div class="k-l">🧾 Transaksi</div><div class="k-v">' + txs.length + '</div></div>' +
       '<div class="k-stat"><div class="k-l">🧮 Rata-rata / trx</div><div class="k-v">' + K.rp(txs.length ? Math.round(omzet / txs.length) : 0) + '</div></div></div>';
-    h += '<div class="k-card"><h3>' + ((this.period === 'today' || this.period === 'yesterday') ? '📊 Omzet Per Jam' : '📊 Omzet Harian') + '</h3><canvas class="k-chart" id="kChart"></canvas></div>';
+    var chartLabel = r.label.replace('Hari ini', 'Hari Ini').replace('Bulan ini', 'Bulan Ini');
+    h += '<div class="k-card"><h3>📊 Omzet ' + chartLabel + '</h3><canvas class="k-chart" id="kChart"></canvas></div>';
     var agg = {};
     for (var a = 0; a < txs.length; a++) {
       for (var b = 0; b < txs[a].items.length; b++) {
