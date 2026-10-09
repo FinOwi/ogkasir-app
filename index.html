@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KasirKu — Download</title>
+<title>OGKasir — Download</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(160deg, #3b2a1e, #6b4423); color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
@@ -27,7 +27,7 @@
 <body>
 <div class="card">
   <div class="logo">☕</div>
-  <h1>KasirKu</h1>
+  <h1>OGKasir</h1>
   <div class="tag">Aplikasi kasir (POS) untuk warkop &amp; F&B — offline, Bahasa Indonesia</div>
   <div class="trial">🎉 GRATIS trial 7 hari — full fitur</div>
   <div class="feat">
@@ -45,7 +45,7 @@
     · 1 tahun — <b>Rp 500rb</b><br>
     <span style="opacity:.7">Trial habis? Chat kami untuk kode aktivasi 👇</span>
   </div>
-  <a class="wa" href="https://wa.me/6281396048839?text=Halo!%20Saya%20sudah%20install%20KasirKu%20dan%20ingin%20minta%20kode%20aktivasi.">💬 Minta Kode Aktivasi via WA</a>
+  <a class="wa" href="https://wa.me/6281396048839?text=Halo!%20Saya%20sudah%20install%20OGKasir%20dan%20ingin%20minta%20kode%20aktivasi.">💬 Minta Kode Aktivasi via WA</a>
   <div class="steps">
     <b>Cara install:</b><br>
     1. Ketuk tombol download di atas<br>
@@ -56,7 +56,7 @@
   <div class="foot">Butuh Android 10 ke atas · Data tersimpan aman di HP kamu</div>
 </div>
 <script>
-fetch('https://api.github.com/repos/FinOwi/kasirku-app/releases/latest')
+fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest')
   .then(r => r.json())
   .then(d => {
     var apk = (d.assets || []).find(a => a.name.endsWith('.apk'));
@@ -65,7 +65,7 @@ fetch('https://api.github.com/repos/FinOwi/kasirku-app/releases/latest')
       btn.href = apk.browser_download_url;
       btn.style.pointerEvents = 'auto';
       btn.style.opacity = '1';
-      btn.textContent = '⬇️ Download KasirKu ' + (d.name || '');
+      btn.textContent = '⬇️ Download OGKasir ' + (d.name || '');
       document.getElementById('ver').textContent = 'Ukuran ±' + Math.round(apk.size / 1024) + ' KB · ' + new Date(d.published_at).toLocaleDateString('id-ID');
     } else { btn.textContent = 'Belum ada rilis'; }
   })

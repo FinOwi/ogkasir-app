@@ -1,4 +1,4 @@
-/* KasirKu - pengaturan: profil toko, backup, PIN, tema */
+/* OGKasir - pengaturan: profil toko, backup, PIN, tema */
 var Set = {
   render: function () {
     var s = KDB.data.settings;
@@ -29,7 +29,7 @@ var Set = {
     var ver = '?';
     try { if (window.KasirKuNative && KasirKuNative.appVersion) ver = KasirKuNative.appVersion(); } catch (e) {}
     h += '<div class="k-card"><h3>ℹ️ Tentang</h3>' +
-      '<div class="k-row"><div><b>KasirKu</b><div class="k-small k-muted">Aplikasi kasir warkop & F&B • v' + K.esc(ver) + '</div></div>' +
+      '<div class="k-row"><div><b>OGKasir</b><div class="k-small k-muted">Aplikasi kasir warkop & F&B • v' + K.esc(ver) + '</div></div>' +
       '<div style="font-size:34px">☕</div></div>' +
       '<div class="k-small k-muted" style="margin-top:8px">Data tersimpan aman di HP ini (offline).</div></div>';
     return h;
@@ -49,7 +49,7 @@ var Set = {
     var json = JSON.stringify(KDB.data);
     var d = new Date();
     function p2(x) { return (x < 10 ? '0' : '') + x; }
-    UI.saveFile('kasirku-backup-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '.json', json, 'application/json');
+    UI.saveFile('ogkasir-backup-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '.json', json, 'application/json');
   },
   restore: function () {
     document.getElementById('kFilePick').click();

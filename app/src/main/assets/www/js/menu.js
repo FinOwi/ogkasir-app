@@ -1,4 +1,4 @@
-/* KasirKu - kelola menu & kategori */
+/* OGKasir - kelola menu & kategori */
 var Menu = {
   render: function () {
     var D = KDB.data;

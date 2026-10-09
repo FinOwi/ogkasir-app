@@ -1,4 +1,4 @@
-/* KasirKu - kripto lisensi (dipakai aplikasi & generator; offline) */
+/* OGKasir - kripto lisensi (dipakai aplikasi & generator; offline) */
 var LicCrypto = (function () {
   /* Kunci rahasia: dipecah agar tidak terbaca sekilas (obfuskasi ringan).
      CATATAN: diganti => semua kode lama tidak berlaku. */

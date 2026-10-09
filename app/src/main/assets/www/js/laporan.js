@@ -1,4 +1,4 @@
-/* KasirKu - laporan penjualan */
+/* OGKasir - laporan penjualan */
 var Lap = {
   period: 'today', // today | yesterday | 7d | 30d | month
 

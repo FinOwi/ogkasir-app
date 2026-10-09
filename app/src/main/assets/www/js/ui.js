@@ -1,4 +1,4 @@
-/* KasirKu - shared UI primitives */
+/* OGKasir - shared UI primitives */
 var UI = {
   toast: function (msg) {
     var w = document.getElementById('kToast');

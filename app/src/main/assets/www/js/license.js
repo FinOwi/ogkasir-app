@@ -1,4 +1,4 @@
-/* KasirKu - sistem lisensi: trial 7 hari + kode aktivasi per device (offline) */
+/* OGKasir - sistem lisensi: trial 7 hari + kode aktivasi per device (offline) */
 var Lic = {
   TRIAL_DAYS: 7,
 
@@ -93,7 +93,7 @@ var Lic = {
     var dc = LicCrypto.fmtDevice(this.deviceCode());
     document.getElementById('kPage').innerHTML =
       '<div class="k-pinwrap"><div style="font-size:52px">☕</div>' +
-      '<h3 style="margin:10px 0 4px">KasirKu</h3>' +
+      '<h3 style="margin:10px 0 4px">OGKasir</h3>' +
       '<div class="k-small k-muted" style="margin-bottom:14px;text-align:center">Masa trial 7 hari telah berakhir.<br>Data kamu aman — aktifkan untuk lanjut.</div>' +
       '<div class="k-card" style="width:100%;max-width:360px">' +
       '<div class="k-fld"><label>Kode Device — kirim ke penjual via WA</label>' +

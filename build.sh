@@ -1,6 +1,6 @@
 #!/bin/bash
-# Build KasirKu APK (signed dengan release key). Versi dibaca dari AndroidManifest.xml
-# Hasil: KasirKu-v<versionName>.apk di direktori ini
+# Build OGKasir APK (signed dengan release key). Versi dibaca dari AndroidManifest.xml
+# Hasil: OGKasir-v<versionName>.apk di direktori ini
 set -e
 export PATH=~/jdk17/bin:$PATH
 cd "$(dirname "$0")"
@@ -8,7 +8,7 @@ BT=~/android-sdk/build-tools/34.0.0
 PASS=$(cat keystore/.storepass)
 VC=$(grep -oP 'versionCode="\K[0-9]+' app/src/main/AndroidManifest.xml)
 VN=$(grep -oP 'versionName="\K[^"]+' app/src/main/AndroidManifest.xml)
-echo "== Build KasirKu v$VN (code $VC) =="
+echo "== Build OGKasir v$VN (code $VC) =="
 rm -rf build && mkdir -p build/classes build/dex build/gen
 javac -source 17 -target 17 -cp ~/android-sdk/platforms/android-34/android.jar -d build/classes \
   app/src/main/java/com/kasirku/app/MainActivity.java
@@ -21,7 +21,7 @@ $BT/aapt2 link -o build/app-unsigned.apk -I ~/android-sdk/platforms/android-34/a
 cp build/dex/classes.dex build/classes.dex
 zip -q -j -0 build/app-unsigned.apk build/classes.dex
 $BT/zipalign -f 4 build/app-unsigned.apk build/app-aligned.apk
-OUT="KasirKu-v$VN.apk"
+OUT="OGKasir-v$VN.apk"
 java -jar $BT/lib/apksigner.jar sign --ks keystore/kasirku-release.keystore \
   --ks-pass pass:"$PASS" --key-pass pass:"$PASS" --out "$OUT" build/app-aligned.apk
 java -jar $BT/lib/apksigner.jar verify "$OUT"

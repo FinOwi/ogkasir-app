@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kasirku.app"
-    android:versionCode="12"
-    android:versionName="1.11">
+    android:versionCode="13"
+    android:versionName="1.12">
 
     <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="34" />
     <supports-screens android:smallScreens="true" android:normalScreens="true"
         android:largeScreens="true" android:xlargeScreens="true" />
 
     <application
-        android:label="KasirKu"
+        android:label="OGKasir"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"

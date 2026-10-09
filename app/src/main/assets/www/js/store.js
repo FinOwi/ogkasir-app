@@ -1,4 +1,4 @@
-/* KasirKu - data layer (localStorage) */
+/* OGKasir - data layer (localStorage) */
 var KDB = {
   key: 'kasirku_db_v1',
   data: null,

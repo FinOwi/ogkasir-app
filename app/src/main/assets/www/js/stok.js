@@ -1,4 +1,4 @@
-/* KasirKu - stok opname */
+/* OGKasir - stok opname */
 var Stok = {
   render: function () {
     var D = KDB.data;

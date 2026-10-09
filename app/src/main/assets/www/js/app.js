@@ -1,4 +1,4 @@
-/* KasirKu - init & router */
+/* OGKasir - init & router */
 var App = {
   page: 'kasir',
   unlocked: false,
@@ -98,7 +98,7 @@ var App = {
     var self = this;
     document.getElementById('kPage').innerHTML =
       '<div class="k-pinwrap"><div style="font-size:52px">☕</div>' +
-      '<h3 style="margin:10px 0 0">KasirKu Terkunci</h3>' +
+      '<h3 style="margin:10px 0 0">OGKasir Terkunci</h3>' +
       '<div class="k-small k-muted">Masukkan PIN 6 digit</div>' +
       '<div class="k-pin-dots" id="kPinDots"><span></span><span></span><span></span><span></span><span></span><span></span></div>' +
       '<div class="k-pinpad">' +

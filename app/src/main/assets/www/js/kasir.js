@@ -1,4 +1,4 @@
-/* KasirKu - kasir, keranjang, pembayaran, struk, riwayat */
+/* OGKasir - kasir, keranjang, pembayaran, struk, riwayat */
 var Kasir = {
   cart: {},        // menuId -> qty
   cat: 'Semua',

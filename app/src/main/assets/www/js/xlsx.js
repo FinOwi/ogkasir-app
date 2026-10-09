@@ -1,4 +1,4 @@
-/* KasirKu - penulis file .xlsx asli (tanpa library) + export laporan rapi */
+/* OGKasir - penulis file .xlsx asli (tanpa library) + export laporan rapi */
 var XLSX = (function () {
   /* ---------- CRC32 ---------- */
   var T = (function () {
