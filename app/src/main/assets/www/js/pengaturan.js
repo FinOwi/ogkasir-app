@@ -15,7 +15,7 @@ var Set = {
       KDB.data.txs.filter(function (t) { return !t.voided; }).length + ' transaksi</div>' +
       '<div class="k-btn-row" style="margin-top:0"><button class="k-btn k-sec" onclick="Set.backup()">⬆️ Backup</button>' +
       '<button class="k-btn k-sec" onclick="Set.restore()">⬇️ Restore</button></div>' +
-      '<button class="k-btn k-sec" style="margin-top:10px" onclick="UI.openDownloads()">📁 Buka Folder Download</button>' +
+      '<button class="k-btn k-sec" style="margin-top:10px" onclick="UI.openLastExport()">📂 Buka Export Terakhir</button>' +
       '<button class="k-btn k-danger" style="margin-top:10px" onclick="Set.wipe()">🗑️ Hapus Semua Data</button></div>';
 
     h += '<div class="k-card"><h3>🔒 Keamanan</h3>' +

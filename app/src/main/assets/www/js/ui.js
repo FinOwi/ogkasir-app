@@ -84,6 +84,10 @@ var UI = {
 
   savedDialog: function (name, uri, mime) {
     UI._lastFile = uri ? { uri: uri, mime: mime || '' } : null;
+    try {
+      // simpan permanen agar tombol "buka export terakhir" tetap jalan habis restart
+      if (uri) { KDB.data.settings.lastExport = { uri: uri, mime: mime || '', name: name }; KDB.save(); }
+    } catch (e) {}
     var btns = '<button class="k-btn k-ghost" onclick="UI.closeModal()">Tutup</button>';
     if (UI._lastFile && window.KasirKuNative && KasirKuNative.openFile) {
       btns += '<button class="k-btn k-sec" onclick="UI.openFile()">📂 Buka File</button>';
@@ -103,6 +107,19 @@ var UI = {
     try {
       if (window.KasirKuNative && KasirKuNative.openFile) KasirKuNative.openFile(f.uri, f.mime);
     } catch (e) {}
+  },
+
+  openLastExport: function () {
+    var f = null;
+    try { f = KDB.data.settings.lastExport; } catch (e) {}
+    if (!f || !f.uri) { UI.toast('Belum ada file export — export dulu dari Laporan'); return; }
+    try {
+      if (window.KasirKuNative && KasirKuNative.openFile) {
+        KasirKuNative.openFile(f.uri, f.mime || '');
+        return;
+      }
+    } catch (e) {}
+    UI.toast('Buka file hanya bisa di aplikasi Android');
   },
 
   /* simpan file biner (xlsx) dari base64, dikirim bertahap per 20KB */
