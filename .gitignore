@@ -1,0 +1,10 @@
+# Secrets & build outputs — JANGAN di-commit
+keystore/
+*.storepass
+*.apk
+*.idsig
+.github-token
+build/
+# Tool generator lisensi (milik penjual, bukan untuk publik)
+license-gen.html
+license-gen-template.html
