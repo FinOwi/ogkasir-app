@@ -183,7 +183,7 @@ var XLSX = (function () {
   return { build: build, esc: esc };
 })();
 
-/* ---------- export laporan KasirKu ke .xlsx rapi ---------- */
+/* ---------- export laporan OGKasir ke .xlsx rapi ---------- */
 function kasirkuExportExcel() {
   try {
     kasirkuExportExcelInner();

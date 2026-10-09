@@ -44,7 +44,7 @@ var Lap = {
       '<div class="k-stat k-grn"><div class="k-l">📈 Laba kotor</div><div class="k-v">' + K.rp(laba) + '</div></div>' +
       '<div class="k-stat"><div class="k-l">🧾 Transaksi</div><div class="k-v">' + txs.length + '</div></div>' +
       '<div class="k-stat"><div class="k-l">🧮 Rata-rata / trx</div><div class="k-v">' + K.rp(txs.length ? Math.round(omzet / txs.length) : 0) + '</div></div></div>';
-    h += '<div class="k-card"><h3>📊 Omzet Harian</h3><canvas class="k-chart" id="kChart"></canvas></div>';
+    h += '<div class="k-card"><h3>' + ((this.period === 'today' || this.period === 'yesterday') ? '📊 Omzet Per Jam' : '📊 Omzet Harian') + '</h3><canvas class="k-chart" id="kChart"></canvas></div>';
     var agg = {};
     for (var a = 0; a < txs.length; a++) {
       for (var b = 0; b < txs[a].items.length; b++) {
@@ -100,17 +100,25 @@ var Lap = {
     c.scale(dpr, dpr);
     var days = Math.max(1, Math.round((r.end - r.start) / 864e5));
     if (days > 31) days = 31;
+    var hourly = (days === 1); // 1 hari -> pecah per jam (24 batang), bukan 1 batang raksasa
+    var n = hourly ? 24 : days;
     var vals = [], labels = [];
-    for (var i = 0; i < days; i++) {
-      var ds = r.start + i * 864e5, de = ds + 864e5;
+    for (var i = 0; i < n; i++) {
+      var ds, de, lab;
+      if (hourly) {
+        ds = r.start + i * 36e5; de = ds + 36e5; lab = i + '';
+      } else {
+        ds = r.start + i * 864e5; de = ds + 864e5;
+        var d = new Date(ds);
+        lab = d.getDate() + '/' + (d.getMonth() + 1);
+      }
       var sum = 0;
       var txs = KDB.data.txs;
       for (var j = 0; j < txs.length; j++) {
         if (!txs[j].voided && txs[j].at >= ds && txs[j].at < de) sum += txs[j].total;
       }
       vals.push(sum);
-      var d = new Date(ds);
-      labels.push(d.getDate() + '/' + (d.getMonth() + 1));
+      labels.push(lab);
     }
     var max = 0;
     for (var k = 0; k < vals.length; k++) if (vals[k] > max) max = vals[k];
