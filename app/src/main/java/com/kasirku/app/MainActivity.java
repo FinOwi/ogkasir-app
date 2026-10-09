@@ -173,6 +173,23 @@ public class MainActivity extends Activity {
             }
 
             @JavascriptInterface
+            public void openUrl(final String url) {
+                // Buka link eksternal (IG/WA) di browser aplikasi lain
+                runOnUiThread(() -> {
+                    try {
+                        if (url == null) return;
+                        String u = url.trim();
+                        if (!u.startsWith("http://") && !u.startsWith("https://")) return;
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(u));
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                    } catch (Exception e) {
+                        Log.e("KasirKu", "openUrl gagal", e);
+                    }
+                });
+            }
+
+            @JavascriptInterface
             public String appVersion() {
                 try {
                     android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);

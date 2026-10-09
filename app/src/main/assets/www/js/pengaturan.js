@@ -32,6 +32,10 @@ var Set = {
     h += '<div class="k-card"><h3>ℹ️ Tentang</h3>' +
       '<div class="k-row"><div><b>OGKasir</b><div class="k-small k-muted">Aplikasi kasir warkop & F&B • v' + K.esc(ver) + '</div></div>' +
       '<div style="font-size:34px">☕</div></div>' +
+      '<div class="k-row" style="margin-top:10px"><div><b>📸 Instagram</b><div class="k-small k-muted">@ogkasir</div></div>' +
+      '<button class="k-chip" onclick="UI.openLink(\'https://www.instagram.com/ogkasir\')">Buka</button></div>' +
+      '<div class="k-row" style="margin-top:8px"><div><b>💬 WhatsApp</b><div class="k-small k-muted">+62 882-7940-6268</div></div>' +
+      '<button class="k-chip" onclick="UI.openLink(\'https://wa.me/6288279406268\')">Chat</button></div>' +
       '<div class="k-small k-muted" style="margin-top:8px">Data tersimpan aman di HP ini (offline).</div></div>';
     return h;
   },

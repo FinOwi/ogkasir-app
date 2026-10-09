@@ -137,6 +137,13 @@ var UI = {
     } catch (e) {}
   },
 
+  openLink: function (url) {
+    try {
+      if (window.KasirKuNative && KasirKuNative.openUrl) { KasirKuNative.openUrl(url); return; }
+    } catch (e) {}
+    try { window.open(url, '_blank'); } catch (e2) {}
+  },
+
   shareText: function (subject, text) {
     try {
       if (window.KasirKuNative && KasirKuNative.shareText) {
