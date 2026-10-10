@@ -23,7 +23,14 @@ var KDB = {
   },
 
   save: function () {
-    try { localStorage.setItem(this.key, JSON.stringify(this.data)); } catch (e) {}
+    try { localStorage.setItem(this.key, JSON.stringify(this.data)); }
+    catch (e) {
+      // penyimpanan penuh (mis. kebanyakan foto menu) — jangan gagal diam-diam
+      if (!KDB._quotaWarned && e && (e.name === 'QuotaExceededError' || e.code === 22)) {
+        KDB._quotaWarned = true;
+        try { UI.toast('⚠️ Penyimpanan penuh — hapus foto menu yg tak perlu'); } catch (e2) {}
+      }
+    }
   },
 
   wipe: function () {
@@ -129,5 +136,9 @@ var K = {
   esc: function (s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  },
+  // untuk nilai string di dalam onclick='...': amankan backslash & kutip satu juga
+  escQ: function (s) {
+    return K.esc(String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"));
   }
 };

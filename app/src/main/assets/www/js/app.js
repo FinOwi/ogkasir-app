@@ -44,8 +44,8 @@ var App = {
   renderHeader: function () {
     var s = KDB.data.settings;
     document.getElementById('kHeader').innerHTML =
-      '<div class="k-head-row"><div class="k-shop">☕ ' + K.esc(s.shop) +
-      '<small>Aplikasi Kasir Warkop & F&B</small></div>' +
+      '<div class="k-head-row"><div class="k-shop">⚡ ' + K.esc(s.shop) +
+      '<small>Aplikasi Kasir UMKM</small></div>' +
       '<div class="k-date">' + K.fmtDate(Date.now()) + '</div></div>';
   },
 

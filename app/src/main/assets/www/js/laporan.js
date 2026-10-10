@@ -163,7 +163,7 @@ var Lap = {
     var csv = '\ufeff' + rows.map(function (x) { return x.join(';'); }).join('\n');
     var d = new Date(r.start);
     function p2(x) { return (x < 10 ? '0' : '') + x; }
-    var fname = 'kasirku-laporan-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '.csv';
+    var fname = 'ogkasir-laporan-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '.csv';
     UI.saveFile(fname, csv, 'text/csv');
   }
 };

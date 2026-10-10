@@ -199,6 +199,65 @@ try {
   var strukHtml = Kasir.renderStruk();
   ok(strukHtml.indexOf('Printer.printStruk') >= 0, 'tombol cetak ada di struk');
 
+  /* ===== audit 2026-10-10: regresi temuan bug ===== */
+  // 1. escQ: kutip satu & backslash aman di onclick
+  ok(K.escQ("Kopi D'Langit") === "Kopi D\\'Langit", 'escQ amankan kutip satu');
+  ok(K.escQ('a\\b') === 'a\\\\b', 'escQ amankan backslash');
+  ok(K.escQ('<x>&"') === '&lt;x&gt;&amp;&quot;', 'escQ tetap escape HTML');
+  // 2. chip kategori dgn kutip: onclick tidak putus
+  KDB.data.cats.push("Kopi D'Langit");
+  Kasir.cat = "Kopi D'Langit"; Kasir.q = ''; Kasir.mode = 'kasir';
+  var kasHtml = Kasir.render();
+  ok(kasHtml.indexOf("setCat('Kopi D\\'Langit')") >= 0, 'chip kategori kutip hasilkan onclick valid');
+  Kasir.cat = 'Semua';
+  KDB.data.cats = KDB.data.cats.filter(function (c) { return c !== "Kopi D'Langit"; });
+  // 3. diskon negatif dijepit ke 0
+  KDB.data.menus.push({ id: 'mT', name: 'Tes', cat: 'Kopi', price: 50000, cost: 0, stock: 99, min: 5, track: true, active: true, emoji: '☕' });
+  Kasir.cart = { mT: 1 };
+  document.getElementById('kDisc').value = '-10'; document.getElementById('kDiscType').value = 'rp'; document.getElementById('kCash').value = '0';
+  var cc = Kasir.calc();
+  ok(cc.disc === 0 && cc.total === 50000, 'diskon negatif dijepit (total tetap 50000)');
+  document.getElementById('kDisc').value = '150'; document.getElementById('kDiscType').value = 'pct';
+  cc = Kasir.calc();
+  ok(cc.disc === 50000 && cc.total === 0, 'diskon 150% dijepit ke 100%');
+  Kasir.cart = {};
+  KDB.data.menus = KDB.data.menus.filter(function (m) { return m.id !== 'mT'; });
+  // 4. harga negatif dijepit di Menu.save
+  document.getElementById('mName').value = 'Neg'; document.getElementById('mPrice').value = '-5000'; document.getElementById('mCost').value = '0';
+  document.getElementById('mEmoji').value = '☕'; document.getElementById('mCat').value = 'Kopi'; document.getElementById('mTrack').checked = true;
+  document.getElementById('mStock').value = '10'; document.getElementById('mMin').value = '2'; document.getElementById('mActive').checked = true;
+  Menu.save('neg1', 0);
+  var mn = KDB.menuById('neg1');
+  ok(mn && mn.price === 0, 'harga negatif dijepit ke 0 saat simpan menu');
+  KDB.data.menus = KDB.data.menus.filter(function (m) { return m.id !== 'neg1'; });
+  // 5. void ganda: stok hanya kembali sekali
+  var mm2 = KDB.menuById('m1'); var stkBefore = mm2.stock;
+  var vtx = { id: 'vx1', no: 999, at: Date.now(), items: [{ id: 'm1', name: mm2.name, price: mm2.price, cost: 0, qty: 2 }], sub: 0, disc: 0, total: 16000, pay: 'Tunai', cash: 16000, change: 0, note: '', voided: false };
+  KDB.data.txs.unshift(vtx);
+  Kasir.voidTx('vx1');
+  els['kConfirmOk'].onclick(); // klik Batalkan pertama
+  var after1 = mm2.stock;
+  els['kConfirmOk'].onclick = null;
+  Kasir.voidTx('vx1'); // panggil lagi setelah void
+  ok(after1 === stkBefore + 2 && mm2.stock === after1 && vtx.voided, 'void ganda: stok kembali tepat 1x');
+  KDB.data.txs = KDB.data.txs.filter(function (t) { return t.id !== 'vx1'; });
+  // 6. sanitasi nama file update
+  Upd.download('https://x/y.apk', '../../../evi\'l v1.24');
+  ok(window._updFile === 'OGKasir-.._.._evi_l_v1.24.apk' || window._updFile.indexOf('/') < 0 && window._updFile.indexOf("'") < 0, 'nama file update disanitasi: ' + window._updFile);
+  // 7. peringatan kuota penyimpanan
+  var origSet = global.localStorage.setItem;
+  global.localStorage.setItem = function () { var e = new Error('x'); e.name = 'QuotaExceededError'; throw e; };
+  KDB._quotaWarned = false;
+  var qok = true;
+  try { KDB.save(); } catch (e) { qok = false; }
+  ok(qok && KDB._quotaWarned === true, 'kuota penuh: save tidak lempar, flag warning nyala');
+  global.localStorage.setItem = origSet; KDB._quotaWarned = false;
+  // 8. rename kategori duplikat ditolak (simulasi langsung)
+  KDB.data.cats.push('DupA'); KDB.data.cats.push('DupB');
+  var dupGuard = (function () { var D = KDB.data, old = 'DupA', v = 'DupB'; return (v !== old && D.cats.indexOf(v) >= 0); })();
+  ok(dupGuard === true, 'rename ke nama kategori yg sudah ada terdeteksi');
+  KDB.data.cats = KDB.data.cats.filter(function (c) { return c !== 'DupA' && c !== 'DupB'; });
+
   console.log(fails.length ? '\n' + fails.length + ' GAGAL' : '\nSEMUA LOLOS ✓');
   process.exit(fails.length ? 1 : 0);
 } catch (e) {

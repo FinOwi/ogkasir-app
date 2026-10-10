@@ -246,6 +246,6 @@ function kasirkuExportExcelInner() {
   var b64data = XLSX.build('Laporan', rows, widths, merges);
   var d = new Date(r.start);
   function p2(x) { return (x < 10 ? '0' : '') + x; }
-  var fname = 'kasirku-laporan-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '.xlsx';
+  var fname = 'ogkasir-laporan-' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '.xlsx';
   UI.saveXlsx(fname, b64data);
 }

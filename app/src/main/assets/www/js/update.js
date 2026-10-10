@@ -56,6 +56,8 @@ var Upd = {
   download: function (url, vname) {
     var go = document.getElementById('updGo');
     if (go) { go.disabled = true; go.textContent = '⏳ Mengunduh...'; }
+    // sanitasi nama file: cegah path traversal dari nama rilis
+    vname = String(vname == null ? '' : vname).replace(/[^0-9A-Za-z.\-]/g, '_').slice(0, 40) || 'update';
     window._updFile = 'OGKasir-' + vname + '.apk';
     try { OGKasirUpdater.downloadUpdate(url, window._updFile); }
     catch (e) {

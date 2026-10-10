@@ -115,7 +115,7 @@ var Menu = {
   save: function (id, isEdit) {
     var name = document.getElementById('mName').value.trim();
     if (!name) { UI.toast('Nama menu wajib diisi'); return; }
-    var price = K.num(document.getElementById('mPrice').value);
+    var price = Math.max(0, K.num(document.getElementById('mPrice').value));
     var D = KDB.data;
     if (isEdit) {
       var m = KDB.menuById(id);
@@ -189,8 +189,8 @@ var Menu = {
       var n = D.menus.filter(function (m) { return m.cat === c; }).length;
       h += '<div class="k-li"><div class="k-tx"><div class="k-t1">' + K.esc(c) + '</div>' +
         '<div class="k-t2">' + n + ' menu</div></div>' +
-        '<button class="k-ico-btn" onclick="Menu.catRename(\'' + K.esc(c) + '\')">✏️</button> ' +
-        '<button class="k-ico-btn" onclick="Menu.catDel(\'' + K.esc(c) + '\')">🗑️</button></div>';
+        '<button class="k-ico-btn" onclick="Menu.catRename(\'' + K.escQ(c) + '\')">✏️</button> ' +
+        '<button class="k-ico-btn" onclick="Menu.catDel(\'' + K.escQ(c) + '\')">🗑️</button></div>';
     }
     h += '<div class="k-fld" style="margin-top:12px"><label>Kategori baru</label>' +
       '<div class="k-frow"><input class="k-in" id="kNewCat" placeholder="cth: Dessert">' +
@@ -217,6 +217,7 @@ var Menu = {
       var v = document.getElementById('kCatNew').value.trim();
       if (!v) return;
       var D = KDB.data;
+      if (v !== old && D.cats.indexOf(v) >= 0) { UI.toast('Kategori "' + v + '" sudah ada'); return; }
       var ix = D.cats.indexOf(old);
       if (ix >= 0) D.cats[ix] = v;
       for (var i = 0; i < D.menus.length; i++) if (D.menus[i].cat === old) D.menus[i].cat = v;

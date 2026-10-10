@@ -18,7 +18,7 @@ var Kasir = {
     h += '<input class="k-search" id="kKasirQ" placeholder="🔍 Cari menu..." value="' + K.esc(this.q) + '" oninput="Kasir.search(this.value)">';
     h += '<div class="k-chips">';
     for (var i = 0; i < cats.length; i++) {
-      h += '<button class="k-chip' + (this.cat === cats[i] ? ' k-on' : '') + '" onclick="Kasir.setCat(\'' + K.esc(cats[i]) + '\')">' + K.esc(cats[i]) + '</button>';
+      h += '<button class="k-chip' + (this.cat === cats[i] ? ' k-on' : '') + '" onclick="Kasir.setCat(\'' + K.escQ(cats[i]) + '\')">' + K.esc(cats[i]) + '</button>';
     }
     h += '</div><div class="k-grid">';
     var list = this.filteredMenus();
@@ -198,7 +198,7 @@ var Kasir = {
 
   calc: function () {
     var sub = this.cartTotal();
-    var discRaw = K.num(document.getElementById('kDisc') ? document.getElementById('kDisc').value : 0);
+    var discRaw = Math.max(0, K.num(document.getElementById('kDisc') ? document.getElementById('kDisc').value : 0));
     var dt = document.getElementById('kDiscType') ? document.getElementById('kDiscType').value : 'rp';
     var disc = dt === 'pct' ? Math.round(sub * Math.min(discRaw, 100) / 100) : Math.min(discRaw, sub);
     var total = sub - disc;
@@ -355,7 +355,7 @@ var Kasir = {
   detail: function (id) {
     var txs = KDB.data.txs, tx = null;
     for (var i = 0; i < txs.length; i++) if (txs[i].id === id) tx = txs[i];
-    if (!tx) return;
+    if (!tx || tx.voided) return;
     var h = '<h3 class="k-sheet-t">Transaksi #' + K.pad(tx.no, 4) + '</h3>';
     h += '<div class="k-small k-muted" style="margin-bottom:10px">' + K.fmtDateTime(tx.at) + ' • ' + K.esc(tx.pay) +
       (tx.note ? ' • ' + K.esc(tx.note) : '') + '</div>';
@@ -381,9 +381,10 @@ var Kasir = {
   voidTx: function (id) {
     var txs = KDB.data.txs, tx = null;
     for (var i = 0; i < txs.length; i++) if (txs[i].id === id) tx = txs[i];
-    if (!tx) return;
+    if (!tx || tx.voided) return;
     var self = this;
     UI.confirm('Batalkan transaksi #' + K.pad(tx.no, 4) + ' (' + K.rp(tx.total) + ')? Stok akan dikembalikan.', 'Batalkan', function () {
+      if (tx.voided) return; // cegah eksekusi ganda
       for (var j = 0; j < tx.items.length; j++) {
         var it = tx.items[j];
         var m = KDB.menuById(it.id);
