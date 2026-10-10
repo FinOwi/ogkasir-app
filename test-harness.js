@@ -258,6 +258,27 @@ try {
   ok(dupGuard === true, 'rename ke nama kategori yg sudah ada terdeteksi');
   KDB.data.cats = KDB.data.cats.filter(function (c) { return c !== 'DupA' && c !== 'DupB'; });
 
+  /* ===== crop foto menu (2026-10-10) ===== */
+  // gambar landscape 1200x800 di canvas 480
+  Menu.cropImg = { width: 1200, height: 800 };
+  Menu.cropSt = { scale: 0.6, cover: 0.6, tx: 0, ty: 0 };
+  Menu.cropClamp();
+  ok(Menu.cropSt.tx === 0 && Menu.cropSt.ty === 0, 'cropClamp: posisi tengah valid tidak digeser');
+  Menu.cropSt.tx = 100; Menu.cropSt.ty = -500;
+  Menu.cropClamp();
+  ok(Menu.cropSt.tx === 0 && Menu.cropSt.ty === 0, 'cropClamp: jepit ke batas gambar (tx=0, ty=0; tinggi pas 480)');
+  // zoom 2x dari tengah
+  Menu.cropSt = { scale: 0.6, cover: 0.6, tx: 0, ty: 0 };
+  Menu.cropZoomAt(2, 240, 240);
+  ok(Math.abs(Menu.cropSt.scale - 1.2) < 1e-9 && Math.abs(Menu.cropSt.tx + 240) < 1e-9, 'cropZoomAt: 2x dari tengah -> scale 1.2, tx -240');
+  // zoom tidak boleh lebih kecil dari cover
+  Menu.cropZoomAt(0.001, 240, 240);
+  ok(Math.abs(Menu.cropSt.scale - 0.6) < 1e-9, 'cropZoomAt: tidak bisa lebih kecil dari cover');
+  // zoom tidak boleh lebih dari 5x cover
+  Menu.cropZoomAt(100, 240, 240);
+  ok(Math.abs(Menu.cropSt.scale - 3.0) < 1e-9, 'cropZoomAt: dibatasi max 5x cover');
+  Menu.cropImg = null; Menu.cropSt = null;
+
   console.log(fails.length ? '\n' + fails.length + ' GAGAL' : '\nSEMUA LOLOS ✓');
   process.exit(fails.length ? 1 : 0);
 } catch (e) {

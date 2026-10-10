@@ -47,7 +47,7 @@ var Menu = {
     var m = id ? KDB.menuById(id) : { id: K.uid(), name: '', cat: D.cats[0] || '', price: 0, cost: 0, stock: 0, min: 5, track: true, active: true, emoji: '🍽️', photo: '', sample: false };
     this._photo = m.photo || '';
     var h = '<h3 class="k-sheet-t">' + (id ? '✏️ Ubah Menu' : '＋ Tambah Menu') + '</h3>';
-    h += '<div class="k-fld"><label>Foto menu (opsional)</label>' +
+    h += '<div class="k-fld"><label>Foto menu (bisa di-crop biar pas)</label>' +
       '<div class="k-photopick" id="mPhotoPrev">' + (this._photo ? '<img src="' + this._photo + '">' : '📷 Belum ada foto') + '</div>' +
       '<div class="k-btn-row" style="margin-top:8px"><button class="k-btn k-sec" onclick="Menu.pickPhoto()">📷 Pilih Foto</button>' +
       '<button class="k-btn k-ghost" onclick="Menu.clearPhoto()">Hapus Foto</button></div>' +
@@ -91,18 +91,21 @@ var Menu = {
       var img = new Image();
       img.onload = function () {
         try {
-          var max = 480, w = img.width, h = img.height;
+          // kecilkan dulu secukupnya (max 1200) biar ringan, lalu buka editor crop
+          var max = 1200, w = img.width, h = img.height;
           if (w > max || h > max) {
             var r = Math.min(max / w, max / h);
             w = Math.round(w * r); h = Math.round(h * r);
+            var cv0 = document.createElement('canvas');
+            cv0.width = w; cv0.height = h;
+            cv0.getContext('2d').drawImage(img, 0, 0, w, h);
+            var img2 = new Image();
+            img2.onload = function () { self.openCrop(img2); };
+            img2.onerror = function () { UI.toast('Gagal memproses foto'); };
+            img2.src = cv0.toDataURL('image/jpeg', 0.85);
+          } else {
+            self.openCrop(img);
           }
-          var cv = document.createElement('canvas');
-          cv.width = w; cv.height = h;
-          cv.getContext('2d').drawImage(img, 0, 0, w, h);
-          self._photo = cv.toDataURL('image/jpeg', 0.72);
-          var pv = document.getElementById('mPhotoPrev');
-          if (pv) pv.innerHTML = '<img src="' + self._photo + '">';
-          UI.toast('Foto ditambahkan ✓');
         } catch (e) { UI.toast('Gagal memproses foto'); }
       };
       img.onerror = function () { UI.toast('File bukan gambar'); };
@@ -110,6 +113,105 @@ var Menu = {
     };
     rd.readAsDataURL(f);
     input.value = '';
+  },
+
+  /* ---------- editor crop foto (kotak 1:1) ---------- */
+  cropImg: null,
+  cropSt: null, // {scale, cover, tx, ty} dalam piksel canvas 480
+  openCrop: function (img) {
+    this.cropImg = img;
+    var h = '<h3 class="k-sheet-t">✂️ Atur Foto</h3>' +
+      '<div class="k-small k-muted" style="margin-bottom:10px">Geser & cubit fotonya biar pas, lalu ketuk <b>Potong</b>.</div>' +
+      '<div style="display:flex;justify-content:center"><canvas id="kCropCv" width="480" height="480" ' +
+      'style="width:min(76vw,330px);height:min(76vw,330px);border-radius:14px;background:#111;touch-action:none"></canvas></div>' +
+      '<div class="k-btn-row" style="margin-top:12px">' +
+      '<button class="k-btn k-ghost" onclick="Menu.cropCancel()">Batal</button>' +
+      '<button class="k-btn k-sec" onclick="Menu.cropZoom(0.8)" style="flex:0 0 52px">－</button>' +
+      '<button class="k-btn k-sec" onclick="Menu.cropZoom(1.25)" style="flex:0 0 52px">＋</button>' +
+      '<button class="k-btn k-pri" onclick="Menu.cropOk()">✓ Potong</button></div>';
+    UI.openModal(h);
+    var cover = Math.max(480 / img.width, 480 / img.height);
+    this.cropSt = { scale: cover, cover: cover,
+      tx: (480 - img.width * cover) / 2, ty: (480 - img.height * cover) / 2 };
+    this.cropDraw();
+    var self = this;
+    var cv = document.getElementById('kCropCv');
+    var mode = 0, lx = 0, ly = 0, lastD = 0;
+    function pos(t) {
+      var r = cv.getBoundingClientRect();
+      return { x: (t.clientX - r.left) * 480 / r.width, y: (t.clientY - r.top) * 480 / r.height };
+    }
+    cv.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      if (e.touches.length === 1) { mode = 1; var p = pos(e.touches[0]); lx = p.x; ly = p.y; }
+      else if (e.touches.length >= 2) {
+        mode = 2;
+        var a = pos(e.touches[0]), b = pos(e.touches[1]);
+        lastD = Math.hypot(a.x - b.x, a.y - b.y);
+      }
+    }, { passive: false });
+    cv.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      if (!self.cropSt) return;
+      if (e.touches.length === 1 && mode === 1) {
+        var p = pos(e.touches[0]);
+        self.cropSt.tx += p.x - lx; self.cropSt.ty += p.y - ly;
+        lx = p.x; ly = p.y;
+        self.cropClamp(); self.cropDraw();
+      } else if (e.touches.length >= 2) {
+        var a = pos(e.touches[0]), b = pos(e.touches[1]);
+        var d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (lastD > 0 && d > 0) self.cropZoomAt(d / lastD, (a.x + b.x) / 2, (a.y + b.y) / 2);
+        lastD = d;
+      }
+    }, { passive: false });
+    cv.addEventListener('touchend', function (e) {
+      lastD = 0;
+      if (e.touches.length === 0) { mode = 0; }
+      else if (e.touches.length === 1) { mode = 1; var p = pos(e.touches[0]); lx = p.x; ly = p.y; }
+    });
+  },
+  cropClamp: function () {
+    var st = this.cropSt, img = this.cropImg;
+    if (!st || !img) return;
+    var w = img.width * st.scale, h = img.height * st.scale;
+    st.tx = Math.min(0, Math.max(480 - w, st.tx));
+    st.ty = Math.min(0, Math.max(480 - h, st.ty));
+  },
+  cropZoomAt: function (f, cx, cy) {
+    var st = this.cropSt;
+    if (!st) return;
+    var ns = Math.min(st.cover * 5, Math.max(st.cover, st.scale * f));
+    var k = ns / st.scale;
+    st.tx = cx - (cx - st.tx) * k;
+    st.ty = cy - (cy - st.ty) * k;
+    st.scale = ns;
+    this.cropClamp();
+    this.cropDraw();
+  },
+  cropZoom: function (f) { this.cropZoomAt(f, 240, 240); },
+  cropDraw: function () {
+    var cv = document.getElementById('kCropCv');
+    if (!cv || !this.cropSt || !this.cropImg) return;
+    var c = cv.getContext('2d'), st = this.cropSt, img = this.cropImg;
+    c.fillStyle = '#111';
+    c.fillRect(0, 0, 480, 480);
+    try { c.drawImage(img, st.tx, st.ty, img.width * st.scale, img.height * st.scale); } catch (e) {}
+  },
+  cropOk: function () {
+    var cv = document.getElementById('kCropCv');
+    try {
+      this._photo = cv.toDataURL('image/jpeg', 0.82);
+      var pv = document.getElementById('mPhotoPrev');
+      if (pv) pv.innerHTML = '<img src="' + this._photo + '">';
+      UI.toast('Foto dipotong ✓');
+    } catch (e) { UI.toast('Gagal memotong foto'); }
+    this.cropSt = null; this.cropImg = null;
+    UI.closeModal();
+  },
+  cropCancel: function () {
+    this.cropSt = null; this.cropImg = null;
+    UI.closeModal();
   },
 
   save: function (id, isEdit) {
