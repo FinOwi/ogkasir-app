@@ -321,6 +321,7 @@ var Kasir = {
     if (tx.pay === 'Tunai') h += '<div class="k-srow"><span>Kembalian</span><span>' + K.rp(tx.change) + '</span></div>';
     h += '<hr><div class="k-c">' + K.esc(s.foot || 'Terima kasih!') + '</div></div></div>';
     h += '<div class="k-btn-row"><button class="k-btn k-sec" onclick="Kasir.shareStruk()">📤 Bagikan Struk</button>' +
+      '<button class="k-btn k-sec" onclick="Printer.printStruk(Kasir.lastTx)">🖨️ Cetak</button>' +
       '<button class="k-btn k-pri" onclick="Kasir.baru()">+ Transaksi Baru</button></div>';
     return h;
   },

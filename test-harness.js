@@ -50,7 +50,7 @@ global.KasirKuNative = { deviceId: function () { return 'test-android-id-123'; }
 var fs = require('fs');
 var dir = '/home/hatch/workspace/kasirku/app/src/main/assets/www/js/';
 var all = ['store.js', 'ui.js', 'kasir.js', 'menu.js', 'stok.js', 'laporan.js', 'xlsx.js',
-  'pengaturan.js', 'lic-crypto.js', 'license.js', 'update.js', 'app.js']
+  'pengaturan.js', 'lic-crypto.js', 'license.js', 'update.js', 'printer.js', 'app.js']
   .map(function (f) { return fs.readFileSync(dir + f, 'utf8'); }).join('\n');
 eval(all);
 
@@ -152,6 +152,52 @@ try {
   Lic.doActivate();
   App.boot = origBoot;
   ok(!bootCalled && Lic.valid(), 'aktivasi dari pengaturan tidak memanggil boot ulang');
+
+  /* ---- printer: aman tanpa bridge native ---- */
+  ok(!Printer.hasBridge(), 'tanpa OGKasirPrinter: hasBridge false');
+  ok(Printer.statusLine().indexOf('Tidak tersedia') >= 0, 'statusLine tanpa bridge');
+  Printer.pick(); // tidak boleh throw
+  Printer.testPrint(); // tidak boleh throw
+  Printer.printStruk({ no: 1 }); // tidak boleh throw
+  Printer.preview(); // tidak boleh throw
+  ok(true, 'printer API aman dipanggil tanpa bridge native');
+
+  /* ---- printer: alur dengan bridge mock ---- */
+  global.OGKasirPrinter = {
+    _perm: false,
+    hasPermission: function () { return this._perm; },
+    requestPermission: function () { var s = this; setTimeout(function () { s._perm = true; window.ogkasirBtPerm(true); }, 0); },
+    btAvailable: function () { return true; },
+    btEnabled: function () { return true; },
+    openBtSettings: function () {},
+    listPrinters: function () { return JSON.stringify([{ name: 'XPrinter XP-N160I', mac: 'AA:BB:CC:DD:EE:FF' }]); },
+    connectPrinter: function (mac) { window.ogkasirPrinterConn(true, 'XPrinter XP-N160I'); },
+    disconnectPrinter: function () {},
+    printerStatus: function () { return JSON.stringify({ connected: Printer.connected, name: 'XPrinter XP-N160I', mac: 'AA:BB:CC:DD:EE:FF' }); },
+    printText: function (t) { this._last = t; return true; },
+    printTest: function () { return true; }
+  };
+  ok(Printer.hasBridge(), 'dengan mock bridge: hasBridge true');
+  Printer.connect('AA:BB:CC:DD:EE:FF');
+  ok(Printer.connected && Printer.name === 'XPrinter XP-N160I', 'connect sukses simpan nama');
+  ok(KDB.data.settings.printerMac === 'AA:BB:CC:DD:EE:FF', 'MAC printer tersimpan di settings');
+  // struk: format 32 kolom ASCII
+  var tx0 = { id: 't0', no: 7, at: Date.now(), items: [{ id: 'm1', name: 'Kopi Tubruk', price: 8000, cost: 3000, qty: 2 }], sub: 16000, disc: 0, total: 16000, pay: 'Tunai', cash: 20000, change: 4000, note: '', voided: false };
+  Printer.printStruk(tx0);
+  var sent = global.OGKasirPrinter._last || '';
+  ok(sent.length > 0 && sent.split('\n').every(function (l) { return l.length <= 32; }), 'teks struk max 32 kolom');
+  ok(/^[\x20-\x7E\n]*$/.test(sent), 'teks struk murni ASCII (aman ESC/POS)');
+  ok(sent.indexOf('16000') < 0 && sent.indexOf('16.000') >= 0, 'nominal format rupiah di struk');
+  Printer.disconnect();
+  ok(!Printer.connected && KDB.data.settings.printerMac === '', 'disconnect bersihkan status');
+  // render pengaturan memuat kartu printer tanpa error
+  App.page = 'set';
+  var setHtml = Set.render();
+  ok(setHtml.indexOf('Printer Struk') >= 0, 'kartu printer muncul di pengaturan');
+  // tombol cetak di struk kasir
+  Kasir.lastTx = tx0; Kasir.mode = 'struk';
+  var strukHtml = Kasir.renderStruk();
+  ok(strukHtml.indexOf('Printer.printStruk') >= 0, 'tombol cetak ada di struk');
 
   console.log(fails.length ? '\n' + fails.length + ' GAGAL' : '\nSEMUA LOLOS ✓');
   process.exit(fails.length ? 1 : 0);

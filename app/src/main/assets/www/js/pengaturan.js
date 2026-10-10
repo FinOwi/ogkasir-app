@@ -18,6 +18,14 @@ var Set = {
       '<button class="k-btn k-sec" style="margin-top:10px" onclick="UI.openLastExport()">📂 Buka Export Terakhir</button>' +
       '<button class="k-btn k-danger" style="margin-top:10px" onclick="Set.wipe()">🗑️ Hapus Semua Data</button></div>';
 
+    h += '<div class="k-card"><h3>🖨️ Printer Struk</h3>' +
+      '<div style="margin-bottom:10px;font-size:14px">' + Printer.statusLine() + '</div>' +
+      '<div class="k-btn-row" style="margin-top:0"><button class="k-btn k-sec" onclick="Printer.pick()">🔍 Pilih Printer</button>' +
+      '<button class="k-btn k-sec" onclick="Printer.testPrint()">🧪 Test Print</button></div>' +
+      '<div class="k-btn-row" style="margin-top:10px"><button class="k-btn k-sec" onclick="Printer.preview()">👁️ Pratinjau Struk</button>' +
+      (Printer.connected ? '<button class="k-btn k-ghost" onclick="Printer.disconnect()">❌ Putuskan</button>' : '') + '</div>' +
+      '<p class="k-small k-muted" style="margin-top:8px">Printer thermal Bluetooth 58mm (mis. XPrinter). Pairing dulu di pengaturan Bluetooth HP.</p></div>';
+
     h += '<div class="k-card"><h3>🔒 Keamanan</h3>' +
       '<div class="k-row"><div><b>PIN Aplikasi</b><div class="k-small k-muted">' + (s.pin ? 'Aktif — diminta saat buka aplikasi' : 'Nonaktif') + '</div></div>' +
       '<button class="k-chip" onclick="Set.pinForm()">' + (s.pin ? 'Ubah' : 'Aktifkan') + '</button></div>' +

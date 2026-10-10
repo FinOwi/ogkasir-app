@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity {
     private WebView webView;
     private ValueCallback<Uri[]> filePathCallback;
     private static final int FILE_CHOOSER_REQ = 1001;
+    private PrinterBridge printerBridge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +199,15 @@ public class MainActivity extends Activity {
                 } catch (Exception e) { return "?"; }
             }
         }, "KasirKuNative");
+        // Bridge printer thermal Bluetooth (ESC/POS)
+        printerBridge = new PrinterBridge(this, new PrinterBridge.JsCallback() {
+            @Override
+            public void eval(final String js) {
+                if (webView == null) return;
+                webView.post(() -> webView.evaluateJavascript(js, null));
+            }
+        });
+        webView.addJavascriptInterface(printerBridge, "OGKasirPrinter");
         setupUpdater();
         setContentView(webView);
         if (savedInstanceState != null) {
@@ -339,8 +350,18 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // hasil izin Bluetooth -> teruskan ke bridge printer
+        if (requestCode == 2002 && printerBridge != null) {
+            boolean ok = grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            printerBridge.onPermResult(ok);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILE_CHOOSER_REQ) {
             if (filePathCallback == null) return;
             Uri[] results = WebChromeClient.FileChooserParams.parseResult(resultCode, data);

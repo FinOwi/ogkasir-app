@@ -64,7 +64,7 @@ var KDB = {
       nextNo: 1,
       settings: {
         shop: 'Warkop Saya', addr: '', foot: 'Terima kasih sudah mampir!',
-        pin: '', theme: 'light'
+        pin: '', theme: 'light', printerMac: '', printerName: ''
       }
     };
   },

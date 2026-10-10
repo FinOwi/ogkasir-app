@@ -17,6 +17,7 @@ var App = {
     });
     Lic.init();
     if (!Lic.valid()) { Lic.showLock(); return; }
+    Printer.init();
     this.boot();
   },
 
