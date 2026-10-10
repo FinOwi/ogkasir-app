@@ -3,74 +3,228 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OGKasir — Download</title>
+<title>OGKasir — Aplikasi Kasir Warkop & F&B</title>
+<meta name="description" content="OGKasir — aplikasi kasir (POS) offline Bahasa Indonesia untuk warkop & F&B. Trial 7 hari gratis, cuma Rp 50rb/bulan.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(160deg, #3b2a1e, #6b4423); color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
-  .card { max-width: 460px; width: 100%; text-align: center; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 24px; padding: 36px 28px; backdrop-filter: blur(8px); }
-  .logo { width: 110px; height: 110px; border-radius: 26px; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
-  h1 { font-size: 34px; margin: 10px 0 4px; }
-  .tag { opacity: .8; font-size: 15px; margin-bottom: 18px; }
-  .trial { display: inline-block; background: #4caf50; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 99px; margin-bottom: 18px; }
-  .feat { text-align: left; font-size: 14px; opacity: .92; line-height: 2; margin: 0 auto 22px; display: inline-block; }
-  #dlBtn { display: block; width: 100%; padding: 16px; font-size: 18px; font-weight: 700; color: #3b2a1e; background: #ffd54f; border: none; border-radius: 16px; cursor: pointer; text-decoration: none; }
-  #dlBtn:disabled { opacity: .5; cursor: wait; }
-  #ver { font-size: 13px; opacity: .6; margin-top: 10px; }
-  .price { margin-top: 22px; background: rgba(0,0,0,.22); border-radius: 14px; padding: 14px 16px; font-size: 13.5px; line-height: 2; text-align: left; }
-  .price b { color: #ffd54f; }
-  .wa { display: block; margin-top: 14px; padding: 14px; border-radius: 14px; background: #25d366; color: #063; font-weight: 700; text-decoration: none; font-size: 16px; }
-  .steps { text-align: left; font-size: 13.5px; opacity: .85; line-height: 1.9; margin-top: 18px; background: rgba(0,0,0,.22); border-radius: 14px; padding: 14px 16px; }
-  .steps b { color: #ffd54f; }
-  .foot { font-size: 12px; opacity: .5; margin-top: 18px; }
+  :root { --gold: #ffd54f; --gold-d: #e6b93d; --bg1: #2b1d12; --bg2: #4a2f1c; --card: rgba(255,255,255,.06); --line: rgba(255,255,255,.12); }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(160deg, var(--bg1), var(--bg2)); color: #fff; line-height: 1.6; }
+  a { color: inherit; }
+  .wrap { max-width: 1024px; margin: 0 auto; padding: 0 20px; }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(43,29,18,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; padding-bottom: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; }
+  .brand img { width: 38px; height: 38px; border-radius: 10px; }
+  .nav-links { display: flex; gap: 22px; font-size: 15px; opacity: .9; }
+  .nav-links a { text-decoration: none; }
+  .nav-links a:hover { color: var(--gold); }
+  .btn { display: inline-block; background: var(--gold); color: #3b2a1e; font-weight: 800; padding: 12px 26px; border-radius: 14px; text-decoration: none; border: none; cursor: pointer; font-size: 16px; }
+  .btn:hover { background: var(--gold-d); }
+  .btn.ghost { background: rgba(255,255,255,.1); color: #fff; border: 1px solid var(--line); }
+  .btn.wa { background: #25d366; color: #063; }
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* hero */
+  .hero { text-align: center; padding: 64px 0 48px; }
+  .hero img.logo { width: 120px; height: 120px; border-radius: 28px; box-shadow: 0 12px 32px rgba(0,0,0,.4); }
+  .hero h1 { font-size: clamp(32px, 6vw, 54px); margin: 18px 0 8px; line-height: 1.15; }
+  .hero h1 span { color: var(--gold); }
+  .hero p.sub { font-size: clamp(16px, 3vw, 20px); opacity: .85; max-width: 620px; margin: 0 auto 20px; }
+  .trial { display: inline-block; background: #4caf50; font-size: 14px; font-weight: 700; padding: 7px 16px; border-radius: 99px; margin-bottom: 24px; }
+  .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  #ver { font-size: 13px; opacity: .6; margin-top: 12px; }
+
+  /* sections */
+  section { padding: 48px 0; }
+  section h2 { text-align: center; font-size: clamp(24px, 4vw, 34px); margin-bottom: 8px; }
+  section p.lead { text-align: center; opacity: .75; max-width: 640px; margin: 0 auto 32px; }
+
+  /* fitur */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .feat { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 18px; }
+  .feat .e { font-size: 34px; }
+  .feat h3 { font-size: 17px; margin: 8px 0 6px; }
+  .feat p { font-size: 14px; opacity: .78; }
+
+  /* langkah */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; counter-reset: st; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 18px; position: relative; }
+  .step .n { display: inline-flex; width: 34px; height: 34px; border-radius: 50%; background: var(--gold); color: #3b2a1e; font-weight: 800; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .step h3 { font-size: 16px; margin-bottom: 6px; }
+  .step p { font-size: 14px; opacity: .78; }
+
+  /* harga */
+  .prices { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; align-items: stretch; }
+  .price-card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 22px; text-align: center; position: relative; display: flex; flex-direction: column; }
+  .price-card.hot { border: 2px solid var(--gold); background: rgba(255,213,79,.08); }
+  .price-card .badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #3b2a1e; font-size: 12px; font-weight: 800; padding: 4px 14px; border-radius: 99px; white-space: nowrap; }
+  .price-card h3 { font-size: 18px; opacity: .85; }
+  .price-card .rp { font-size: 34px; font-weight: 800; color: var(--gold); margin: 8px 0; }
+  .price-card .per { font-size: 14px; opacity: .7; margin-bottom: 16px; }
+  .price-card ul { list-style: none; font-size: 14px; opacity: .85; line-height: 2; margin-bottom: 20px; text-align: left; }
+  .price-card .btn { margin-top: auto; }
+
+  /* faq */
+  .faq { max-width: 720px; margin: 0 auto; }
+  .qa { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; }
+  .qa b { display: block; margin-bottom: 4px; }
+  .qa p { font-size: 14px; opacity: .8; }
+
+  /* download */
+  .dl { text-align: center; background: rgba(0,0,0,.25); border: 1px solid var(--line); border-radius: 24px; padding: 44px 24px; }
+  .dl h2 { margin-bottom: 8px; }
+  .dl p { opacity: .8; margin-bottom: 20px; }
+  .install { text-align: left; max-width: 520px; margin: 24px auto 0; font-size: 14px; opacity: .85; line-height: 2; background: rgba(0,0,0,.25); border-radius: 14px; padding: 16px 20px; }
+  .install b { color: var(--gold); }
+
+  /* kontak */
+  .kontak { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  footer { text-align: center; padding: 32px 20px; font-size: 13px; opacity: .55; border-top: 1px solid var(--line); }
 </style>
 </head>
 <body>
-<div class="card">
-  <img class="logo" src="logo.png" alt="OGKasir">
-  <h1>OGKasir</h1>
-  <div class="tag">Aplikasi kasir (POS) untuk warkop &amp; F&B — offline, Bahasa Indonesia</div>
-  <div class="trial">🎉 GRATIS trial 7 hari — full fitur</div>
-  <div class="feat">
-    🧾 Kasir cepat + struk digital<br>
-    📦 Kelola menu, foto &amp; stok<br>
-    📊 Laporan omzet &amp; laba + export Excel<br>
-    🔑 Sistem lisensi per device
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="logo.png" alt="OGKasir"> OGKasir</a>
+    <div class="nav-links">
+      <a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a>
+    </div>
+    <a class="btn" href="#download" style="padding:10px 20px;font-size:14px">Download</a>
   </div>
-  <a id="dlBtn" href="#" style="pointer-events:none;opacity:.5">Memuat versi terbaru…</a>
-  <div id="ver"></div>
-  <div class="price">
-    <b>Harga lisensi:</b><br>
-    · 30 hari — <b>Rp 50rb</b><br>
-    · 90 hari — <b>Rp 130rb</b><br>
-    · 1 tahun — <b>Rp 500rb</b><br>
-    <span style="opacity:.7">Trial habis? Chat kami untuk kode aktivasi 👇</span>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <img class="logo" src="logo.png" alt="OGKasir">
+    <h1>Aplikasi Kasir Buat <span>Warkop &amp; F&B</span></h1>
+    <p class="sub">Offline, Bahasa Indonesia, gampang dipakai. Catat transaksi, kelola stok, lihat omzet — semua dari HP kamu.</p>
+    <div class="trial">🎉 GRATIS trial 7 hari — full fitur, tanpa kartu kredit</div>
+    <div class="hero-cta">
+      <a class="btn" id="dlBtnTop" href="#">⬇️ Download Sekarang</a>
+      <a class="btn ghost" href="#harga">Lihat Harga</a>
+    </div>
+    <div id="ver"></div>
   </div>
-  <a class="wa" href="https://wa.me/6288279406268?text=Halo!%20Saya%20sudah%20install%20OGKasir%20dan%20ingin%20minta%20kode%20aktivasi.">💬 Minta Kode Aktivasi via WA</a>
-  <a class="wa" style="background:rgba(255,255,255,.14);color:#fff;margin-top:10px" href="https://www.instagram.com/ogkasir">📸 Instagram @ogkasir</a>
-  <div class="steps">
-    <b>Cara install:</b><br>
-    1. Ketuk tombol download di atas<br>
-    2. Buka file APK yang terunduh<br>
-    3. Saat diminta, izinkan <b>"Instal dari sumber tak dikenal"</b><br>
-    4. Ketuk <b>Install</b> — selesai! 🎉
-  </div>
-  <div class="foot">Butuh Android 10 ke atas · Data tersimpan aman di HP kamu</div>
+
+  <section id="fitur">
+    <h2>Fitur Lengkap, Harga Warteg ☕</h2>
+    <p class="lead">Semua yang warkop butuhkan — tanpa ribet, tanpa mahal.</p>
+    <div class="grid">
+      <div class="feat"><div class="e">🧾</div><h3>Kasir Kilat</h3><p>Diskon Rp/%, tunai/QRIS/transfer, kembalian otomatis, struk digital siap dibagikan.</p></div>
+      <div class="feat"><div class="e">🖨️</div><h3>Cetak Struk Thermal</h3><p>Connect via Bluetooth ke printer thermal 58mm (mis. XPrinter). Satu ketuk, struk keluar.</p></div>
+      <div class="feat"><div class="e">📦</div><h3>Menu &amp; Stok</h3><p>Foto menu, kategori, stok berkurang otomatis tiap transaksi + peringatan stok menipis.</p></div>
+      <div class="feat"><div class="e">📊</div><h3>Laporan Rapi</h3><p>Omzet per jam/hari, laba, produk terlaris — plus export ke Excel yang rapi.</p></div>
+      <div class="feat"><div class="e">📵</div><h3>100% Offline</h3><p>Jalan tanpa internet. Data tersimpan aman di HP kamu sendiri.</p></div>
+      <div class="feat"><div class="e">🔑</div><h3>Lisensi Per Device</h3><p>Sistem aktivasi offline yang adil — bayar per HP kasir yang dipakai.</p></div>
+      <div class="feat"><div class="e">🔒</div><h3>PIN Keamanan</h3><p>Kunci aplikasi pakai PIN 6 digit biar karyawan nggak utak-atik.</p></div>
+      <div class="feat"><div class="e">💾</div><h3>Backup &amp; Restore</h3><p>Backup data ke file, restore kapan saja. Update aplikasi tanpa takut data hilang.</p></div>
+    </div>
+  </section>
+
+  <section id="cara">
+    <h2>Mulai Dalam 3 Langkah</h2>
+    <p class="lead">Nggak perlu daftar, nggak perlu kartu kredit.</p>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>⬇️ Download &amp; Install</h3><p>Unduh APK di bawah, izinkan "instal dari sumber tak dikenal" sekali saja.</p></div>
+      <div class="step"><div class="n">2</div><h3>🎉 Trial 7 Hari Gratis</h3><p>Semua fitur terbuka penuh selama 7 hari. Cocok buat jualan harianmu.</p></div>
+      <div class="step"><div class="n">3</div><h3>💬 Aktivasi via WA</h3><p>Cocok? Chat kami, bayar, terima kode aktivasi — masukkan di aplikasi. Beres!</p></div>
+    </div>
+  </section>
+
+  <section id="harga">
+    <h2>Harga Jujur, Tanpa Biaya Sembunyi</h2>
+    <p class="lead">Lebih murah dari parkir harian. Batal kapan saja — datamu tetap milikmu.</p>
+    <div class="prices">
+      <div class="price-card">
+        <h3>30 Hari</h3><div class="rp">Rp 50rb</div><div class="per">≈ Rp 1.600/hari</div>
+        <ul><li>✅ Semua fitur</li><li>✅ 1 HP kasir</li><li>✅ Update gratis</li></ul>
+        <a class="btn ghost" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20aktivasi%20OGKasir%2030%20hari.">Pilih 30 Hari</a>
+      </div>
+      <div class="price-card hot">
+        <div class="badge">PALING LARIS</div>
+        <h3>90 Hari</h3><div class="rp">Rp 130rb</div><div class="per">≈ Rp 1.400/hari · hemat Rp 20rb</div>
+        <ul><li>✅ Semua fitur</li><li>✅ 1 HP kasir</li><li>✅ Update gratis</li><li>✅ Prioritas bantuan WA</li></ul>
+        <a class="btn" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20aktivasi%20OGKasir%2090%20hari.">Pilih 90 Hari</a>
+      </div>
+      <div class="price-card">
+        <h3>1 Tahun</h3><div class="rp">Rp 500rb</div><div class="per">≈ Rp 1.370/hari · hemat Rp 100rb</div>
+        <ul><li>✅ Semua fitur</li><li>✅ 1 HP kasir</li><li>✅ Update gratis</li><li>✅ Prioritas bantuan WA</li></ul>
+        <a class="btn ghost" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20aktivasi%20OGKasir%201%20tahun.">Pilih 1 Tahun</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>Sering Ditanyakan</h2>
+    <p class="lead"></p>
+    <div class="faq">
+      <div class="qa"><b>Apakah butuh internet?</b><p>Tidak. OGKasir jalan 100% offline. Internet hanya dipakai sesekali untuk cek update aplikasi.</p></div>
+      <div class="qa"><b>Apakah dataku hilang saat update / lisensi habis?</b><p>Tidak. Data transaksi, menu &amp; stok tetap aman — update menimpa aplikasi tanpa menghapus data, dan lisensi habis hanya mengunci fitur sampai diperpanjang.</p></div>
+      <div class="qa"><b>Printer apa yang didukung?</b><p>Printer thermal Bluetooth 58mm (mis. XPrinter). Pairing di Bluetooth HP, pilih di Pengaturan → Printer, lalu cetak dari layar struk.</p></div>
+      <div class="qa"><b>HP apa yang didukung?</b><p>Android 10 ke atas.</p></div>
+      <div class="qa"><b>Bagaimana cara bayar lisensinya?</b><p>Chat WhatsApp kami setelah trial — bayar via transfer, terima kode aktivasi, masukkan di aplikasi. Tanpa daftar akun apa pun.</p></div>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="dl">
+      <h2>Siap Naik Kelas? 🚀</h2>
+      <p>Download OGKasir sekarang — gratis 7 hari, full fitur.</p>
+      <a class="btn" id="dlBtn" href="#" style="pointer-events:none;opacity:.5;font-size:18px;padding:16px 40px">Memuat versi terbaru…</a>
+      <div id="ver2" style="font-size:13px;opacity:.6;margin-top:10px"></div>
+      <div class="install">
+        <b>Cara install:</b><br>
+        1. Ketuk tombol download di atas<br>
+        2. Buka file APK yang terunduh<br>
+        3. Izinkan <b>"Instal dari sumber tak dikenal"</b> saat diminta<br>
+        4. Ketuk <b>Install</b> — selesai! 🎉
+      </div>
+    </div>
+  </section>
+
+  <section id="kontak">
+    <h2>Ada Pertanyaan?</h2>
+    <p class="lead">Chat kami — fast respon.</p>
+    <div class="kontak">
+      <a class="btn wa" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya-tanya%20tentang%20OGKasir.">💬 WhatsApp</a>
+      <a class="btn ghost" href="https://www.instagram.com/ogkasir">📸 Instagram @ogkasir</a>
+    </div>
+  </section>
 </div>
+
+<footer>
+  © 2026 OGKasir · Aplikasi kasir warkop &amp; F&B · Android 10+ · Data tersimpan aman di HP kamu
+</footer>
+
 <script>
 fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest')
   .then(r => r.json())
   .then(d => {
     var apk = (d.assets || []).find(a => a.name.endsWith('.apk'));
-    var btn = document.getElementById('dlBtn');
+    var info = 'Ukuran ±' + Math.round(apk.size / 1024) + ' KB · ' + new Date(d.published_at).toLocaleDateString('id-ID');
     if (apk) {
-      btn.href = apk.browser_download_url;
-      btn.style.pointerEvents = 'auto';
-      btn.style.opacity = '1';
-      btn.textContent = '⬇️ Download OGKasir ' + (d.name || '');
-      document.getElementById('ver').textContent = 'Ukuran ±' + Math.round(apk.size / 1024) + ' KB · ' + new Date(d.published_at).toLocaleDateString('id-ID');
-    } else { btn.textContent = 'Belum ada rilis'; }
+      [['dlBtnTop'], ['dlBtn']].forEach(function (id) {
+        var btn = document.getElementById(id[0]);
+        btn.href = apk.browser_download_url;
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+      });
+      document.getElementById('dlBtn').textContent = '⬇️ Download OGKasir ' + (d.name || '');
+      document.getElementById('dlBtnTop').textContent = '⬇️ Download Sekarang';
+      document.getElementById('ver').textContent = info;
+      document.getElementById('ver2').textContent = info;
+    }
   })
-  .catch(() => { document.getElementById('dlBtn').textContent = 'Gagal memuat — coba lagi nanti'; });
+  .catch(() => {
+    document.getElementById('dlBtn').textContent = 'Gagal memuat — coba lagi nanti';
+    document.getElementById('dlBtnTop').textContent = '⬇️ Download';
+    document.getElementById('dlBtnTop').style.pointerEvents = 'auto';
+    document.getElementById('dlBtnTop').style.opacity = '1';
+  });
 </script>
 </body>
 </html>
