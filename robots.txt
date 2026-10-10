@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://finowi.github.io/ogkasir-app/sitemap.xml
