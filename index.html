@@ -98,6 +98,8 @@
   .price-card .per { font-size: 14px; opacity: .7; margin-bottom: 16px; }
   .price-card ul { list-style: none; font-size: 14px; opacity: .85; line-height: 2; margin-bottom: 20px; text-align: left; }
   .price-card .btn { margin-top: auto; }
+  .price-card.first { grid-column: 1 / -1; border: 2px solid var(--gold); background: rgba(255,213,79,.10); }
+  .price-card.first .rp { font-size: 46px; }
 
   /* faq */
   .faq { max-width: 720px; margin: 0 auto; }
@@ -120,7 +122,7 @@
 </head>
 <body>
 
-<div class="announce">🔥 Promo Launching — hemat s/d 35% · 🎉 Trial 7 hari GRATIS, tanpa kartu kredit · <a href="#harga">Lihat harga</a></div>
+<div class="announce">🎉 Bulan pertama cuma <b>Rp8rb</b> · 🔥 Promo Launching hemat s/d 35% · Trial 7 hari GRATIS · <a href="#harga">Lihat harga</a></div>
 
 <nav>
   <div class="wrap">
@@ -157,7 +159,7 @@
     <p class="lead">Dibuat buat pemilik usaha kecil — bukan buat perusahaan besar yang ribet.</p>
     <div class="grid">
       <div class="feat"><div class="e">📵</div><h3>Offline-First, Data Milikmu</h3><p>Jalan penuh tanpa internet. Data tersimpan di HP kamu sendiri — bukan di server orang.</p></div>
-      <div class="feat"><div class="e">💰</div><h3>Harga Jujur Rp49rb/bln</h3><p>Nggak ada biaya sembunyi, nggak ada potongan per transaksi. Batal kapan saja, datamu tetap milikmu.</p></div>
+      <div class="feat"><div class="e">💰</div><h3>Harga Jujur, Mulai Rp8rb</h3><p>Bulan pertama cuma Rp8rb. Selanjutnya Rp49rb/bln — nggak ada biaya sembunyi, nggak ada potongan per transaksi. Batal kapan saja, datamu tetap milikmu.</p></div>
       <div class="feat"><div class="e">👆</div><h3>Gampang Dipakai</h3><p>Karyawan baru bisa pakai dalam 5 menit. Tap menu, tap bayar, kembalian kehitung otomatis.</p></div>
       <div class="feat"><div class="e">💬</div><h3>Support via WhatsApp</h3><p>Ada kendala? Chat langsung, fast respon. Nggak perlu tiket, nggak perlu antre.</p></div>
     </div>
@@ -168,6 +170,7 @@
     <p class="lead">Semua yang warkop butuhkan — tanpa ribet, tanpa mahal.</p>
     <div class="grid">
       <div class="feat"><div class="e">🧾</div><h3>Kasir Kilat</h3><p>Diskon Rp/%, tunai/QRIS/transfer, kembalian otomatis, struk digital siap dibagikan.</p></div>
+      <div class="feat"><div class="e">⚖️</div><h3>Jual Per Kilo</h3><p>Buat produk timbangan (ayam, beras, kopi): ketuk tombol berat 0.25/0.5/1 kg atau ketik manual — total &amp; stok terhitung otomatis.</p></div>
       <div class="feat"><div class="e">🖨️</div><h3>Cetak Struk Thermal</h3><p>Connect via Bluetooth ke printer thermal 58mm (mis. XPrinter). Satu ketuk, struk keluar.</p></div>
       <div class="feat"><div class="e">📦</div><h3>Menu &amp; Stok</h3><p>Foto menu, kategori, stok berkurang otomatis tiap transaksi + peringatan stok menipis.</p></div>
       <div class="feat"><div class="e">📊</div><h3>Laporan Rapi</h3><p>Omzet per jam/hari, laba, produk terlaris — plus export ke Excel yang rapi.</p></div>
@@ -201,8 +204,14 @@
 
   <section id="harga">
     <h2>🔥 Promo Launching — Diskon s/d 35%</h2>
-    <p class="lead">Harga spesial selama masa launching. Tanpa biaya sembunyi — batal kapan saja, datamu tetap milikmu.</p>
+    <p class="lead">Bulan pertama cuma <b style="color:var(--gold)">Rp8rb</b> — khusus pembelian pertama. Selanjutnya pilih paket perpanjangan di bawah. Tanpa biaya sembunyi — batal kapan saja, datamu tetap milikmu.</p>
     <div class="prices">
+      <div class="price-card first">
+        <div class="badge">🎉 PROMO PERKENALAN</div>
+        <h3>Bulan Pertama</h3><div class="old">Rp 49.000</div><div class="rp">Rp 8rb</div>
+        <div class="per">30 hari penuh · semua fitur · 1 HP kasir · <b>khusus pembelian pertama (1x)</b></div>
+        <a class="btn" href="https://wa.me/6288279406268?text=Halo!%20Saya%20mau%20promo%20bulan%20pertama%20OGKasir%20Rp8rb.">Klaim Rp8rb</a>
+      </div>
       <div class="price-card">
         <h3>30 Hari</h3><div class="old">Rp 75.000</div><div class="rp">Rp 49rb</div><div class="per">≈ Rp 1.600/hari · hemat 35%</div>
         <ul><li>✅ Semua fitur</li><li>✅ 1 HP kasir</li><li>✅ Update gratis</li></ul>
@@ -239,6 +248,7 @@
       <div class="qa"><b>Printer apa yang didukung?</b><p>Printer thermal Bluetooth 58mm (mis. XPrinter). Pairing di Bluetooth HP, pilih di Pengaturan → Printer, lalu cetak dari layar struk.</p></div>
       <div class="qa"><b>HP apa yang didukung?</b><p>Android 10 ke atas.</p></div>
       <div class="qa"><b>Bagaimana cara bayar lisensinya?</b><p>Chat WhatsApp kami setelah trial — bayar via transfer, terima kode aktivasi, masukkan di aplikasi. Tanpa daftar akun apa pun.</p></div>
+      <div class="qa"><b>Apakah promo bulan pertama Rp8rb berlaku selamanya?</b><p>Tidak — Rp8rb hanya untuk bulan pertama, satu kali per pelanggan. Bulan berikutnya Rp49rb, atau lebih hemat dengan paket 90 hari / 1 tahun.</p></div>
     </div>
   </section>
 
