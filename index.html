@@ -26,6 +26,11 @@
 <style>
   html { scroll-behavior: smooth; }
   section[id] { scroll-margin-top: 76px; }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .65s ease, transform .65s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --gold: #ffd54f; --gold-d: #e6b93d; --bg1: #2b1d12; --bg2: #4a2f1c; --card: rgba(255,255,255,.06); --line: rgba(255,255,255,.12); }
   body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(160deg, var(--bg1), var(--bg2)); color: #fff; line-height: 1.6; }
@@ -292,6 +297,24 @@ fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest')
     document.getElementById('dlBtnTop').style.pointerEvents = 'auto';
     document.getElementById('dlBtnTop').style.opacity = '1';
   });
+</script>
+<script>
+// Scroll-reveal: kartu muncul halus saat masuk viewport
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  var els = document.querySelectorAll('.feat, .step, .price-card, .qa, .dl');
+  els.forEach(function (el) {
+    var sibs = Array.prototype.slice.call(el.parentNode.children);
+    el.style.transitionDelay = ((sibs.indexOf(el) % 4) * 70) + 'ms';
+    el.classList.add('reveal');
+  });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(function (el) { io.observe(el); });
+})();
 </script>
 </body>
 </html>
