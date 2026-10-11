@@ -222,8 +222,8 @@
   .price-card ul { list-style: none; font-size: 14px; color: var(--mut); line-height: 2.1; margin-bottom: 24px; text-align: left; }
   .price-card ul li::before { content: '✓ '; color: var(--gold); font-weight: 800; }
   .price-card .btn { margin-top: auto; }
-  .price-card.first { grid-column: 1 / -1; border: 2px solid var(--gold); background: linear-gradient(120deg, rgba(255,213,79,.14), rgba(255,213,79,.05)); overflow: hidden; }
-  .price-card.first::before { content: ''; position: absolute; inset: 0; background: radial-gradient(500px 200px at 50% 0%, rgba(255,213,79,.18), transparent 70%); pointer-events: none; }
+  .price-card.first { grid-column: 1 / -1; border: 2px solid var(--gold); background: linear-gradient(120deg, rgba(255,213,79,.14), rgba(255,213,79,.05)); }
+  .price-card.first::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(500px 200px at 50% 0%, rgba(255,213,79,.18), transparent 70%); pointer-events: none; }
   .price-card.first .rp { font-size: 58px; }
   .price-card.first .row { display: flex; gap: 26px; align-items: center; justify-content: center; flex-wrap: wrap; position: relative; }
   .price-card.first .txt { text-align: left; }
