@@ -81,7 +81,7 @@
   .btn.ghost { background: var(--card2); color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
   .btn.ghost:hover { background: rgba(255,255,255,.13); box-shadow: none; }
   .btn.wa { background: linear-gradient(180deg, #2fe07a, #1fc25c); color: #063; box-shadow: 0 10px 28px rgba(37,211,102,.35), inset 0 1px 0 rgba(255,255,255,.4); }
-  .btn.sm { padding: 10px 22px; font-size: 14px; }
+  .btn.sm { padding: 10px 22px; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; }
   @media (max-width: 720px) { .nav-links { display: none; } }
 
   /* mobile menu */
@@ -110,6 +110,17 @@
   #ver { font-size: 13px; color: var(--faint); }
   .trust { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-top: 22px; font-size: 14px; color: var(--mut); font-weight: 600; }
   .trust span::before { content: '✓ '; color: var(--gold); font-weight: 800; }
+
+  /* stats strip (proof band) */
+  .stats { display: flex; justify-content: center; max-width: 780px; margin: 34px auto 0; background: linear-gradient(160deg, var(--card2), var(--card)); border: 1px solid var(--line); border-radius: 20px; padding: 24px 12px; box-shadow: 0 18px 44px rgba(0,0,0,.3); }
+  .stat { flex: 1; text-align: center; padding: 0 14px; }
+  .stat + .stat { border-left: 1px solid var(--line); }
+  .stat b { display: block; font-size: clamp(25px, 4.5vw, 36px); font-weight: 800; letter-spacing: -1px; background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stat span { font-size: 13px; color: var(--mut); font-weight: 600; }
+  @media (max-width: 560px) { .stats { flex-wrap: wrap; gap: 18px 0; } .stat { flex: 1 1 42%; } .stat + .stat { border-left: none; } }
+
+  /* accessibility: visible keyboard focus (WCAG 2.2) */
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2.5px solid var(--gold); outline-offset: 3px; border-radius: 10px; }
 
   /* hero visual : phone + floating cards */
   .hero-visual { position: relative; display: flex; justify-content: center; margin: 46px 0 10px; padding: 20px 0 40px; }
@@ -288,6 +299,13 @@
       <div class="float-card fc1"><div class="ic">✅</div><div><b>Terjual Rp72.000</b><small>7 item · baru saja</small></div></div>
       <div class="float-card fc2"><div class="ic">📦</div><div><b>Stok diperbarui</b><small>Otomatis tiap transaksi</small></div></div>
       <div class="float-card fc3"><div class="ic"><span class="live-dot"></span></div><div><b>Omzet tercatat</b><small style="color:#9ccc9f;font-weight:700">● Live</small></div></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>9+</b><span>Fitur unggulan</span></div>
+      <div class="stat"><b>100%</b><span>Offline, tanpa internet</span></div>
+      <div class="stat"><b>7 hari</b><span>Trial gratis full fitur</span></div>
+      <div class="stat"><b>🇮🇩</b><span>Buatan Indonesia</span></div>
     </div>
   </div>
 </div>
@@ -504,7 +522,7 @@ fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest')
 // Scroll-reveal: elemen muncul halus saat masuk viewport
 (function () {
   if (!('IntersectionObserver' in window)) return;
-  var els = document.querySelectorAll('.bcard, .feat, .step, .price-card, .qa, .dl, .show-list li, .browser-frame, .float-card');
+  var els = document.querySelectorAll('.bcard, .feat, .step, .price-card, .qa, .dl, .show-list li, .browser-frame, .float-card, .stats');
   els.forEach(function (el) {
     var sibs = Array.prototype.slice.call(el.parentNode.children);
     el.style.transitionDelay = ((sibs.indexOf(el) % 4) * 70) + 'ms';
