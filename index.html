@@ -30,6 +30,10 @@
   a { color: inherit; }
   .wrap { max-width: 1024px; margin: 0 auto; padding: 0 20px; }
 
+  /* announcement bar */
+  .announce { background: var(--gold); color: #3b2a1e; text-align: center; font-size: 14px; font-weight: 700; padding: 9px 16px; }
+  .announce a { color: #3b2a1e; text-decoration: underline; }
+
   /* nav */
   nav { position: sticky; top: 0; z-index: 50; background: rgba(43,29,18,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; padding-bottom: 12px; }
@@ -45,14 +49,17 @@
   @media (max-width: 640px) { .nav-links { display: none; } }
 
   /* hero */
-  .hero { text-align: center; padding: 64px 0 48px; }
+  .hero { text-align: center; padding: 56px 0 48px; }
   .hero img.logo { width: 120px; height: 120px; border-radius: 28px; box-shadow: 0 12px 32px rgba(0,0,0,.4); }
-  .hero h1 { font-size: clamp(32px, 6vw, 54px); margin: 18px 0 8px; line-height: 1.15; }
+  .hero .kicker { display: inline-block; background: rgba(255,213,79,.14); border: 1px solid rgba(255,213,79,.4); color: var(--gold); font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 99px; margin: 18px 0 4px; }
+  .hero h1 { font-size: clamp(32px, 6vw, 54px); margin: 10px 0 8px; line-height: 1.15; }
   .hero h1 span { color: var(--gold); }
-  .hero p.sub { font-size: clamp(16px, 3vw, 20px); opacity: .85; max-width: 620px; margin: 0 auto 20px; }
+  .hero p.sub { font-size: clamp(16px, 3vw, 20px); opacity: .85; max-width: 640px; margin: 0 auto 20px; }
   .trial { display: inline-block; background: #4caf50; font-size: 14px; font-weight: 700; padding: 7px 16px; border-radius: 99px; margin-bottom: 24px; }
   .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   #ver { font-size: 13px; opacity: .6; margin-top: 12px; }
+  .chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+  .chip { font-size: 13px; font-weight: 600; background: var(--card); border: 1px solid var(--line); padding: 8px 15px; border-radius: 99px; opacity: .9; }
 
   /* sections */
   section { padding: 48px 0; }
@@ -106,11 +113,13 @@
 </head>
 <body>
 
+<div class="announce">🔥 Promo Launching — hemat s/d 35% · 🎉 Trial 7 hari GRATIS, tanpa kartu kredit · <a href="#harga">Lihat harga</a></div>
+
 <nav>
   <div class="wrap">
     <a class="brand" href="#"><img src="logo.png" alt="OGKasir"> OGKasir</a>
     <div class="nav-links">
-      <a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#faq">FAQ</a><a href="#artikel">Artikel</a><a href="#kontak">Kontak</a>
+      <a href="#kenapa">Kenapa</a><a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#artikel">Artikel</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a>
     </div>
     <a class="btn" href="#download" style="padding:10px 20px;font-size:14px">Download</a>
   </div>
@@ -119,15 +128,33 @@
 <div class="wrap">
   <div class="hero">
     <img class="logo" src="logo.png" alt="OGKasir">
+    <div><span class="kicker">⚡ Kasir kilat buat UMKM Indonesia</span></div>
     <h1>Aplikasi Kasir Buat <span>Warkop &amp; F&B</span></h1>
-    <p class="sub">Offline, Bahasa Indonesia, gampang dipakai. Catat transaksi, kelola stok, lihat omzet — semua dari HP kamu.</p>
+    <p class="sub">Catat transaksi, kelola stok, lihat omzet — semua dari HP kamu. Offline, Bahasa Indonesia, gampang dipakai karyawan.</p>
     <div class="trial">🎉 GRATIS trial 7 hari — full fitur, tanpa kartu kredit</div>
     <div class="hero-cta">
       <a class="btn" id="dlBtnTop" href="#">⬇️ Download Sekarang</a>
       <a class="btn ghost" href="#harga">Lihat Harga</a>
     </div>
     <div id="ver"></div>
+    <div class="chips">
+      <span class="chip">📵 100% Offline</span>
+      <span class="chip">🇮🇩 Bahasa Indonesia</span>
+      <span class="chip">🖨️ Struk Thermal</span>
+      <span class="chip">📊 Laporan + Excel</span>
+    </div>
   </div>
+
+  <section id="kenapa">
+    <h2>Kenapa OGKasir? ⚡</h2>
+    <p class="lead">Dibuat buat pemilik usaha kecil — bukan buat perusahaan besar yang ribet.</p>
+    <div class="grid">
+      <div class="feat"><div class="e">📵</div><h3>Offline-First, Data Milikmu</h3><p>Jalan penuh tanpa internet. Data tersimpan di HP kamu sendiri — bukan di server orang.</p></div>
+      <div class="feat"><div class="e">💰</div><h3>Harga Jujur Rp49rb/bln</h3><p>Nggak ada biaya sembunyi, nggak ada potongan per transaksi. Batal kapan saja, datamu tetap milikmu.</p></div>
+      <div class="feat"><div class="e">👆</div><h3>Gampang Dipakai</h3><p>Karyawan baru bisa pakai dalam 5 menit. Tap menu, tap bayar, kembalian kehitung otomatis.</p></div>
+      <div class="feat"><div class="e">💬</div><h3>Support via WhatsApp</h3><p>Ada kendala? Chat langsung, fast respon. Nggak perlu tiket, nggak perlu antre.</p></div>
+    </div>
+  </section>
 
   <section id="fitur">
     <h2>Fitur Lengkap, Harga Warteg ☕</h2>
@@ -137,10 +164,21 @@
       <div class="feat"><div class="e">🖨️</div><h3>Cetak Struk Thermal</h3><p>Connect via Bluetooth ke printer thermal 58mm (mis. XPrinter). Satu ketuk, struk keluar.</p></div>
       <div class="feat"><div class="e">📦</div><h3>Menu &amp; Stok</h3><p>Foto menu, kategori, stok berkurang otomatis tiap transaksi + peringatan stok menipis.</p></div>
       <div class="feat"><div class="e">📊</div><h3>Laporan Rapi</h3><p>Omzet per jam/hari, laba, produk terlaris — plus export ke Excel yang rapi.</p></div>
-      <div class="feat"><div class="e">📵</div><h3>100% Offline</h3><p>Jalan tanpa internet. Data tersimpan aman di HP kamu sendiri.</p></div>
       <div class="feat"><div class="e">🔑</div><h3>Lisensi Per Device</h3><p>Sistem aktivasi offline yang adil — bayar per HP kasir yang dipakai.</p></div>
       <div class="feat"><div class="e">🔒</div><h3>PIN Keamanan</h3><p>Kunci aplikasi pakai PIN 6 digit biar karyawan nggak utak-atik.</p></div>
       <div class="feat"><div class="e">💾</div><h3>Backup &amp; Restore</h3><p>Backup data ke file, restore kapan saja. Update aplikasi tanpa takut data hilang.</p></div>
+      <div class="feat"><div class="e">🌙</div><h3>Mode Gelap</h3><p>Nyaman dipakai malam hari saat warkop paling ramai.</p></div>
+    </div>
+  </section>
+
+  <section id="untuk-siapa">
+    <h2>Dibuat Untuk Usahamu 🏪</h2>
+    <p class="lead">Apapun jualanmu, OGKasir siap membantu.</p>
+    <div class="grid">
+      <div class="feat"><div class="e">☕</div><h3>Warkop &amp; Kedai Kopi</h3><p>Catat pesanan cepat saat ramai, tahu menu paling laris tiap minggu.</p></div>
+      <div class="feat"><div class="e">🍜</div><h3>Warung Makan</h3><p>Hitung total + kembalian otomatis, nggak ada lagi salah hitung.</p></div>
+      <div class="feat"><div class="e">🏪</div><h3>Toko Kelontong</h3><p>Kelola ratusan produk dan pantau stok biar nggak kehabisan.</p></div>
+      <div class="feat"><div class="e">🥤</div><h3>UMKM Kuliner</h3><p>Struk rapi bikin usaha terlihat profesional di mata pembeli.</p></div>
     </div>
   </section>
 
@@ -200,7 +238,7 @@
   <section id="download">
     <div class="dl">
       <h2>Siap Naik Kelas? 🚀</h2>
-      <p>Download OGKasir sekarang — gratis 7 hari, full fitur.</p>
+      <p>Download OGKasir sekarang — gratis 7 hari, full fitur. Warkopmu pantas dapat kasir yang rapi.</p>
       <a class="btn" id="dlBtn" href="#" style="pointer-events:none;opacity:.5;font-size:18px;padding:16px 40px">Memuat versi terbaru…</a>
       <div id="ver2" style="font-size:13px;opacity:.6;margin-top:10px"></div>
       <div class="install">
