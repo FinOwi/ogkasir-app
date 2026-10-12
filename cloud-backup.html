@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud Backup OGKasir — HP Hilang? Data Kasirmu Tetap Aman</title>
+<meta name="description" content="Cloud Backup OGKasir: data kasir ter-backup otomatis ke cloud FinOwi. Ganti HP atau HP hilang, pulihkan semua dalam hitungan menit. Segera hadir, gratis untuk pelanggan aktif.">
+<link rel="canonical" href="https://ogkasir.my.id/cloud-backup.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cloud Backup OGKasir — Data Kasirmu Aman di Cloud">
+<meta property="og:description" content="HP hilang? Ganti HP? Pulihkan seluruh data kasir dalam hitungan menit. Segera hadir di OGKasir v1.36.">
+<meta property="og:url" content="https://ogkasir.my.id/cloud-backup.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #ffd54f; --gold2: #ffb300; --gold-d: #e6a93d;
+    --bg0: #060a15; --bg1: #0b1226;
+    --ink: #f5f7fc; --mut: rgba(245,247,252,.68); --faint: rgba(245,247,252,.45);
+    --card: rgba(255,255,255,.05); --card2: rgba(255,255,255,.085);
+    --line: rgba(255,255,255,.11); --r: 22px;
+    --font: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --serif: 'Playfair Display', Georgia, serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); color: var(--ink); line-height: 1.65; overflow-x: hidden;
+    background: linear-gradient(180deg, var(--bg1), var(--bg0) 60%); background-attachment: fixed; }
+  body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(700px 460px at 50% -6%, rgba(255,213,79,.14), transparent 65%),
+      radial-gradient(560px 420px at 8% 40%, rgba(90,140,255,.08), transparent 65%),
+      radial-gradient(620px 460px at 94% 70%, rgba(255,179,0,.07), transparent 65%);
+    animation: aurora 18s ease-in-out infinite alternate; }
+  @keyframes aurora { to { transform: translate3d(0,-30px,0) scale(1.07); } }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 22px; position: relative; z-index: 2; }
+  a { color: inherit; }
+
+  nav.top { position: sticky; top: 0; z-index: 50; background: rgba(8,12,24,.8); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  nav.top .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; padding-bottom: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; text-decoration: none; }
+  .brand img { width: 38px; height: 38px; border-radius: 11px; box-shadow: 0 4px 14px rgba(255,183,0,.35); }
+  .back { font-size: 14px; font-weight: 700; color: var(--mut); text-decoration: none; border: 1px solid var(--line); padding: 9px 18px; border-radius: 99px; transition: .2s; }
+  .back:hover { color: var(--gold); border-color: rgba(255,213,79,.4); }
+
+  .btn { display: inline-block; background: linear-gradient(180deg, var(--gold), var(--gold-d)); color: #3b2a1e; font-weight: 800; padding: 15px 36px; border-radius: 99px; text-decoration: none; border: none; cursor: pointer; font-size: 16px; font-family: var(--font);
+    box-shadow: 0 10px 28px rgba(255,183,0,.35), inset 0 1px 0 rgba(255,255,255,.55); transition: transform .2s, box-shadow .2s; position: relative; overflow: hidden; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 38px rgba(255,183,0,.5), inset 0 1px 0 rgba(255,255,255,.55); }
+  .btn::after { content: ''; position: absolute; top: 0; left: -80%; width: 55%; height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(255,255,255,.5), transparent); transform: skewX(-20deg); transition: left .55s ease; }
+  .btn:hover::after { left: 130%; }
+  .btn.wa { background: linear-gradient(180deg, #2fe07a, #1fc25c); color: #063; box-shadow: 0 10px 28px rgba(37,211,102,.35), inset 0 1px 0 rgba(255,255,255,.4); }
+  .btn.ghost { background: var(--card2); color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
+
+  .hero { text-align: center; padding: 84px 0 40px; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; letter-spacing: 1.5px;
+    color: var(--gold); border: 1.5px dashed rgba(255,213,79,.55); padding: 9px 22px; border-radius: 99px; margin-bottom: 26px;
+    background: rgba(255,213,79,.07); box-shadow: 0 0 26px rgba(255,213,79,.1); }
+  .hero h1 { font-size: clamp(38px, 7.5vw, 72px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.06; margin-bottom: 18px; }
+  .hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 700; letter-spacing: 0;
+    background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.sub { font-size: clamp(16px, 2.6vw, 20px); color: var(--mut); max-width: 680px; margin: 0 auto 30px; }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* cloud visual */
+  .cloud-stage { position: relative; height: 340px; margin: 50px auto 10px; max-width: 720px; }
+  .cloud { position: absolute; left: 50%; top: 46%; transform: translate(-50%,-50%); width: 300px; height: 110px;
+    background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.05));
+    border: 1px solid rgba(255,213,79,.35); border-radius: 999px; filter: blur(1px);
+    box-shadow: 0 0 80px rgba(255,213,79,.25), inset 0 1px 0 rgba(255,255,255,.25);
+    animation: bob 5s ease-in-out infinite; }
+  .cloud::before, .cloud::after { content: ''; position: absolute; border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04)); border: 1px solid rgba(255,213,79,.3); }
+  .cloud::before { width: 130px; height: 130px; left: 36px; top: -62px; }
+  .cloud::after { width: 92px; height: 92px; right: 44px; top: -40px; }
+  @keyframes bob { 50% { transform: translate(-50%,-58%); } }
+  .beam { position: absolute; left: 50%; top: 62%; width: 2px; height: 90px; transform: translateX(-50%);
+    background: linear-gradient(180deg, var(--gold), transparent); opacity: .8; }
+  .beam.b2 { left: 38%; height: 60px; opacity: .4; } .beam.b3 { left: 62%; height: 70px; opacity: .4; }
+  .chipf { position: absolute; display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700;
+    background: rgba(16,24,48,.85); border: 1px solid rgba(255,213,79,.28); border-radius: 14px; padding: 10px 15px;
+    box-shadow: 0 14px 34px rgba(0,0,0,.5); white-space: nowrap; animation: floaty 6s ease-in-out infinite; }
+  @keyframes floaty { 50% { transform: translateY(-12px); } }
+  .chipf small { color: var(--faint); font-weight: 600; }
+  .f1 { left: 2%; top: 12%; animation-delay: 0s; } .f2 { right: 0%; top: 26%; animation-delay: 1.4s; }
+  .f3 { left: 8%; bottom: 6%; animation-delay: 2.6s; } .f4 { right: 6%; bottom: 14%; animation-delay: 3.8s; }
+
+  section { padding: 64px 0; }
+  .eyebrow { display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase; letter-spacing: 3px;
+    font-size: 12px; font-weight: 800; margin-bottom: 14px;
+    background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .eyebrow::before, .eyebrow::after { content: ''; width: 26px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-d)); }
+  .eyebrow::after { background: linear-gradient(90deg, var(--gold-d), transparent); }
+  section h2 { text-align: center; font-size: clamp(28px, 4.6vw, 42px); font-weight: 800; letter-spacing: -1.2px; margin-bottom: 12px; line-height: 1.2; }
+  section h2 em { font-family: var(--serif); font-style: italic; font-weight: 700;
+    background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { text-align: center; color: var(--mut); max-width: 660px; margin: 0 auto 40px; font-size: 16.5px; }
+
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 760px) { .grid3 { grid-template-columns: 1fr; } }
+  .card { background: linear-gradient(160deg, var(--card2), var(--card)); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 28px 24px; position: relative; overflow: hidden; transition: transform .3s, border-color .3s, box-shadow .3s; }
+  .card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,213,79,.55), transparent); opacity: 0; transition: opacity .3s; }
+  .card:hover { transform: translateY(-5px); border-color: rgba(255,213,79,.4); box-shadow: 0 22px 48px rgba(0,0,0,.42), 0 8px 32px rgba(255,183,0,.1); }
+  .card:hover::before { opacity: 1; }
+  .card .tile { width: 52px; height: 52px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 26px;
+    background: rgba(255,213,79,.12); border: 1px solid rgba(255,213,79,.3); margin-bottom: 16px; }
+  .card h3 { font-size: 18px; margin-bottom: 8px; letter-spacing: -.3px; }
+  .card p { color: var(--mut); font-size: 14.5px; }
+  .card.danger .tile { background: rgba(255,90,90,.1); border-color: rgba(255,90,90,.35); }
+  .card .n { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 19px; color: #3b2a1e; background: linear-gradient(180deg, var(--gold), var(--gold-d));
+    box-shadow: 0 6px 18px rgba(255,183,0,.4); margin-bottom: 16px; }
+
+  .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 860px; margin: 0 auto; }
+  @media (max-width: 700px) { .vs { grid-template-columns: 1fr; } }
+  .vscol { border-radius: var(--r); padding: 30px 26px; border: 1px solid var(--line); background: var(--card); }
+  .vscol.win { border-color: rgba(255,213,79,.45); background: linear-gradient(160deg, rgba(255,213,79,.1), var(--card));
+    box-shadow: 0 18px 50px rgba(0,0,0,.4), 0 0 40px rgba(255,183,0,.08); }
+  .vscol h3 { font-size: 19px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .vscol ul { list-style: none; }
+  .vscol li { padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; color: var(--mut); }
+  .vscol li:last-child { border: none; }
+  .vscol.win li { color: var(--ink); }
+  .vscol li b.x { color: #ff8a8a; margin-right: 8px; } .vscol li b.c { color: #7de29a; margin-right: 8px; }
+
+  .secbox { max-width: 860px; margin: 0 auto; background: linear-gradient(160deg, var(--card2), var(--card));
+    border: 1px solid rgba(255,213,79,.3); border-radius: 28px; padding: 44px 34px; text-align: center;
+    box-shadow: 0 24px 70px rgba(0,0,0,.45), 0 0 60px rgba(255,183,0,.07); position: relative; overflow: hidden; }
+  .secbox::before { content: ''; position: absolute; inset: -40%;
+    background: conic-gradient(from 0deg, transparent 70%, rgba(255,213,79,.13), transparent 88%); animation: spin 12s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .secbox > * { position: relative; }
+  .keycode { display: inline-block; font-family: ui-monospace, monospace; font-size: 22px; font-weight: 800; letter-spacing: 4px;
+    color: var(--gold); background: rgba(0,0,0,.45); border: 1.5px dashed rgba(255,213,79,.55); border-radius: 14px;
+    padding: 14px 28px; margin: 18px 0 6px; }
+  .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+
+  .faq { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .qa { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .qa summary { padding: 18px 22px; font-weight: 700; cursor: pointer; list-style: none; font-size: 16px; }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: '+'; float: right; color: var(--gold); font-size: 22px; font-weight: 800; }
+  .qa[open] summary::after { content: '–'; }
+  .qa .a { padding: 0 22px 20px; color: var(--mut); font-size: 15px; }
+
+  footer { text-align: center; padding: 40px 20px 60px; color: var(--faint); font-size: 13.5px; position: relative; z-index: 2; }
+  .wa-float { position: fixed; right: 20px; bottom: 20px; z-index: 60; width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(180deg, #2fe07a, #1fc25c); display: flex; align-items: center; justify-content: center;
+    font-size: 28px; text-decoration: none; box-shadow: 0 12px 30px rgba(37,211,102,.45); transition: transform .2s; }
+  .wa-float:hover { transform: scale(1.08); }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; } .cloud, .chipf, .secbox::before, body::before { animation: none !important; } .btn::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top"><div class="wrap">
+  <a class="brand" href="index.html"><img src="logo.png" alt="OGKasir"> OGKasir</a>
+  <a class="back" href="index.html">← Beranda</a>
+</div></nav>
+
+<div class="wrap">
+  <div class="hero">
+    <div><span class="pill">☁️ SEGERA HADIR · v1.36 · GRATIS</span></div>
+    <h1>HP Hilang? <em>Data Kasirmu</em><br>Tetap Aman.</h1>
+    <p class="sub">Cloud Backup OGKasir menyimpan salinan data kasirmu di cloud FinOwi secara otomatis. Ganti HP, HP rusak, HP hilang — <b style="color:var(--ink)">pulihkan semuanya dalam hitungan menit.</b></p>
+    <div class="hero-cta">
+      <a class="btn wa" href="https://wa.me/6288279406268?text=Halo!%20Ingatkan%20saya%20saat%20Cloud%20Backup%20OGKasir%20rilis.">🔔 Ingatkan Saya Saat Rilis</a>
+      <a class="btn ghost" href="#cara">Cara Kerjanya</a>
+    </div>
+
+    <div class="cloud-stage" aria-hidden="true">
+      <div class="beam"></div><div class="beam b2"></div><div class="beam b3"></div>
+      <div class="cloud"></div>
+      <div class="chipf f1">🧾 <span>2.340 transaksi<br><small>ter-backup ✓</small></span></div>
+      <div class="chipf f2">📦 <span>Stok & menu<br><small>ter-backup ✓</small></span></div>
+      <div class="chipf f3">📊 <span>Laporan omzet<br><small>ter-backup ✓</small></span></div>
+      <div class="chipf f4">🔑 <span>Kode pemulihan<br><small>milikmu pribadi</small></span></div>
+    </div>
+  </div>
+
+  <section id="masalah">
+    <div class="eyebrow">Kenapa Ini Penting</div>
+    <h2>Kebayang Kalau <em>HP Kasirmu</em> Hilang Besok?</h2>
+    <p class="lead">Semua data usahamu — transaksi, stok, laporan — hidup di satu HP. Satu kejadian, semuanya bisa lenyap.</p>
+    <div class="grid3">
+      <div class="card danger"><div class="tile">📱💥</div><h3>HP Rusak / Mati Total</h3><p>Kehujanan, jatuh, bootloop. Servis bisa seminggu — data di dalamnya? Belum tentu selamat.</p></div>
+      <div class="card danger"><div class="tile">🏃💨</div><h3>HP Hilang / Dicuri</h3><p>Tertinggal di ojek, diambil orang. Catatan penjualan berbulan-bulan ikut raib begitu saja.</p></div>
+      <div class="card danger"><div class="tile">🔄😰</div><h3>Ganti HP Baru</h3><p>HP lama lemot, mau ganti baru — pindahin data kasir manual? Ribet dan rawan ada yang kelewat.</p></div>
+    </div>
+  </section>
+
+  <section id="cara">
+    <div class="eyebrow">Cara Kerja</div>
+    <h2>Semudah <em>3 Ketuk</em></h2>
+    <p class="lead">Nggak perlu akun, nggak perlu ingat password. Cukup sekali setting.</p>
+    <div class="grid3">
+      <div class="card"><div class="n">1</div><h3>Backup Sekali Ketuk</h3><p>Di Pengaturan → Data &amp; Backup, ketuk <b>Backup ke Cloud</b>. Aplikasi memberimu <b>kode pemulihan pribadi</b> — catat &amp; simpan baik-baik.</p></div>
+      <div class="card"><div class="n">2</div><h3>Data Tersimpan Aman</h3><p>Seluruh data kasir — transaksi, menu, stok, pengaturan — tersimpan terenkripsi di cloud FinOwi. HP-mu tetap jalan offline seperti biasa.</p></div>
+      <div class="card"><div class="n">3</div><h3>Pulihkan Kapan Saja</h3><p>HP baru? Install OGKasir, ketuk <b>Pulihkan dari Cloud</b>, masukkan kode pemulihanmu. Semua data kembali dalam hitungan menit.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:30px"><span class="keycode">X7K2-M9PQ-4D8R</span>
+      <p style="color:var(--faint);font-size:13.5px;margin-top:10px">Contoh kode pemulihan — punyamu dibuat acak &amp; unik.</p></div>
+  </section>
+
+  <section id="aman">
+    <div class="eyebrow">Keamanan</div>
+    <h2>Hanya Kamu yang Bisa <em>Membuka</em></h2>
+    <p class="lead">Backup-mu dikunci kode pemulihan pribadimu. Bahkan kami pun tidak bisa mengintip isinya.</p>
+    <div class="grid3">
+      <div class="card"><div class="tile">🔑</div><h3>Kode Milikmu Pribadi</h3><p>12 karakter acak yang hanya kamu tahu. Tanpa kode ini, backup tidak bisa dibuka siapa pun.</p></div>
+      <div class="card"><div class="tile">🛡️</div><h3>Server FinOwi</h3><p>Data tersimpan di infrastruktur cloud profesional — bukan di laptop seseorang. Terlindungi &amp; selalu online.</p></div>
+      <div class="card"><div class="tile">📵</div><h3>Tetap Offline-First</h3><p>Cloud hanya untuk backup. Kasir harianmu tetap jalan 100% tanpa internet, seperti biasa.</p></div>
+    </div>
+  </section>
+
+  <section id="banding">
+    <div class="eyebrow">Perbandingan</div>
+    <h2>Tanpa vs Dengan <em>Cloud Backup</em></h2>
+    <p class="lead"></p>
+    <div class="vs">
+      <div class="vscol">
+        <h3>😰 Tanpa Cloud Backup</h3>
+        <ul>
+          <li><b class="x">✕</b>HP hilang = data lenyap selamanya</li>
+          <li><b class="x">✕</b>Ganti HP = pindah data manual</li>
+          <li><b class="x">✕</b>Harus ingat backup file sendiri</li>
+          <li><b class="x">✕</b>Was-was tiap HP bermasalah</li>
+        </ul>
+      </div>
+      <div class="vscol win">
+        <h3>😌 Dengan Cloud Backup</h3>
+        <ul>
+          <li><b class="c">✓</b>HP hilang = pulihkan dalam hitungan menit</li>
+          <li><b class="c">✓</b>Ganti HP = masukkan kode, beres</li>
+          <li><b class="c">✓</b>Backup otomatis ke cloud</li>
+          <li><b class="c">✓</b>Tidur nyenyak, data aman</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta">
+    <div class="secbox">
+      <div class="eyebrow">Segera Hadir</div>
+      <h2 style="margin-bottom:10px">Rilis di <em>v1.36</em> — Gratis</h2>
+      <p class="lead" style="margin-bottom:0">Untuk semua pelanggan aktif OGKasir. Tanpa biaya tambahan, tanpa batasan aneh.</p>
+      <div class="cta-row">
+        <a class="btn wa" href="https://wa.me/6288279406268?text=Halo!%20Ingatkan%20saya%20saat%20Cloud%20Backup%20OGKasir%20rilis.">🔔 Ingatkan Saya Saat Rilis</a>
+        <a class="btn" href="index.html#download">⬇️ Download OGKasir</a>
+      </div>
+      <p style="color:var(--faint);font-size:13.5px;margin-top:18px">Sudah pakai OGKasir? Update otomatis via aplikasi saat v1.36 rilis.</p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="eyebrow">FAQ</div>
+    <h2>Yang Sering <em>Ditanyakan</em></h2>
+    <p class="lead"></p>
+    <div class="faq">
+      <details class="qa" open><summary>Apakah dataku tetap aman di cloud?</summary><div class="a">Ya. Backup-mu hanya bisa dibuka dengan kode pemulihan pribadimu. Tanpa kode itu, tidak ada — termasuk kami — yang bisa membaca isinya.</div></details>
+      <details class="qa"><summary>Apakah kasirku jadi butuh internet terus?</summary><div class="a">Tidak. OGKasir tetap 100% offline untuk operasional harian. Internet hanya dipakai sesaat ketika kamu menekan tombol backup atau restore.</div></details>
+      <details class="qa"><summary>Berapa biayanya?</summary><div class="a">Gratis untuk semua pelanggan aktif OGKasir. Tidak ada biaya tambahan.</div></details>
+      <details class="qa"><summary>Bagaimana kalau kode pemulihanku hilang?</summary><div class="a">Kode pemulihan tidak bisa kami reset — itu justru yang bikin datamu aman. Simpan di tempat yang aman (catat di buku / password manager) begitu kamu menerimanya.</div></details>
+    </div>
+  </section>
+</div>
+
+<footer>© 2026 OGKasir · Cloud Backup — segera hadir di v1.36 · <a href="index.html" style="color:var(--gold)">ogkasir.my.id</a></footer>
+<a class="wa-float" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya%20tentang%20Cloud%20Backup%20OGKasir." aria-label="Chat WhatsApp">💬</a>
+
+<script>
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  var els = document.querySelectorAll('.card, .vscol, .secbox, .qa, .chipf');
+  els.forEach(function (el, i) {
+    el.style.transitionDelay = ((i % 3) * 80) + 'ms';
+    el.classList.add('reveal');
+  });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>

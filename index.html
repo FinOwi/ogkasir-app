@@ -257,6 +257,71 @@
   /* wa float */
   .wa-float { position: fixed; right: 20px; bottom: 20px; z-index: 60; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(180deg, #2fe07a, #1eb85a); display: flex; align-items: center; justify-content: center; font-size: 30px; text-decoration: none; box-shadow: 0 12px 32px rgba(37,211,102,.5); transition: transform .2s; }
   .wa-float:hover { transform: scale(1.08); }
+  /* ===== Premium polish: aurora, grain, glow ===== */
+  body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+    background:
+      radial-gradient(560px 380px at 8% 4%, rgba(255,213,79,.13), transparent 65%),
+      radial-gradient(620px 420px at 94% 10%, rgba(255,120,60,.08), transparent 65%),
+      radial-gradient(720px 480px at 50% 108%, rgba(255,179,0,.07), transparent 65%);
+    animation: aurora 16s ease-in-out infinite alternate; }
+  @keyframes aurora { to { transform: translate3d(0,-26px,0) scale(1.06); } }
+  body::after { content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E"); }
+  .wrap, nav, footer, .announce, .marquee { position: relative; z-index: 2; }
+  .eyebrow { display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase; letter-spacing: 3px; font-size: 12px; font-weight: 800;
+    background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 14px; }
+  .eyebrow::before, .eyebrow::after { content: ''; width: 26px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-d)); }
+  .eyebrow::after { background: linear-gradient(90deg, var(--gold-d), transparent); }
+  section h2 { letter-spacing: -1.2px; }
+  .bcard, .feat { position: relative; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; overflow: hidden; }
+  .bcard::before, .feat::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,213,79,.55), transparent); opacity: 0; transition: opacity .3s; }
+  .bcard:hover, .feat:hover { transform: translateY(-5px); border-color: rgba(255,213,79,.4);
+    box-shadow: 0 22px 48px rgba(0,0,0,.42), 0 0 0 1px rgba(255,213,79,.12), 0 8px 32px rgba(255,183,0,.12); }
+  .bcard:hover::before, .feat:hover::before { opacity: 1; }
+  .btn { position: relative; overflow: hidden; }
+  .btn::after { content: ''; position: absolute; top: 0; left: -80%; width: 55%; height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(255,255,255,.5), transparent); transform: skewX(-20deg); transition: left .55s ease; }
+  .btn:hover::after { left: 130%; }
+  .phone { position: relative; }
+  .phone::before { content: ''; position: absolute; inset: -26px; border-radius: 60px; z-index: -1;
+    background: conic-gradient(from 140deg, rgba(255,213,79,.35), rgba(255,120,60,.12), rgba(255,213,79,.05), rgba(255,213,79,.35));
+    filter: blur(28px); animation: spinGlow 9s linear infinite; }
+  @keyframes spinGlow { to { transform: rotate(360deg); } }
+  .float-card { background: rgba(16,24,48,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,213,79,.22); box-shadow: 0 18px 44px rgba(0,0,0,.45), 0 0 24px rgba(255,183,0,.08); }
+
+  /* ===== Yang Baru: timeline versi ===== */
+  .timeline { position: relative; max-width: 760px; margin: 34px auto 0; padding-left: 34px; }
+  .timeline::before { content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 2px;
+    background: linear-gradient(180deg, var(--gold), rgba(255,213,79,.12)); border-radius: 2px; }
+  .tcard { position: relative; background: linear-gradient(160deg, var(--card2), var(--card));
+    border: 1px solid var(--line); border-radius: 18px; padding: 20px 22px; margin-bottom: 18px;
+    box-shadow: 0 14px 36px rgba(0,0,0,.3); transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+  .tcard::before { content: ''; position: absolute; left: -29px; top: 26px; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--gold); box-shadow: 0 0 0 4px rgba(255,213,79,.18), 0 0 14px var(--gold); }
+  .tcard:hover { transform: translateX(6px); border-color: rgba(255,213,79,.4); box-shadow: 0 18px 44px rgba(0,0,0,.4), 0 0 28px rgba(255,183,0,.1); }
+  .tcard .vrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .vbadge { font-size: 12.5px; font-weight: 800; padding: 5px 13px; border-radius: 99px; letter-spacing: .4px;
+    background: linear-gradient(180deg, var(--gold), var(--gold-d)); color: #3b2a1e; box-shadow: 0 4px 14px rgba(255,183,0,.35); }
+  .vbadge.soon { background: transparent; color: var(--gold); border: 1.5px dashed rgba(255,213,79,.6); box-shadow: none; }
+  .vbadge.new { background: linear-gradient(180deg, #2fe07a, #1fc25c); color: #063; box-shadow: 0 4px 14px rgba(37,211,102,.3); }
+  .tcard h3 { font-size: 19px; letter-spacing: -.4px; margin-bottom: 6px; }
+  .tcard p { color: var(--mut); font-size: 15px; }
+  .tcard p b { color: var(--ink); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .chip { font-size: 12.5px; font-weight: 700; color: var(--gold); background: rgba(255,213,79,.1);
+    border: 1px solid rgba(255,213,79,.3); padding: 5px 12px; border-radius: 99px; }
+
+  /* download panel glow */
+  .dl { position: relative; overflow: hidden; }
+  .dl::before { content: ''; position: absolute; inset: -40%; z-index: 0;
+    background: conic-gradient(from 0deg, transparent 70%, rgba(255,213,79,.14), transparent 88%); animation: spinGlow 12s linear infinite; }
+  .dl > * { position: relative; z-index: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    body::before, .phone::before, .dl::before { animation: none !important; }
+    .btn::after { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -267,7 +332,7 @@
   <div class="wrap">
     <a class="brand" href="#"><img src="logo.png" alt="OGKasir"> OGKasir</a>
     <div class="nav-links">
-      <a href="#kenapa">Kenapa</a><a href="#tampilan">Tampilan</a><a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a>
+      <a href="#kenapa">Kenapa</a><a href="#baru">✨ Yang Baru</a><a href="#tampilan">Tampilan</a><a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a>
     </div>
     <div class="nav-right">
       <button class="burger" id="burger" aria-label="Buka menu">☰</button>
@@ -275,13 +340,13 @@
     </div>
   </div>
   <div class="mobile-menu" id="mmenu">
-    <a href="#kenapa">Kenapa</a><a href="#tampilan">Tampilan</a><a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a>
+    <a href="#kenapa">Kenapa</a><a href="#baru">✨ Yang Baru</a><a href="#tampilan">Tampilan</a><a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a>
   </div>
 </nav>
 
 <div class="wrap">
   <div class="hero">
-    <div><span class="kicker"><span class="dot"></span>⚡ Kasir kilat buat UMKM Indonesia</span></div>
+    <div><span class="kicker"><span class="dot"></span>✨ Baru: 5 tema pilihan & cloud backup segera hadir</span></div>
     <h1>Aplikasi Kasir Buat <em>UMKM</em></h1>
     <p class="sub">Catat transaksi, kelola stok, lihat omzet — semua dari HP kamu. Offline, Bahasa Indonesia, gampang dipakai karyawan.</p>
     <div class="trial">🎉 GRATIS trial 7 hari — full fitur, tanpa kartu kredit</div>
@@ -303,7 +368,7 @@
     </div>
 
     <div class="stats">
-      <div class="stat"><b>9+</b><span>Fitur unggulan</span></div>
+      <div class="stat"><b>13+</b><span>Fitur unggulan</span></div>
       <div class="stat"><b>100%</b><span>Offline, tanpa internet</span></div>
       <div class="stat"><b>7 hari</b><span>Trial gratis full fitur</span></div>
       <div class="stat"><span class="flag-id" role="img" aria-label="Bendera Indonesia"></span><span>Buatan Indonesia</span></div>
@@ -319,6 +384,32 @@
 </div>
 
 <div class="wrap">
+  <section id="baru">
+    <div class="eyebrow">Update Terbaru</div>
+    <h2>Selalu Ada Yang <em>Baru</em> ✨</h2>
+    <p class="lead">OGKasir terus berkembang — update gratis untuk semua pelanggan aktif.</p>
+    <div class="timeline">
+      <div class="tcard">
+        <div class="vrow"><span class="vbadge">v1.36</span><span class="vbadge soon">SEGERA HADIR</span></div>
+        <h3>☁️ Cloud Backup</h3>
+        <p>Data kasir <b>ter-backup otomatis ke cloud FinOwi</b> — ganti HP atau HP hilang, pulihkan semua data dalam hitungan menit pakai kode pemulihan pribadimu. Tetap aman: hanya kamu yang bisa membuka backup-mu.</p>
+        <div class="chips"><span class="chip">Otomatis</span><span class="chip">Kode pemulihan pribadi</span><span class="chip">Gratis</span></div>
+      </div>
+      <div class="tcard">
+        <div class="vrow"><span class="vbadge">v1.35</span><span class="vbadge new">BARU</span></div>
+        <h3>🎨 5 Pilihan Tema</h3>
+        <p>Bosan tampilan itu-itu saja? Pilih gayamu: <b>Klasik, Gelap, Midnight Gold, Clean Fintech,</b> atau <b>Bold Warkop</b>. Satu ketuk di Pengaturan → Custom Tampilan — seluruh aplikasi berubah mengikuti.</p>
+        <div class="chips"><span class="chip">Midnight Gold</span><span class="chip">Clean Fintech</span><span class="chip">Bold Warkop</span></div>
+      </div>
+      <div class="tcard">
+        <div class="vrow"><span class="vbadge">v1.34</span><span class="vbadge new">BARU</span></div>
+        <h3>📝 Catatan Per Item & ➕ Tambah Pesanan</h3>
+        <p><b>"Es teh-nya gula sedikit ya!"</b> — catat permintaan khusus per item dengan sekali ketuk (ada preset siap pakai + bebas ketik), tercetak otomatis di struk. Pelanggan nambah pesanan? Tambahkan ke tagihan yang sama tanpa ribet — stok terhitung otomatis.</p>
+        <div class="chips"><span class="chip">Preset cepat</span><span class="chip">Masuk struk</span><span class="chip">Stok otomatis</span></div>
+      </div>
+    </div>
+  </section>
+
   <section id="kenapa">
     <div class="eyebrow">Kenapa OGKasir</div>
     <h2>Dibuat Buat Usaha Kecil, <em>Bukan Buat Ribet</em></h2>
@@ -328,7 +419,7 @@
       <div class="bcard"><div class="tile">💰</div><h3>Harga Jujur</h3><p>Bulan pertama Rp8rb. Rp49rb/bln setelahnya — tanpa potongan per transaksi, tanpa biaya sembunyi.</p></div>
       <div class="bcard"><div class="tile">👆</div><h3>Gampang Dipakai</h3><p>Karyawan baru bisa pakai dalam 5 menit. Tap menu, tap bayar, kembalian kehitung otomatis.</p></div>
       <div class="bcard"><div class="tile">💬</div><h3>Support via WhatsApp</h3><p>Ada kendala? Chat langsung, fast respon. Nggak perlu tiket, nggak perlu antre.</p></div>
-      <div class="bcard"><div class="tile">🔄</div><h3>Selalu Update</h3><p>Fitur baru mengalir terus — jual per kilo, tagihan, scan barcode — semua gratis untuk pelanggan aktif.</p></div>
+      <div class="bcard"><div class="tile">🔄</div><h3>Selalu Update</h3><p>Fitur baru mengalir terus — catatan per item, tambah pesanan, 5 tema, cloud backup — semua gratis untuk pelanggan aktif.</p></div>
       <div class="bcard"><div class="tile">📱</div><h3>Ringan di HP</h3><p>APK kecil, jalan mulus di HP kentang sekalipun. Android 10 ke atas siap gas.</p></div>
     </div>
   </section>
@@ -345,7 +436,7 @@
       <ul class="show-list">
         <li><div class="n">1</div><div><b>Kasir secepat kilat</b><span>Ketuk menu atau scan barcode — total &amp; kembalian kehitung otomatis.</span></div></li>
         <li><div class="n">2</div><div><b>Laporan yang ngertiin usaha</b><span>Omzet per jam, laba, menu terlaris — plus export Excel rapi.</span></div></li>
-        <li><div class="n">3</div><div><b>Mode gelap &amp; terang</b><span>Nyaman dipakai siang maupun saat warkop paling ramai di malam hari.</span></div></li>
+        <li><div class="n">3</div><div><b>5 tema pilihan</b><span>Dari Klasik sampai Midnight Gold — ganti suasana kasir sesuai gayamu, siang maupun malam.</span></div></li>
       </ul>
     </div>
   </section>
@@ -363,7 +454,11 @@
       <div class="feat"><div class="tile">⏳</div><h3>Tagihan / Kas Bon</h3><p>Pelanggan bon dulu? Catat sebagai tagihan — struk BELUM DIBAYAR + total piutang terpantau.</p></div>
       <div class="feat"><div class="tile">🔑</div><h3>Lisensi Per Device</h3><p>Sistem aktivasi offline yang adil — bayar per HP kasir yang dipakai.</p></div>
       <div class="feat"><div class="tile">🔒</div><h3>PIN Keamanan</h3><p>Kunci aplikasi pakai PIN 6 digit biar karyawan nggak utak-atik.</p></div>
+      <div class="feat"><div class="tile">📝</div><h3>Catatan Per Item</h3><p>"Gula sedikit", "tanpa es" — catat per item sekali ketuk, tercetak otomatis di struk.</p></div>
+      <div class="feat"><div class="tile">➕</div><h3>Tambah Pesanan</h3><p>Pelanggan nambah? Masukkan ke tagihan yang sama — stok terhitung otomatis.</p></div>
+      <div class="feat"><div class="tile">🎨</div><h3>5 Pilihan Tema</h3><p>Klasik, Gelap, Midnight Gold, Clean Fintech, Bold Warkop — ganti suasana kapan saja.</p></div>
       <div class="feat"><div class="tile">💾</div><h3>Backup &amp; Restore</h3><p>Backup data ke file, restore kapan saja. Update aplikasi tanpa takut data hilang.</p></div>
+      <a href="cloud-backup.html" style="text-decoration:none;color:inherit"><div class="feat"><div class="tile">☁️</div><h3>Cloud Backup <span class="vbadge soon" style="font-size:10.5px;padding:3px 10px">SEGERA</span></h3><p>Backup otomatis ke cloud FinOwi. Ganti HP? Pulihkan semua data dalam hitungan menit. <b style="color:var(--gold)">Pelajari →</b></p></div></a>
     </div>
   </section>
 
@@ -440,6 +535,7 @@
     <h2>Sering <em>Ditanyakan</em></h2>
     <p class="lead"></p>
     <div class="faq">
+      <details class="qa"><summary>Apakah ada backup cloud?</summary><div class="a">Segera hadir! Cloud Backup OGKasir menyimpan salinan data kasirmu di cloud FinOwi secara otomatis — kalau ganti HP atau HP hilang, pulihkan semuanya dalam hitungan menit pakai kode pemulihan pribadimu. 100% gratis untuk pelanggan aktif.</div></details>
       <details class="qa" open><summary>Apakah butuh internet?</summary><div class="a">Tidak. OGKasir jalan 100% offline. Internet hanya dipakai sesekali untuk cek update aplikasi.</div></details>
       <details class="qa"><summary>Apakah dataku hilang saat update / lisensi habis?</summary><div class="a">Tidak. Data transaksi, menu &amp; stok tetap aman — update menimpa aplikasi tanpa menghapus data, dan lisensi habis hanya mengunci fitur sampai diperpanjang.</div></details>
       <details class="qa"><summary>Printer apa yang didukung?</summary><div class="a">Printer thermal Bluetooth 58mm (mis. XPrinter). Pairing di Bluetooth HP, pilih di Pengaturan → Printer, lalu cetak dari layar struk.</div></details>
@@ -524,7 +620,7 @@ fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest')
 // Scroll-reveal: elemen muncul halus saat masuk viewport
 (function () {
   if (!('IntersectionObserver' in window)) return;
-  var els = document.querySelectorAll('.bcard, .feat, .step, .price-card, .qa, .dl, .show-list li, .browser-frame, .float-card, .stats');
+  var els = document.querySelectorAll('.bcard, .feat, .step, .price-card, .qa, .dl, .show-list li, .browser-frame, .float-card, .stats, .tcard');
   els.forEach(function (el) {
     var sibs = Array.prototype.slice.call(el.parentNode.children);
     el.style.transitionDelay = ((sibs.indexOf(el) % 4) * 70) + 'ms';
