@@ -8,3 +8,6 @@ build/
 # Tool generator lisensi (milik penjual, bukan untuk publik)
 license-gen.html
 license-gen-template.html
+
+# Source code aplikasi — tidak dipublikasikan (web + rilis APK tidak butuh ini)
+app/
