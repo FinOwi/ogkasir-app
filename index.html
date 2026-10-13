@@ -192,6 +192,16 @@
   .feat { background: linear-gradient(160deg, var(--card2), var(--card)); border: 1px solid var(--line); border-radius: var(--r); padding: 28px 24px; transition: transform .25s, box-shadow .25s, border-color .25s; }
   .feat:hover { transform: translateY(-6px); border-color: rgba(255,213,79,.4); box-shadow: 0 24px 50px rgba(0,0,0,.4), 0 0 40px rgba(255,183,0,.08); }
   .feat .tile { width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 25px; background: linear-gradient(135deg, rgba(255,213,79,.28), rgba(255,179,0,.10)); border: 1px solid rgba(255,213,79,.35); margin-bottom: 16px; }
+
+  /* kartu fitur bergambar */
+  .feat { padding: 0; overflow: hidden; }
+  .fshot { aspect-ratio: 16/10; overflow: hidden; border-bottom: 1px solid var(--line); background: #0e0e12; }
+  .fshot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .4s ease; }
+  .feat:hover .fshot img { transform: scale(1.04); }
+  .fshot.mid img { object-position: center 35%; }
+  .fshot.bot img { object-position: center 70%; }
+  .feat h3 { padding: 20px 22px 0; }
+  .feat p { padding: 0 22px 24px; }
   .feat h3 { font-size: 17px; font-weight: 800; margin-bottom: 7px; letter-spacing: -.2px; }
   .feat p { font-size: 14px; color: var(--mut); }
   @media (max-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
@@ -446,19 +456,19 @@
     <h2>Lengkap, <em>Harga Warteg</em> ☕</h2>
     <p class="lead">Semua yang warkop butuhkan — tanpa ribet, tanpa mahal.</p>
     <div class="grid">
-      <div class="feat"><div class="tile">🧾</div><h3>Kasir Kilat</h3><p>Diskon Rp/%, tunai/QRIS/transfer, kembalian otomatis, struk digital siap dibagikan.</p></div>
-      <div class="feat"><div class="tile">⚖️</div><h3>Jual Per Kilo</h3><p>Buat produk timbangan: tombol berat 0.25/0.5/1 kg atau ketik manual — total &amp; stok terhitung otomatis.</p></div>
-      <div class="feat"><div class="tile">🖨️</div><h3>Cetak Struk Thermal</h3><p>Connect via Bluetooth ke printer thermal 58mm. Satu ketuk, struk keluar.</p></div>
-      <div class="feat"><div class="tile">📦</div><h3>Menu &amp; Stok</h3><p>Foto menu, kategori, stok berkurang otomatis tiap transaksi + peringatan stok menipis.</p></div>
-      <div class="feat"><div class="tile">📊</div><h3>Laporan Rapi</h3><p>Omzet per jam/hari, laba, produk terlaris — plus export ke Excel yang rapi.</p></div>
-      <div class="feat"><div class="tile">⏳</div><h3>Tagihan / Kas Bon</h3><p>Pelanggan bon dulu? Catat sebagai tagihan — struk BELUM DIBAYAR + total piutang terpantau.</p></div>
-      <div class="feat"><div class="tile">🔑</div><h3>Lisensi Per Device</h3><p>Sistem aktivasi offline yang adil — bayar per HP kasir yang dipakai.</p></div>
-      <div class="feat"><div class="tile">🔒</div><h3>PIN Keamanan</h3><p>Kunci aplikasi pakai PIN 6 digit biar karyawan nggak utak-atik.</p></div>
-      <div class="feat"><div class="tile">📝</div><h3>Catatan Per Item</h3><p>"Gula sedikit", "tanpa es" — catat per item sekali ketuk, tercetak otomatis di struk.</p></div>
-      <div class="feat"><div class="tile">➕</div><h3>Tambah Pesanan</h3><p>Pelanggan nambah? Masukkan ke tagihan yang sama — stok terhitung otomatis.</p></div>
-      <div class="feat"><div class="tile">🎨</div><h3>5 Pilihan Tema</h3><p>Klasik, Gelap, Midnight Gold, Clean Fintech, Bold Warkop — ganti suasana kapan saja.</p></div>
-      <div class="feat"><div class="tile">💾</div><h3>Backup &amp; Restore</h3><p>Backup data ke file, restore kapan saja. Update aplikasi tanpa takut data hilang.</p></div>
-      <a href="cloud-backup.html" style="text-decoration:none;color:inherit"><div class="feat"><div class="tile">☁️</div><h3>Cloud Backup</h3><p>Backup otomatis ke cloud FinOwi. Ganti HP? Pulihkan semua data dalam hitungan menit. <b style="color:var(--gold)">Pelajari →</b></p></div></a>
+      <div class="feat"><div class="fshot"><img src="img/f-kasir.jpg" alt="Layar kasir OGKasir" loading="lazy"></div><h3>Kasir Kilat</h3><p>Diskon Rp/%, tunai/QRIS/transfer, kembalian otomatis, struk digital siap dibagikan.</p></div>
+      <div class="feat"><div class="fshot mid"><img src="img/f-kasir.jpg" alt="Kasir dengan fitur timbangan" loading="lazy"></div><h3>Jual Per Kilo</h3><p>Buat produk timbangan: tombol berat 0.25/0.5/1 kg atau ketik manual — total &amp; stok terhitung otomatis.</p></div>
+      <div class="feat"><div class="fshot"><img src="img/f-cart.jpg" alt="Alur pembayaran dan struk" loading="lazy"></div><h3>Cetak Struk Thermal</h3><p>Connect via Bluetooth ke printer thermal 58mm. Satu ketuk, struk keluar.</p></div>
+      <div class="feat"><div class="fshot"><img src="img/f-menu.jpg" alt="Daftar menu OGKasir" loading="lazy"></div><h3>Menu &amp; Stok</h3><p>Foto menu, kategori, stok berkurang otomatis tiap transaksi + peringatan stok menipis.</p></div>
+      <div class="feat"><div class="fshot"><img src="img/f-laporan.jpg" alt="Laporan omzet OGKasir" loading="lazy"></div><h3>Laporan Rapi</h3><p>Omzet per jam/hari, laba, produk terlaris — plus export ke Excel yang rapi.</p></div>
+      <div class="feat"><div class="fshot"><img src="img/f-tagihan.jpg" alt="Daftar tagihan" loading="lazy"></div><h3>Tagihan / Kas Bon</h3><p>Pelanggan bon dulu? Catat sebagai tagihan — struk BELUM DIBAYAR + total piutang terpantau.</p></div>
+      <div class="feat"><div class="fshot"><img src="img/f-lainnya.jpg" alt="Kartu lisensi di pengaturan" loading="lazy"></div><h3>Lisensi Per Device</h3><p>Sistem aktivasi offline yang adil — bayar per HP kasir yang dipakai.</p></div>
+      <div class="feat"><div class="fshot"><img src="img/f-pin.jpg" alt="Kunci PIN OGKasir" loading="lazy"></div><h3>PIN Keamanan</h3><p>Kunci aplikasi pakai PIN 6 digit biar karyawan nggak utak-atik.</p></div>
+      <div class="feat"><div class="fshot mid"><img src="img/f-cart.jpg" alt="Catatan per item di keranjang" loading="lazy"></div><h3>Catatan Per Item</h3><p>"Gula sedikit", "tanpa es" — catat per item sekali ketuk, tercetak otomatis di struk.</p></div>
+      <div class="feat"><div class="fshot mid"><img src="img/f-tagihan.jpg" alt="Tagihan untuk tambah pesanan" loading="lazy"></div><h3>Tambah Pesanan</h3><p>Pelanggan nambah? Masukkan ke tagihan yang sama — stok terhitung otomatis.</p></div>
+      <div class="feat"><div class="fshot"><img src="img/f-tema.jpg" alt="Pilihan tema tampilan" loading="lazy"></div><h3>5 Pilihan Tema</h3><p>Klasik, Gelap, Midnight Gold, Clean Fintech, Bold Warkop — ganti suasana kapan saja.</p></div>
+      <div class="feat"><div class="fshot mid"><img src="img/f-cloud.jpg" alt="Kartu Data dan Backup" loading="lazy"></div><h3>Backup &amp; Restore</h3><p>Backup data ke file, restore kapan saja. Update aplikasi tanpa takut data hilang.</p></div>
+      <a href="cloud-backup.html" style="text-decoration:none;color:inherit"><div class="feat"><div class="fshot bot"><img src="img/f-cloud.jpg" alt="Kartu Cloud Backup" loading="lazy"></div><h3>Cloud Backup</h3><p>Backup otomatis ke cloud FinOwi. Ganti HP? Pulihkan semua data dalam hitungan menit. <b style="color:var(--gold)">Pelajari →</b></p></div></a>
     </div>
   </section>
 
