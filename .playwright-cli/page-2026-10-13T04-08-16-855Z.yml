@@ -1,0 +1,392 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - text: 🎉 Bulan pertama cuma Rp8rb · 🔥 Promo Launching hemat s/d 35% · Trial 7 hari GRATIS ·
+    - link "Lihat harga" [ref=e3] [cursor=pointer]:
+      - /url: "#harga"
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - link [ref=e6] [cursor=pointer]:
+        - /url: "#"
+        - img "OGKasir" [ref=e7]
+        - text: OGKasir
+      - generic [ref=e8]:
+        - button "Buka menu" [ref=e9] [cursor=pointer]: ☰
+        - link "Download" [ref=e10] [cursor=pointer]:
+          - /url: "#download"
+  - generic [ref=e12]:
+    - generic [ref=e13]: "✨ Baru: 5 tema pilihan & cloud backup"
+    - heading [level=1] [ref=e16]:
+      - text: Aplikasi Kasir Buat
+      - emphasis [ref=e17]: UMKM
+    - paragraph [ref=e18]: Catat transaksi, kelola stok, lihat omzet — semua dari HP kamu. Offline, Bahasa Indonesia, gampang dipakai karyawan.
+    - generic [ref=e19]: 🎉 GRATIS trial 7 hari — full fitur, tanpa kartu kredit
+    - generic [ref=e20]:
+      - link "⬇️ Download Sekarang" [ref=e21] [cursor=pointer]:
+        - /url: https://github.com/FinOwi/ogkasir-app/releases/download/37/OGKasir-v1.36.apk
+      - link "Lihat Harga" [ref=e22] [cursor=pointer]:
+        - /url: "#harga"
+    - generic [ref=e23]: Ukuran ±254 KB · 13/10/2026
+    - generic [ref=e24]:
+      - generic [ref=e25]: ✓ Tanpa kartu kredit
+      - generic [ref=e26]: ✓ 100% offline
+      - generic [ref=e27]: ✓ Support WA fast respon
+    - generic [ref=e28]:
+      - img "Tampilan aplikasi kasir OGKasir di HP" [ref=e31]
+      - generic [ref=e32]:
+        - generic [ref=e33]: ✅
+        - generic [ref=e34]:
+          - generic [ref=e35]: Terjual Rp72.000
+          - text: 7 item · baru saja
+      - generic [ref=e36]:
+        - generic [ref=e37]: 📦
+        - generic [ref=e38]:
+          - generic [ref=e39]: Stok diperbarui
+          - text: Otomatis tiap transaksi
+      - generic [ref=e43]:
+        - generic [ref=e44]: Omzet tercatat
+        - text: ● Live
+    - generic [ref=e45]:
+      - generic [ref=e46]:
+        - generic [ref=e47]: 13+
+        - text: Fitur unggulan
+      - generic [ref=e48]:
+        - generic [ref=e49]: 100%
+        - text: Offline, tanpa internet
+      - generic [ref=e50]:
+        - generic [ref=e51]: 7 hari
+        - text: Trial gratis full fitur
+      - generic [ref=e52]:
+        - img "Bendera Indonesia" [ref=e53]
+        - text: Buatan Indonesia
+  - generic [ref=e55]:
+    - generic [ref=e56]: ☕ Warkop
+    - generic [ref=e57]: 🍜 Warung Makan
+    - generic [ref=e58]: 🏪 Toko Kelontong
+    - generic [ref=e59]: 🥤 Kedai Minuman
+    - generic [ref=e60]: 🍢 Angkringan
+    - generic [ref=e61]: 🍰 Toko Kue
+    - generic [ref=e62]: 🥟 Depot
+    - generic [ref=e63]: 🍛 Kantin
+    - generic [ref=e64]: ☕ Warkop
+    - generic [ref=e65]: 🍜 Warung Makan
+    - generic [ref=e66]: 🏪 Toko Kelontong
+    - generic [ref=e67]: 🥤 Kedai Minuman
+    - generic [ref=e68]: 🍢 Angkringan
+    - generic [ref=e69]: 🍰 Toko Kue
+    - generic [ref=e70]: 🥟 Depot
+    - generic [ref=e71]: 🍛 Kantin
+  - generic [ref=e72]:
+    - generic [ref=e73]:
+      - generic [ref=e74]: Update Terbaru
+      - heading [level=2] [ref=e75]:
+        - text: Selalu Ada Yang
+        - emphasis [ref=e76]: Baru
+        - text: ✨
+      - paragraph [ref=e77]: OGKasir terus berkembang — update gratis untuk semua pelanggan aktif.
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - generic [ref=e81]: v1.36
+            - generic [ref=e82]: BARU
+          - heading "☁️ Cloud Backup" [level=3] [ref=e83]
+          - paragraph [ref=e84]: "Data kasir ter-backup otomatis ke cloud FinOwi — ganti HP atau HP hilang, pulihkan semua data dalam hitungan menit pakai kode pemulihan pribadimu. Tetap aman: hanya kamu yang bisa membuka backup-mu."
+          - generic [ref=e85]:
+            - generic [ref=e86]: Otomatis
+            - generic [ref=e87]: Kode pemulihan pribadi
+            - generic [ref=e88]: Gratis
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e91]: v1.35
+            - generic [ref=e92]: BARU
+          - heading "🎨 5 Pilihan Tema" [level=3] [ref=e93]
+          - paragraph [ref=e94]: "Bosan tampilan itu-itu saja? Pilih gayamu: Klasik, Gelap, Midnight Gold, Clean Fintech, atau Bold Warkop. Satu ketuk di Pengaturan → Custom Tampilan — seluruh aplikasi berubah mengikuti."
+          - generic [ref=e95]:
+            - generic [ref=e96]: Midnight Gold
+            - generic [ref=e97]: Clean Fintech
+            - generic [ref=e98]: Bold Warkop
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - generic [ref=e101]: v1.34
+            - generic [ref=e102]: BARU
+          - heading "📝 Catatan Per Item & ➕ Tambah Pesanan" [level=3] [ref=e103]
+          - paragraph [ref=e104]: "\"Es teh-nya gula sedikit ya!\" — catat permintaan khusus per item dengan sekali ketuk (ada preset siap pakai + bebas ketik), tercetak otomatis di struk. Pelanggan nambah pesanan? Tambahkan ke tagihan yang sama tanpa ribet — stok terhitung otomatis."
+          - generic [ref=e105]:
+            - generic [ref=e106]: Preset cepat
+            - generic [ref=e107]: Masuk struk
+            - generic [ref=e108]: Stok otomatis
+    - generic [ref=e109]:
+      - generic [ref=e110]: Kenapa OGKasir
+      - heading [level=2] [ref=e111]:
+        - text: Dibuat Buat Usaha Kecil,
+        - emphasis [ref=e112]: Bukan Buat Ribet
+      - paragraph [ref=e113]: Bukan software perusahaan besar yang ribet — ini kasir yang ngertiin warkop.
+      - generic [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]: 📵
+          - heading "Offline-First, Data Milikmu" [level=3] [ref=e117]
+          - paragraph [ref=e118]: Jalan penuh tanpa internet — kasir, stok, laporan, semua tetap jalan. Data tersimpan di HP kamu sendiri, bukan di server orang. Internet mati? Jualan tetap jalan.
+          - text: ⚡
+        - generic [ref=e119]:
+          - generic [ref=e120]: 💰
+          - heading "Harga Jujur" [level=3] [ref=e121]
+          - paragraph [ref=e122]: Bulan pertama Rp8rb. Rp49rb/bln setelahnya — tanpa potongan per transaksi, tanpa biaya sembunyi.
+        - generic [ref=e123]:
+          - generic [ref=e124]: 👆
+          - heading "Gampang Dipakai" [level=3] [ref=e125]
+          - paragraph [ref=e126]: Karyawan baru bisa pakai dalam 5 menit. Tap menu, tap bayar, kembalian kehitung otomatis.
+        - generic [ref=e127]:
+          - generic [ref=e128]: 💬
+          - heading "Support via WhatsApp" [level=3] [ref=e129]
+          - paragraph [ref=e130]: Ada kendala? Chat langsung, fast respon. Nggak perlu tiket, nggak perlu antre.
+        - generic [ref=e131]:
+          - generic [ref=e132]: 🔄
+          - heading "Selalu Update" [level=3] [ref=e133]
+          - paragraph [ref=e134]: Fitur baru mengalir terus — catatan per item, tambah pesanan, 5 tema, cloud backup — semua gratis untuk pelanggan aktif.
+        - generic [ref=e135]:
+          - generic [ref=e136]: 📱
+          - heading "Ringan di HP" [level=3] [ref=e137]
+          - paragraph [ref=e138]: APK kecil, jalan mulus di HP kentang sekalipun. Android 10 ke atas siap gas.
+    - generic [ref=e139]:
+      - generic [ref=e140]: Tampilan Asli
+      - heading [level=2] [ref=e141]:
+        - text: Lihat Isinya
+        - emphasis [ref=e142]: Dulu
+      - paragraph [ref=e143]: Layar asli aplikasi — bukan mockup tempelan. Yang kamu lihat, itu yang kamu dapat.
+      - generic [ref=e144]:
+        - img "Laporan omzet OGKasir dengan grafik per jam" [ref=e150]
+        - list [ref=e151]:
+          - listitem [ref=e152]:
+            - generic [ref=e153]: "1"
+            - generic [ref=e154]:
+              - generic [ref=e155]: Kasir secepat kilat
+              - text: Ketuk menu atau scan barcode — total & kembalian kehitung otomatis.
+          - listitem [ref=e156]:
+            - generic [ref=e157]: "2"
+            - generic [ref=e158]:
+              - generic [ref=e159]: Laporan yang ngertiin usaha
+              - text: Omzet per jam, laba, menu terlaris — plus export Excel rapi.
+          - listitem [ref=e160]:
+            - generic [ref=e161]: "3"
+            - generic [ref=e162]:
+              - generic [ref=e163]: 5 tema pilihan
+              - text: Dari Klasik sampai Midnight Gold — ganti suasana kasir sesuai gayamu, siang maupun malam.
+    - generic [ref=e164]:
+      - generic [ref=e165]: Fitur
+      - heading [level=2] [ref=e166]:
+        - text: Lengkap,
+        - emphasis [ref=e167]: Harga Warteg
+        - text: ☕
+      - paragraph [ref=e168]: Semua yang warkop butuhkan — tanpa ribet, tanpa mahal.
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - img "Layar kasir OGKasir" [ref=e172]
+          - heading "Kasir Kilat" [level=3] [ref=e173]
+          - paragraph [ref=e174]: Diskon Rp/%, tunai/QRIS/transfer, kembalian otomatis, struk digital siap dibagikan.
+        - generic [ref=e175]:
+          - img "Kasir dengan fitur timbangan" [ref=e177]
+          - heading "Jual Per Kilo" [level=3] [ref=e178]
+          - paragraph [ref=e179]: "Buat produk timbangan: tombol berat 0.25/0.5/1 kg atau ketik manual — total & stok terhitung otomatis."
+        - generic [ref=e180]:
+          - img "Alur pembayaran dan struk" [ref=e182]
+          - heading "Cetak Struk Thermal" [level=3] [ref=e183]
+          - paragraph [ref=e184]: Connect via Bluetooth ke printer thermal 58mm. Satu ketuk, struk keluar.
+        - generic [ref=e185]:
+          - img "Daftar menu OGKasir" [ref=e187]
+          - heading "Menu & Stok" [level=3] [ref=e188]
+          - paragraph [ref=e189]: Foto menu, kategori, stok berkurang otomatis tiap transaksi + peringatan stok menipis.
+        - generic [ref=e190]:
+          - img "Laporan omzet OGKasir" [ref=e192]
+          - heading "Laporan Rapi" [level=3] [ref=e193]
+          - paragraph [ref=e194]: Omzet per jam/hari, laba, produk terlaris — plus export ke Excel yang rapi.
+        - generic [ref=e195]:
+          - img "Daftar tagihan" [ref=e197]
+          - heading "Tagihan / Kas Bon" [level=3] [ref=e198]
+          - paragraph [ref=e199]: Pelanggan bon dulu? Catat sebagai tagihan — struk BELUM DIBAYAR + total piutang terpantau.
+        - generic [ref=e200]:
+          - img "Kartu lisensi di pengaturan" [ref=e202]
+          - heading "Lisensi Per Device" [level=3] [ref=e203]
+          - paragraph [ref=e204]: Sistem aktivasi offline yang adil — bayar per HP kasir yang dipakai.
+        - generic [ref=e205]:
+          - img "Kunci PIN OGKasir" [ref=e207]
+          - heading "PIN Keamanan" [level=3] [ref=e208]
+          - paragraph [ref=e209]: Kunci aplikasi pakai PIN 6 digit biar karyawan nggak utak-atik.
+        - generic [ref=e210]:
+          - img "Catatan per item di keranjang" [ref=e212]
+          - heading "Catatan Per Item" [level=3] [ref=e213]
+          - paragraph [ref=e214]: "\"Gula sedikit\", \"tanpa es\" — catat per item sekali ketuk, tercetak otomatis di struk."
+        - generic [ref=e215]:
+          - img "Tagihan untuk tambah pesanan" [ref=e217]
+          - heading "Tambah Pesanan" [level=3] [ref=e218]
+          - paragraph [ref=e219]: Pelanggan nambah? Masukkan ke tagihan yang sama — stok terhitung otomatis.
+        - generic [ref=e220]:
+          - img "Pilihan tema tampilan" [ref=e222]
+          - heading "5 Pilihan Tema" [level=3] [ref=e223]
+          - paragraph [ref=e224]: Klasik, Gelap, Midnight Gold, Clean Fintech, Bold Warkop — ganti suasana kapan saja.
+        - generic [ref=e225]:
+          - img "Kartu Data dan Backup" [ref=e227]
+          - heading "Backup & Restore" [level=3] [ref=e228]
+          - paragraph [ref=e229]: Backup data ke file, restore kapan saja. Update aplikasi tanpa takut data hilang.
+        - link [ref=e230] [cursor=pointer]:
+          - /url: cloud-backup.html
+          - generic [ref=e231]:
+            - img "Kartu Cloud Backup" [ref=e233]
+            - heading "Cloud Backup" [level=3] [ref=e234]
+            - paragraph [ref=e235]: Backup otomatis ke cloud FinOwi. Ganti HP? Pulihkan semua data dalam hitungan menit. Pelajari →
+    - generic [ref=e236]:
+      - generic [ref=e237]: Cocok Buat Kamu
+      - heading [level=2] [ref=e238]:
+        - text: Dibuat Untuk
+        - emphasis [ref=e239]: Usahamu
+        - text: 🏪
+      - paragraph [ref=e240]: Apapun jualanmu, OGKasir siap membantu.
+      - generic [ref=e241]:
+        - generic [ref=e242]:
+          - generic [ref=e243]: ☕
+          - heading "Warkop & Kedai Kopi" [level=3] [ref=e244]
+          - paragraph [ref=e245]: Catat pesanan cepat saat ramai, tahu menu paling laris tiap minggu.
+        - generic [ref=e246]:
+          - generic [ref=e247]: 🍜
+          - heading "Warung Makan" [level=3] [ref=e248]
+          - paragraph [ref=e249]: Hitung total + kembalian otomatis, nggak ada lagi salah hitung.
+        - generic [ref=e250]:
+          - generic [ref=e251]: 🏪
+          - heading "Toko Kelontong" [level=3] [ref=e252]
+          - paragraph [ref=e253]: Kelola ratusan produk dan pantau stok biar nggak kehabisan.
+        - generic [ref=e254]:
+          - generic [ref=e255]: 🥤
+          - heading "UMKM Kuliner" [level=3] [ref=e256]
+          - paragraph [ref=e257]: Struk rapi bikin usaha terlihat profesional di mata pembeli.
+    - generic [ref=e258]:
+      - generic [ref=e259]: Mulai Cepat
+      - heading [level=2] [ref=e260]:
+        - text: Mulai Dalam
+        - emphasis [ref=e261]: 3 Langkah
+      - paragraph [ref=e262]: Nggak perlu daftar, nggak perlu kartu kredit.
+      - generic [ref=e263]:
+        - generic [ref=e264]:
+          - generic [ref=e265]: "1"
+          - heading "⬇️ Download & Install" [level=3] [ref=e266]
+          - paragraph [ref=e267]: Unduh APK di bawah, izinkan "instal dari sumber tak dikenal" sekali saja.
+        - generic [ref=e268]:
+          - generic [ref=e269]: "2"
+          - heading "🎉 Trial 7 Hari Gratis" [level=3] [ref=e270]
+          - paragraph [ref=e271]: Semua fitur terbuka penuh selama 7 hari. Cocok buat jualan harianmu.
+        - generic [ref=e272]:
+          - generic [ref=e273]: "3"
+          - heading "💬 Aktivasi via WA" [level=3] [ref=e274]
+          - paragraph [ref=e275]: Cocok? Chat kami, bayar, terima kode aktivasi — masukkan di aplikasi. Beres!
+    - generic [ref=e276]:
+      - generic [ref=e277]: Harga Jujur
+      - heading [level=2] [ref=e278]:
+        - text: 🔥 Promo Launching —
+        - emphasis [ref=e279]: Diskon s/d 35%
+      - paragraph [ref=e280]: Bulan pertama cuma Rp8rb — khusus pembelian pertama. Selanjutnya pilih paket perpanjangan di bawah. Tanpa biaya sembunyi — batal kapan saja, datamu tetap milikmu.
+      - generic [ref=e281]:
+        - generic [ref=e282]:
+          - generic [ref=e283]: 🎉 PROMO PERKENALAN
+          - generic [ref=e284]:
+            - generic [ref=e285]:
+              - heading "Bulan Pertama" [level=3] [ref=e286]
+              - generic [ref=e287]: Rp 49.000
+              - generic [ref=e288]: Rp 8rb
+              - generic [ref=e289]: 30 hari penuh · semua fitur · 1 HP kasir · khusus pembelian pertama (1x)
+            - link "Klaim Rp8rb" [ref=e290] [cursor=pointer]:
+              - /url: https://wa.me/6288279406268?text=Halo!%20Saya%20mau%20promo%20bulan%20pertama%20OGKasir%20Rp8rb.
+        - generic [ref=e291]:
+          - heading "30 Hari" [level=3] [ref=e292]
+          - generic [ref=e293]: Rp 75.000
+          - generic [ref=e294]: Rp 49rb
+          - generic [ref=e295]: ≈ Rp 1.600/hari · hemat 35%
+          - list [ref=e296]:
+            - listitem [ref=e297]: ✓ Semua fitur
+            - listitem [ref=e298]: ✓ 1 HP kasir
+            - listitem [ref=e299]: ✓ Update gratis
+          - link "Pilih 30 Hari" [ref=e300] [cursor=pointer]:
+            - /url: https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20aktivasi%20OGKasir%2030%20hari.
+        - generic [ref=e301]:
+          - generic [ref=e302]: PALING LARIS
+          - heading "90 Hari" [level=3] [ref=e303]
+          - generic [ref=e304]: Rp 175.000
+          - generic [ref=e305]: Rp 129rb
+          - generic [ref=e306]: ≈ Rp 1.400/hari · hemat 26%
+          - list [ref=e307]:
+            - listitem [ref=e308]: ✓ Semua fitur
+            - listitem [ref=e309]: ✓ 1 HP kasir
+            - listitem [ref=e310]: ✓ Update gratis
+            - listitem [ref=e311]: ✓ Prioritas bantuan WA
+          - link "Pilih 90 Hari" [ref=e312] [cursor=pointer]:
+            - /url: https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20aktivasi%20OGKasir%2090%20hari.
+        - generic [ref=e313]:
+          - heading "1 Tahun" [level=3] [ref=e314]
+          - generic [ref=e315]: Rp 665.000
+          - generic [ref=e316]: Rp 499rb
+          - generic [ref=e317]: ≈ Rp 1.370/hari · hemat 25%
+          - list [ref=e318]:
+            - listitem [ref=e319]: ✓ Semua fitur
+            - listitem [ref=e320]: ✓ 1 HP kasir
+            - listitem [ref=e321]: ✓ Update gratis
+            - listitem [ref=e322]: ✓ Prioritas bantuan WA
+          - link "Pilih 1 Tahun" [ref=e323] [cursor=pointer]:
+            - /url: https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20aktivasi%20OGKasir%201%20tahun.
+    - generic [ref=e324]:
+      - generic [ref=e325]: Blog
+      - heading "Artikel 📝" [level=2] [ref=e326]
+      - paragraph [ref=e327]: Tips dan panduan buat pemilik warkop & UMKM.
+      - generic [ref=e328]:
+        - group [ref=e329]:
+          - 'generic "Laporan Omzet Harian Warkop: Cara Bikin yang Rapi Tanpa Ribet –" [ref=e330] [cursor=pointer]'
+          - generic [ref=e331]:
+            - text: Komponen wajib laporan harian, contoh format sederhana, dan cara bikin laporannya otomatis tanpa hitung manual.
+            - link "Baca artikel →" [ref=e332] [cursor=pointer]:
+              - /url: artikel-laporan-omzet-harian-warkop.html
+        - group [ref=e333]:
+          - generic "Cara Menghitung HPP Minuman Warkop Biar Nggak Rugi +" [ref=e334] [cursor=pointer]
+        - group [ref=e335]:
+          - generic "Fitur Bon di Aplikasi Kasir Coffeeshop +" [ref=e336] [cursor=pointer]
+        - group [ref=e337]:
+          - 'generic "Aplikasi Kasir Warkop: Berhenti Andalkan Buku Tulis +" [ref=e338] [cursor=pointer]'
+    - generic [ref=e339]:
+      - generic [ref=e340]: FAQ
+      - heading [level=2] [ref=e341]:
+        - text: Sering
+        - emphasis [ref=e342]: Ditanyakan
+      - paragraph
+      - generic [ref=e343]:
+        - group [ref=e344]:
+          - generic "Apakah ada backup cloud? +" [ref=e345] [cursor=pointer]
+        - group [ref=e346]:
+          - generic "Apakah butuh internet? –" [ref=e347] [cursor=pointer]
+          - generic [ref=e348]: Tidak. OGKasir jalan 100% offline. Internet hanya dipakai sesekali untuk cek update aplikasi.
+        - group [ref=e349]:
+          - generic "Apakah dataku hilang saat update / lisensi habis? +" [ref=e350] [cursor=pointer]
+        - group [ref=e351]:
+          - generic "Printer apa yang didukung? +" [ref=e352] [cursor=pointer]
+        - group [ref=e353]:
+          - generic "HP apa yang didukung? +" [ref=e354] [cursor=pointer]
+        - group [ref=e355]:
+          - generic "Bagaimana cara bayar lisensinya? +" [ref=e356] [cursor=pointer]
+        - group [ref=e357]:
+          - generic "Apakah promo bulan pertama Rp8rb berlaku selamanya? +" [ref=e358] [cursor=pointer]
+    - generic [ref=e360]:
+      - generic [ref=e361]: Download
+      - heading "Siap Naik Kelas? 🚀" [level=2] [ref=e362]
+      - paragraph [ref=e363]: Download OGKasir sekarang — gratis 7 hari, full fitur. Warkopmu pantas dapat kasir yang rapi.
+      - link "⬇️ Download OGKasir v1.36" [ref=e364] [cursor=pointer]:
+        - /url: https://github.com/FinOwi/ogkasir-app/releases/download/37/OGKasir-v1.36.apk
+      - generic [ref=e365]: Ukuran ±254 KB · 13/10/2026
+      - generic [ref=e366]: "Cara install: 1. Ketuk tombol download di atas 2. Buka file APK yang terunduh 3. Izinkan \"Instal dari sumber tak dikenal\" saat diminta 4. Ketuk Install — selesai! 🎉"
+    - generic [ref=e367]:
+      - generic [ref=e368]: Kontak
+      - heading [level=2] [ref=e369]:
+        - text: Ada
+        - emphasis [ref=e370]: Pertanyaan?
+      - paragraph [ref=e371]: Chat kami — fast respon.
+      - generic [ref=e372]:
+        - link "💬 WhatsApp" [ref=e373] [cursor=pointer]:
+          - /url: https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya-tanya%20tentang%20OGKasir.
+        - link "📸 Instagram @ogkasir" [ref=e374] [cursor=pointer]:
+          - /url: https://www.instagram.com/ogkasir
+  - contentinfo [ref=e375]: © 2026 OGKasir · Aplikasi kasir warkop & F&B · Android 10+ · Data tersimpan aman di HP kamu
+  - link "Chat WhatsApp" [ref=e376] [cursor=pointer]:
+    - /url: https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya-tanya%20tentang%20OGKasir.
+    - text: 💬

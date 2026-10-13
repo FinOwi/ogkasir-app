@@ -1,0 +1,153 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link [ref=e4] [cursor=pointer]:
+        - /url: index.html
+        - img "OGKasir" [ref=e5]
+        - text: OGKasir
+      - link "← Beranda" [ref=e6] [cursor=pointer]:
+        - /url: index.html
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]: ☁️ SEGERA HADIR · v1.36 · GRATIS
+      - heading [level=1] [ref=e11]:
+        - text: HP Hilang?
+        - emphasis [ref=e12]: Data Kasirmu
+        - text: Tetap Aman.
+      - paragraph [ref=e13]: Cloud Backup OGKasir menyimpan salinan data kasirmu di cloud FinOwi secara otomatis. Ganti HP, HP rusak, HP hilang — pulihkan semuanya dalam hitungan menit.
+      - generic [ref=e14]:
+        - link "🔔 Ingatkan Saya Saat Rilis" [ref=e15] [cursor=pointer]:
+          - /url: https://wa.me/6288279406268?text=Halo!%20Ingatkan%20saya%20saat%20Cloud%20Backup%20OGKasir%20rilis.
+        - link "Cara Kerjanya" [ref=e16] [cursor=pointer]:
+          - /url: "#cara"
+      - generic [aria-hidden] [ref=e17]:
+        - generic [ref=e22]:
+          - text: 🧾
+          - generic [ref=e23]: 2.340 transaksi ter-backup ✓
+        - generic [ref=e24]:
+          - text: 📦
+          - generic [ref=e25]: Stok & menu ter-backup ✓
+        - generic [ref=e26]:
+          - text: 📊
+          - generic [ref=e27]: Laporan omzet ter-backup ✓
+        - generic [ref=e28]:
+          - text: 🔑
+          - generic [ref=e29]: Kode pemulihan milikmu pribadi
+    - generic [ref=e30]:
+      - generic [ref=e31]: Kenapa Ini Penting
+      - heading [level=2] [ref=e32]:
+        - text: Kebayang Kalau
+        - emphasis [ref=e33]: HP Kasirmu
+        - text: Hilang Besok?
+      - paragraph [ref=e34]: Semua data usahamu — transaksi, stok, laporan — hidup di satu HP. Satu kejadian, semuanya bisa lenyap.
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]: 📱💥
+          - heading "HP Rusak / Mati Total" [level=3] [ref=e38]
+          - paragraph [ref=e39]: Kehujanan, jatuh, bootloop. Servis bisa seminggu — data di dalamnya? Belum tentu selamat.
+        - generic [ref=e40]:
+          - generic [ref=e41]: 🏃💨
+          - heading "HP Hilang / Dicuri" [level=3] [ref=e42]
+          - paragraph [ref=e43]: Tertinggal di ojek, diambil orang. Catatan penjualan berbulan-bulan ikut raib begitu saja.
+        - generic [ref=e44]:
+          - generic [ref=e45]: 🔄😰
+          - heading "Ganti HP Baru" [level=3] [ref=e46]
+          - paragraph [ref=e47]: HP lama lemot, mau ganti baru — pindahin data kasir manual? Ribet dan rawan ada yang kelewat.
+    - generic [ref=e48]:
+      - generic [ref=e49]: Cara Kerja
+      - heading [level=2] [ref=e50]:
+        - text: Semudah
+        - emphasis [ref=e51]: 3 Ketuk
+      - paragraph [ref=e52]: Nggak perlu akun, nggak perlu ingat password. Cukup sekali setting.
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]: "1"
+          - heading "Backup Sekali Ketuk" [level=3] [ref=e56]
+          - paragraph [ref=e57]: Di Pengaturan → Data & Backup, ketuk Backup ke Cloud. Aplikasi memberimu kode pemulihan pribadi — catat & simpan baik-baik.
+        - generic [ref=e58]:
+          - generic [ref=e59]: "2"
+          - heading "Data Tersimpan Aman" [level=3] [ref=e60]
+          - paragraph [ref=e61]: Seluruh data kasir — transaksi, menu, stok, pengaturan — tersimpan terenkripsi di cloud FinOwi. HP-mu tetap jalan offline seperti biasa.
+        - generic [ref=e62]:
+          - generic [ref=e63]: "3"
+          - heading "Pulihkan Kapan Saja" [level=3] [ref=e64]
+          - paragraph [ref=e65]: HP baru? Install OGKasir, ketuk Pulihkan dari Cloud, masukkan kode pemulihanmu. Semua data kembali dalam hitungan menit.
+      - generic [ref=e66]:
+        - generic [ref=e67]: X7K2-M9PQ-4D8R
+        - paragraph [ref=e68]: Contoh kode pemulihan — punyamu dibuat acak & unik.
+    - generic [ref=e69]:
+      - generic [ref=e70]: Keamanan
+      - heading [level=2] [ref=e71]:
+        - text: Hanya Kamu yang Bisa
+        - emphasis [ref=e72]: Membuka
+      - paragraph [ref=e73]: Backup-mu dikunci kode pemulihan pribadimu. Bahkan kami pun tidak bisa mengintip isinya.
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - generic [ref=e76]: 🔑
+          - heading "Kode Milikmu Pribadi" [level=3] [ref=e77]
+          - paragraph [ref=e78]: 12 karakter acak yang hanya kamu tahu. Tanpa kode ini, backup tidak bisa dibuka siapa pun.
+        - generic [ref=e79]:
+          - generic [ref=e80]: 🛡️
+          - heading "Server FinOwi" [level=3] [ref=e81]
+          - paragraph [ref=e82]: Data tersimpan di infrastruktur cloud profesional — bukan di laptop seseorang. Terlindungi & selalu online.
+        - generic [ref=e83]:
+          - generic [ref=e84]: 📵
+          - heading "Tetap Offline-First" [level=3] [ref=e85]
+          - paragraph [ref=e86]: Cloud hanya untuk backup. Kasir harianmu tetap jalan 100% tanpa internet, seperti biasa.
+    - generic [ref=e87]:
+      - generic [ref=e88]: Perbandingan
+      - heading [level=2] [ref=e89]:
+        - text: Tanpa vs Dengan
+        - emphasis [ref=e90]: Cloud Backup
+      - paragraph
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - heading "😰 Tanpa Cloud Backup" [level=3] [ref=e93]
+          - list [ref=e94]:
+            - listitem [ref=e95]: ✕HP hilang = data lenyap selamanya
+            - listitem [ref=e96]: ✕Ganti HP = pindah data manual
+            - listitem [ref=e97]: ✕Harus ingat backup file sendiri
+            - listitem [ref=e98]: ✕Was-was tiap HP bermasalah
+        - generic [ref=e99]:
+          - heading "😌 Dengan Cloud Backup" [level=3] [ref=e100]
+          - list [ref=e101]:
+            - listitem [ref=e102]: ✓HP hilang = pulihkan dalam hitungan menit
+            - listitem [ref=e103]: ✓Ganti HP = masukkan kode, beres
+            - listitem [ref=e104]: ✓Backup otomatis ke cloud
+            - listitem [ref=e105]: ✓Tidur nyenyak, data aman
+    - generic [ref=e107]:
+      - generic [ref=e108]: Segera Hadir
+      - heading [level=2] [ref=e109]:
+        - text: Rilis di
+        - emphasis [ref=e110]: v1.36
+        - text: — Gratis
+      - paragraph [ref=e111]: Untuk semua pelanggan aktif OGKasir. Tanpa biaya tambahan, tanpa batasan aneh.
+      - generic [ref=e112]:
+        - link "🔔 Ingatkan Saya Saat Rilis" [ref=e113] [cursor=pointer]:
+          - /url: https://wa.me/6288279406268?text=Halo!%20Ingatkan%20saya%20saat%20Cloud%20Backup%20OGKasir%20rilis.
+        - link "⬇️ Download OGKasir" [ref=e114] [cursor=pointer]:
+          - /url: index.html#download
+      - paragraph [ref=e115]: Sudah pakai OGKasir? Update otomatis via aplikasi saat v1.36 rilis.
+    - generic [ref=e116]:
+      - generic [ref=e117]: FAQ
+      - heading [level=2] [ref=e118]:
+        - text: Yang Sering
+        - emphasis [ref=e119]: Ditanyakan
+      - paragraph
+      - generic [ref=e120]:
+        - group [ref=e121]:
+          - generic "Apakah dataku tetap aman di cloud? –" [ref=e122] [cursor=pointer]
+          - generic [ref=e123]: Ya. Backup-mu hanya bisa dibuka dengan kode pemulihan pribadimu. Tanpa kode itu, tidak ada — termasuk kami — yang bisa membaca isinya.
+        - group [ref=e124]:
+          - generic "Apakah kasirku jadi butuh internet terus? +" [ref=e125] [cursor=pointer]
+        - group [ref=e126]:
+          - generic "Berapa biayanya? +" [ref=e127] [cursor=pointer]
+        - group [ref=e128]:
+          - generic "Bagaimana kalau kode pemulihanku hilang? +" [ref=e129] [cursor=pointer]
+  - contentinfo [ref=e130]:
+    - text: © 2026 OGKasir · Cloud Backup — segera hadir di v1.36 ·
+    - link "ogkasir.my.id" [ref=e131] [cursor=pointer]:
+      - /url: index.html
+  - link "Chat WhatsApp" [ref=e132] [cursor=pointer]:
+    - /url: https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya%20tentang%20Cloud%20Backup%20OGKasir.
+    - text: 💬

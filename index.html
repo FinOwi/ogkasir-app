@@ -199,19 +199,19 @@
   .phones { display: flex; gap: 26px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px 8px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .phones::-webkit-scrollbar { display: none; }
   .ph { flex: 0 0 auto; scroll-snap-align: center; text-align: center; margin: 0; }
-  .frame { width: 208px; border-radius: 42px; padding: 7px; background: linear-gradient(165deg, #2b2b34, #0f0f13); border: 1px solid rgba(255,255,255,.15); box-shadow: 0 30px 60px rgba(0,0,0,.55), 0 0 46px rgba(255,183,0,.08); position: relative; transition: transform .3s ease, box-shadow .3s ease; }
+  .frame { width: 260px; border-radius: 42px; padding: 7px; background: linear-gradient(165deg, #2b2b34, #0f0f13); border: 1px solid rgba(255,255,255,.15); box-shadow: 0 30px 60px rgba(0,0,0,.55), 0 0 46px rgba(255,183,0,.08); position: relative; transition: transform .3s ease, box-shadow .3s ease; }
   .ph:hover .frame { transform: translateY(-6px); box-shadow: 0 38px 70px rgba(0,0,0,.6), 0 0 60px rgba(255,183,0,.14); }
   .frame .notch { position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 82px; height: 21px; background: #0a0a0d; border-radius: 12px; z-index: 2; }
   .frame img { width: 100%; border-radius: 35px; display: block; aspect-ratio: 360/684; object-fit: cover; background: #141419; }
-  .ph figcaption { margin-top: 14px; max-width: 208px; }
-  .ph figcaption b { display: block; font-size: 16px; font-weight: 800; letter-spacing: -.2px; }
-  .ph figcaption span { font-size: 13px; color: var(--mut); line-height: 1.5; display: block; margin-top: 3px; }
+  .ph figcaption { margin-top: 16px; max-width: 260px; }
+  .ph figcaption b { display: block; font-size: 18px; font-weight: 800; letter-spacing: -.2px; }
+  .ph figcaption span { font-size: 14px; color: var(--mut); line-height: 1.5; display: block; margin-top: 3px; }
   .sh-btn { position: absolute; top: 38%; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: rgba(20,20,26,.85); color: var(--gold); font-size: 24px; cursor: pointer; z-index: 3; backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
   .sh-btn.prev { left: -8px; } .sh-btn.next { right: -8px; }
   .sh-btn:hover { border-color: rgba(255,213,79,.5); }
   .feat-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 26px; }
   .feat-pills span { font-size: 13.5px; font-weight: 600; color: var(--mut); background: rgba(255,255,255,.045); border: 1px solid var(--line); padding: 9px 16px; border-radius: 999px; }
-  @media (max-width: 640px) { .sh-btn { display: none; } .frame { width: 186px; } .ph figcaption { max-width: 188px; } }
+  @media (max-width: 640px) { .sh-btn { display: none; } .frame { width: 242px; } .ph figcaption { max-width: 242px; } .phones { gap: 20px; } }
   /* kartu fitur bergambar */
   .feat { padding: 0; overflow: hidden; }
   .fshot { aspect-ratio: 16/10; overflow: hidden; border-bottom: 1px solid var(--line); background: #0e0e12; }
@@ -479,10 +479,10 @@
       <div class="phones" id="phones">
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-kasir.jpg" alt="Layar kasir dengan foto menu asli" loading="lazy"></div><figcaption><b>Kasir Kilat</b><span>Tap menu, bayar — kembalian kehitung otomatis</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-cart.jpg" alt="Keranjang belanja dengan foto produk" loading="lazy"></div><figcaption><b>Checkout</b><span>Catatan per item, diskon, tunai/QRIS/transfer</span></figcaption></figure>
-      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-laporan.jpg" alt="Laporan omzet harian" loading="lazy"></div><figcaption><b>Laporan Rapi</b><span>Omzet, laba, produk terlaris + export Excel</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-laporan-v2.jpg" alt="Laporan omzet harian" loading="lazy"></div><figcaption><b>Laporan Rapi</b><span>Omzet, laba, produk terlaris + export Excel</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-stok.jpg" alt="Manajemen stok barang" loading="lazy"></div><figcaption><b>Kelola Stok</b><span>Stok berkurang otomatis + peringatan menipis</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-menu.jpg" alt="Daftar menu dengan foto" loading="lazy"></div><figcaption><b>Menu & Foto</b><span>Foto menu asli, kategori, harga, stok</span></figcaption></figure>
-      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-tagihan.jpg" alt="Daftar tagihan pelanggan" loading="lazy"></div><figcaption><b>Tagihan / Kas Bon</b><span>Bon tercatat rapi, total piutang terpantau</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-tagihan-v2.jpg" alt="Daftar tagihan pelanggan" loading="lazy"></div><figcaption><b>Tagihan / Kas Bon</b><span>Bon tercatat rapi, total piutang terpantau</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-cloud.jpg" alt="Fitur cloud backup" loading="lazy"></div><figcaption><b>Cloud Backup</b><span>Backup otomatis + pulihkan di HP baru</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-tema.jpg" alt="Pilihan tema tampilan" loading="lazy"></div><figcaption><b>5 Pilihan Tema</b><span>Klasik, Gelap, Midnight Gold, dan lainnya</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-pin.jpg" alt="Kunci PIN aplikasi" loading="lazy"></div><figcaption><b>PIN Keamanan</b><span>Kunci aplikasi pakai PIN 6 digit</span></figcaption></figure>
