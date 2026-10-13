@@ -193,6 +193,25 @@
   .feat:hover { transform: translateY(-6px); border-color: rgba(255,213,79,.4); box-shadow: 0 24px 50px rgba(0,0,0,.4), 0 0 40px rgba(255,183,0,.08); }
   .feat .tile { width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 25px; background: linear-gradient(135deg, rgba(255,213,79,.28), rgba(255,179,0,.10)); border: 1px solid rgba(255,213,79,.35); margin-bottom: 16px; }
 
+
+  /* showcase mockup HP */
+  .showcase { position: relative; margin-top: 36px; }
+  .phones { display: flex; gap: 26px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px 8px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .phones::-webkit-scrollbar { display: none; }
+  .ph { flex: 0 0 auto; scroll-snap-align: center; text-align: center; margin: 0; }
+  .frame { width: 208px; border-radius: 38px; padding: 32px 9px 9px; background: linear-gradient(165deg, #2b2b34, #0f0f13); border: 1px solid rgba(255,255,255,.15); box-shadow: 0 30px 60px rgba(0,0,0,.55), 0 0 46px rgba(255,183,0,.08); position: relative; transition: transform .3s ease, box-shadow .3s ease; }
+  .ph:hover .frame { transform: translateY(-6px); box-shadow: 0 38px 70px rgba(0,0,0,.6), 0 0 60px rgba(255,183,0,.14); }
+  .frame .notch { position: absolute; top: 17px; left: 50%; transform: translateX(-50%); width: 82px; height: 21px; background: #0a0a0d; border-radius: 12px; z-index: 2; }
+  .frame img { width: 100%; border-radius: 29px; display: block; aspect-ratio: 360/684; object-fit: cover; background: #141419; }
+  .ph figcaption { margin-top: 14px; max-width: 208px; }
+  .ph figcaption b { display: block; font-size: 16px; font-weight: 800; letter-spacing: -.2px; }
+  .ph figcaption span { font-size: 13px; color: var(--mut); line-height: 1.5; display: block; margin-top: 3px; }
+  .sh-btn { position: absolute; top: 38%; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: rgba(20,20,26,.85); color: var(--gold); font-size: 24px; cursor: pointer; z-index: 3; backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; }
+  .sh-btn.prev { left: -8px; } .sh-btn.next { right: -8px; }
+  .sh-btn:hover { border-color: rgba(255,213,79,.5); }
+  .feat-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 26px; }
+  .feat-pills span { font-size: 13.5px; font-weight: 600; color: var(--mut); background: rgba(255,255,255,.045); border: 1px solid var(--line); padding: 9px 16px; border-radius: 999px; }
+  @media (max-width: 640px) { .sh-btn { display: none; } .frame { width: 188px; } .ph figcaption { max-width: 188px; } }
   /* kartu fitur bergambar */
   .feat { padding: 0; overflow: hidden; }
   .fshot { aspect-ratio: 16/10; overflow: hidden; border-bottom: 1px solid var(--line); background: #0e0e12; }
@@ -454,21 +473,36 @@
   <section id="fitur">
     <div class="eyebrow">Fitur</div>
     <h2>Lengkap, <em>Harga Warteg</em> ☕</h2>
-    <p class="lead">Semua yang warkop butuhkan — tanpa ribet, tanpa mahal.</p>
-    <div class="grid">
-      <div class="feat"><div class="fshot"><img src="img/f-kasir.jpg" alt="Layar kasir OGKasir" loading="lazy"></div><h3>Kasir Kilat</h3><p>Diskon Rp/%, tunai/QRIS/transfer, kembalian otomatis, struk digital siap dibagikan.</p></div>
-      <div class="feat"><div class="fshot mid"><img src="img/f-kasir.jpg" alt="Kasir dengan fitur timbangan" loading="lazy"></div><h3>Jual Per Kilo</h3><p>Buat produk timbangan: tombol berat 0.25/0.5/1 kg atau ketik manual — total &amp; stok terhitung otomatis.</p></div>
-      <div class="feat"><div class="fshot"><img src="img/f-cart.jpg" alt="Alur pembayaran dan struk" loading="lazy"></div><h3>Cetak Struk Thermal</h3><p>Connect via Bluetooth ke printer thermal 58mm. Satu ketuk, struk keluar.</p></div>
-      <div class="feat"><div class="fshot"><img src="img/f-menu.jpg" alt="Daftar menu OGKasir" loading="lazy"></div><h3>Menu &amp; Stok</h3><p>Foto menu, kategori, stok berkurang otomatis tiap transaksi + peringatan stok menipis.</p></div>
-      <div class="feat"><div class="fshot"><img src="img/f-laporan.jpg" alt="Laporan omzet OGKasir" loading="lazy"></div><h3>Laporan Rapi</h3><p>Omzet per jam/hari, laba, produk terlaris — plus export ke Excel yang rapi.</p></div>
-      <div class="feat"><div class="fshot"><img src="img/f-tagihan.jpg" alt="Daftar tagihan" loading="lazy"></div><h3>Tagihan / Kas Bon</h3><p>Pelanggan bon dulu? Catat sebagai tagihan — struk BELUM DIBAYAR + total piutang terpantau.</p></div>
-      <div class="feat"><div class="fshot"><img src="img/f-lainnya.jpg" alt="Kartu lisensi di pengaturan" loading="lazy"></div><h3>Lisensi Per Device</h3><p>Sistem aktivasi offline yang adil — bayar per HP kasir yang dipakai.</p></div>
-      <div class="feat"><div class="fshot"><img src="img/f-pin.jpg" alt="Kunci PIN OGKasir" loading="lazy"></div><h3>PIN Keamanan</h3><p>Kunci aplikasi pakai PIN 6 digit biar karyawan nggak utak-atik.</p></div>
-      <div class="feat"><div class="fshot mid"><img src="img/f-cart.jpg" alt="Catatan per item di keranjang" loading="lazy"></div><h3>Catatan Per Item</h3><p>"Gula sedikit", "tanpa es" — catat per item sekali ketuk, tercetak otomatis di struk.</p></div>
-      <div class="feat"><div class="fshot mid"><img src="img/f-tagihan.jpg" alt="Tagihan untuk tambah pesanan" loading="lazy"></div><h3>Tambah Pesanan</h3><p>Pelanggan nambah? Masukkan ke tagihan yang sama — stok terhitung otomatis.</p></div>
-      <div class="feat"><div class="fshot"><img src="img/f-tema.jpg" alt="Pilihan tema tampilan" loading="lazy"></div><h3>5 Pilihan Tema</h3><p>Klasik, Gelap, Midnight Gold, Clean Fintech, Bold Warkop — ganti suasana kapan saja.</p></div>
-      <div class="feat"><div class="fshot mid"><img src="img/f-cloud.jpg" alt="Kartu Data dan Backup" loading="lazy"></div><h3>Backup &amp; Restore</h3><p>Backup data ke file, restore kapan saja. Update aplikasi tanpa takut data hilang.</p></div>
-      <a href="cloud-backup.html" style="text-decoration:none;color:inherit"><div class="feat"><div class="fshot bot"><img src="img/f-cloud.jpg" alt="Kartu Cloud Backup" loading="lazy"></div><h3>Cloud Backup</h3><p>Backup otomatis ke cloud FinOwi. Ganti HP? Pulihkan semua data dalam hitungan menit. <b style="color:var(--gold)">Pelajari →</b></p></div></a>
+    <p class="lead">Ini layar <b>asli aplikasi</b> — bukan gambar tempelan. Geser untuk intip semuanya.</p>
+    <div class="showcase">
+      <button class="sh-btn prev" onclick="document.getElementById('phones').scrollBy({left:-260,behavior:'smooth'})" aria-label="Sebelumnya">‹</button>
+      <div class="phones" id="phones">
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-kasir.jpg" alt="Layar kasir dengan foto menu asli" loading="lazy"></div><figcaption><b>Kasir Kilat</b><span>Tap menu, bayar — kembalian kehitung otomatis</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-cart.jpg" alt="Keranjang belanja dengan foto produk" loading="lazy"></div><figcaption><b>Checkout</b><span>Catatan per item, diskon, tunai/QRIS/transfer</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-laporan.jpg" alt="Laporan omzet harian" loading="lazy"></div><figcaption><b>Laporan Rapi</b><span>Omzet, laba, produk terlaris + export Excel</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-stok.jpg" alt="Manajemen stok barang" loading="lazy"></div><figcaption><b>Kelola Stok</b><span>Stok berkurang otomatis + peringatan menipis</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-menu.jpg" alt="Daftar menu dengan foto" loading="lazy"></div><figcaption><b>Menu & Foto</b><span>Foto menu asli, kategori, harga, stok</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-tagihan.jpg" alt="Daftar tagihan pelanggan" loading="lazy"></div><figcaption><b>Tagihan / Kas Bon</b><span>Bon tercatat rapi, total piutang terpantau</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-cloud.jpg" alt="Fitur cloud backup" loading="lazy"></div><figcaption><b>Cloud Backup</b><span>Backup otomatis + pulihkan di HP baru</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-tema.jpg" alt="Pilihan tema tampilan" loading="lazy"></div><figcaption><b>5 Pilihan Tema</b><span>Klasik, Gelap, Midnight Gold, dan lainnya</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-pin.jpg" alt="Kunci PIN aplikasi" loading="lazy"></div><figcaption><b>PIN Keamanan</b><span>Kunci aplikasi pakai PIN 6 digit</span></figcaption></figure>
+      </div>
+      <button class="sh-btn next" onclick="document.getElementById('phones').scrollBy({left:260,behavior:'smooth'})" aria-label="Berikutnya">›</button>
+    </div>
+    <div class="feat-pills">
+      <span>✓ Kasir Kilat</span>
+      <span>✓ Jual Per Kilo</span>
+      <span>✓ Struk Thermal 58mm</span>
+      <span>✓ Menu & Stok</span>
+      <span>✓ Laporan Excel</span>
+      <span>✓ Tagihan / Kas Bon</span>
+      <span>✓ Lisensi Per Device</span>
+      <span>✓ PIN Keamanan</span>
+      <span>✓ Catatan Per Item</span>
+      <span>✓ Tambah Pesanan</span>
+      <span>✓ 5 Pilihan Tema</span>
+      <span>✓ Backup File</span>
+      <span>✓ Cloud Backup</span>
     </div>
   </section>
 
