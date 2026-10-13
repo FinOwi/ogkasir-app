@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OGKasir — Aplikasi Kasir UMKM Indonesia</title>
-<meta name="description" content="OGKasir — aplikasi kasir (POS) offline Bahasa Indonesia untuk UMKM. Kasir cepat, cetak struk thermal, laporan omzet. Trial 7 hari gratis, bulan pertama cuma Rp8rb.">
+<title>OGKasir: Aplikasi Kasir UMKM Indonesia</title>
+<meta name="description" content="OGKasir: aplikasi kasir (POS) offline Bahasa Indonesia untuk UMKM. Kasir cepat, cetak struk thermal, laporan omzet. Trial 7 hari gratis, bulan pertama cuma Rp8rb.">
 <meta name="keywords" content="OGKasir, aplikasi kasir, aplikasi kasir warkop, POS Indonesia, kasir offline, aplikasi kasir android, struk thermal, kasir UMKM">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://ogkasir.my.id/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="OGKasir — Aplikasi Kasir UMKM Indonesia">
+<meta property="og:title" content="OGKasir: Aplikasi Kasir UMKM Indonesia">
 <meta property="og:description" content="Aplikasi kasir offline Bahasa Indonesia. Trial 7 hari gratis, bulan pertama cuma Rp8rb.">
 <meta property="og:url" content="https://ogkasir.my.id/">
 <meta property="og:image" content="https://ogkasir.my.id/logo.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OGKasir — Aplikasi Kasir UMKM Indonesia">
+<meta name="twitter:title" content="OGKasir: Aplikasi Kasir UMKM Indonesia">
 <meta name="twitter:description" content="Aplikasi kasir offline Bahasa Indonesia. Trial 7 hari gratis, bulan pertama cuma Rp8rb.">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"OGKasir",
@@ -212,6 +212,12 @@
   .feat-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 26px; }
   .feat-pills span { font-size: 13.5px; font-weight: 600; color: var(--mut); background: rgba(255,255,255,.045); border: 1px solid var(--line); padding: 9px 16px; border-radius: 999px; }
   @media (max-width: 640px) { .sh-btn { display: none; } .frame { width: 242px; } .ph figcaption { max-width: 242px; } .phones { gap: 20px; } }
+
+  /* scroll reveal (hormat prefers-reduced-motion) */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .marquee-track { animation: none !important; } }
+  h1, h2 { text-wrap: balance; letter-spacing: -.025em; }
   /* kartu fitur bergambar */
   .feat { padding: 0; overflow: hidden; }
   .fshot { aspect-ratio: 16/10; overflow: hidden; border-bottom: 1px solid var(--line); background: #0e0e12; }
@@ -377,14 +383,13 @@
   <div class="hero">
     <div><span class="kicker"><span class="dot"></span>✨ Baru: 5 tema pilihan & cloud backup</span></div>
     <h1>Aplikasi Kasir Buat <em>UMKM</em></h1>
-    <p class="sub">Catat transaksi, kelola stok, lihat omzet — semua dari HP kamu. Offline, Bahasa Indonesia, gampang dipakai karyawan.</p>
-    <div class="trial">🎉 GRATIS trial 7 hari — full fitur, tanpa kartu kredit</div>
+    <p class="sub">Catat transaksi, kelola stok, lihat omzet, semua dari HP kamu. Offline, Bahasa Indonesia, gampang dipakai karyawan.</p>
+    <div class="trial">🎉 Gratis trial 7 hari · full fitur · tanpa kartu kredit · 100% offline</div>
     <div class="hero-cta">
       <a class="btn" id="dlBtnTop" href="#">⬇️ Download Sekarang</a>
       <a class="btn ghost" href="#harga">Lihat Harga</a>
     </div>
     <div id="ver"></div>
-    <div class="trust"><span>Tanpa kartu kredit</span><span>100% offline</span><span>Support WA fast respon</span></div>
 
     <div class="hero-visual">
       <div class="phone">
@@ -414,58 +419,55 @@
 
 <div class="wrap">
   <section id="baru">
-    <div class="eyebrow">Update Terbaru</div>
     <h2>Selalu Ada Yang <em>Baru</em> ✨</h2>
-    <p class="lead">OGKasir terus berkembang — update gratis untuk semua pelanggan aktif.</p>
+    <p class="lead">OGKasir terus berkembang: update gratis untuk semua pelanggan aktif.</p>
     <div class="timeline">
       <div class="tcard">
         <div class="vrow"><span class="vbadge">v1.36</span><span class="vbadge new">BARU</span></div>
         <h3>☁️ Cloud Backup</h3>
-        <p>Data kasir <b>ter-backup otomatis ke cloud FinOwi</b> — ganti HP atau HP hilang, pulihkan semua data dalam hitungan menit pakai kode pemulihan pribadimu. Tetap aman: hanya kamu yang bisa membuka backup-mu.</p>
+        <p>Data kasir <b>ter-backup otomatis ke cloud FinOwi</b>. Ganti HP atau HP hilang, pulihkan semua data dalam hitungan menit pakai kode pemulihan pribadimu. Tetap aman: hanya kamu yang bisa membuka backup-mu.</p>
         <div class="chips"><span class="chip">Otomatis</span><span class="chip">Kode pemulihan pribadi</span><span class="chip">Gratis</span></div>
       </div>
       <div class="tcard">
         <div class="vrow"><span class="vbadge">v1.35</span><span class="vbadge new">BARU</span></div>
         <h3>🎨 5 Pilihan Tema</h3>
-        <p>Bosan tampilan itu-itu saja? Pilih gayamu: <b>Klasik, Gelap, Midnight Gold, Clean Fintech,</b> atau <b>Bold Warkop</b>. Satu ketuk di Pengaturan → Custom Tampilan — seluruh aplikasi berubah mengikuti.</p>
+        <p>Bosan tampilan itu-itu saja? Pilih gayamu: <b>Klasik, Gelap, Midnight Gold, Clean Fintech,</b> atau <b>Bold Warkop</b>. Satu ketuk di Pengaturan → Custom Tampilan. Seluruh aplikasi berubah mengikuti.</p>
         <div class="chips"><span class="chip">Midnight Gold</span><span class="chip">Clean Fintech</span><span class="chip">Bold Warkop</span></div>
       </div>
       <div class="tcard">
         <div class="vrow"><span class="vbadge">v1.34</span><span class="vbadge new">BARU</span></div>
         <h3>📝 Catatan Per Item & ➕ Tambah Pesanan</h3>
-        <p><b>"Es teh-nya gula sedikit ya!"</b> — catat permintaan khusus per item dengan sekali ketuk (ada preset siap pakai + bebas ketik), tercetak otomatis di struk. Pelanggan nambah pesanan? Tambahkan ke tagihan yang sama tanpa ribet — stok terhitung otomatis.</p>
+        <p><b>"Es teh-nya gula sedikit ya!"</b>: catat permintaan khusus per item dengan sekali ketuk (ada preset siap pakai + bebas ketik), tercetak otomatis di struk. Pelanggan nambah pesanan? Tambahkan ke tagihan yang sama tanpa ribet, stok terhitung otomatis.</p>
         <div class="chips"><span class="chip">Preset cepat</span><span class="chip">Masuk struk</span><span class="chip">Stok otomatis</span></div>
       </div>
     </div>
   </section>
 
   <section id="kenapa">
-    <div class="eyebrow">Kenapa OGKasir</div>
     <h2>Dibuat Buat Usaha Kecil, <em>Bukan Buat Ribet</em></h2>
-    <p class="lead">Bukan software perusahaan besar yang ribet — ini kasir yang ngertiin warkop.</p>
+    <p class="lead">Bukan software perusahaan besar yang ribet. Ini kasir yang ngertiin warkop.</p>
     <div class="bento">
-      <div class="bcard wide"><div class="tile">📵</div><h3>Offline-First, Data Milikmu</h3><p>Jalan penuh tanpa internet — kasir, stok, laporan, semua tetap jalan. Data tersimpan di HP kamu sendiri, bukan di server orang. Internet mati? Jualan tetap jalan.</p></div>
-      <div class="bcard"><div class="tile">💰</div><h3>Harga Jujur</h3><p>Bulan pertama Rp8rb. Rp49rb/bln setelahnya — tanpa potongan per transaksi, tanpa biaya sembunyi.</p></div>
+      <div class="bcard wide"><div class="tile">📵</div><h3>Offline-First, Data Milikmu</h3><p>Jalan penuh tanpa internet: kasir, stok, laporan, semua tetap jalan. Data tersimpan di HP kamu sendiri, bukan di server orang. Internet mati? Jualan tetap jalan.</p></div>
+      <div class="bcard"><div class="tile">💰</div><h3>Harga Jujur</h3><p>Bulan pertama Rp8rb. Rp49rb/bln setelahnya, tanpa potongan per transaksi, tanpa biaya sembunyi.</p></div>
       <div class="bcard"><div class="tile">👆</div><h3>Gampang Dipakai</h3><p>Karyawan baru bisa pakai dalam 5 menit. Tap menu, tap bayar, kembalian kehitung otomatis.</p></div>
       <div class="bcard"><div class="tile">💬</div><h3>Support via WhatsApp</h3><p>Ada kendala? Chat langsung, fast respon. Nggak perlu tiket, nggak perlu antre.</p></div>
-      <div class="bcard"><div class="tile">🔄</div><h3>Selalu Update</h3><p>Fitur baru mengalir terus — catatan per item, tambah pesanan, 5 tema, cloud backup — semua gratis untuk pelanggan aktif.</p></div>
+      <div class="bcard"><div class="tile">🔄</div><h3>Selalu Update</h3><p>Fitur baru mengalir terus: catatan per item, tambah pesanan, 5 tema, cloud backup. Semua gratis untuk pelanggan aktif.</p></div>
       <div class="bcard"><div class="tile">📱</div><h3>Ringan di HP</h3><p>APK kecil, jalan mulus di HP kentang sekalipun. Android 10 ke atas siap gas.</p></div>
     </div>
   </section>
 
   <section id="tampilan">
-    <div class="eyebrow">Tampilan Asli</div>
     <h2>Lihat Isinya <em>Dulu</em></h2>
-    <p class="lead">Layar asli aplikasi — bukan mockup tempelan. Yang kamu lihat, itu yang kamu dapat.</p>
+    <p class="lead">Layar asli aplikasi, bukan mockup tempelan. Yang kamu lihat, itu yang kamu dapat.</p>
     <div class="show-grid">
       <div class="browser-frame">
         <div class="browser-bar"><i></i><i></i><i></i></div>
         <img src="screenshot-laporan.png" alt="Laporan omzet OGKasir dengan grafik per jam">
       </div>
       <ul class="show-list">
-        <li><div class="n">1</div><div><b>Kasir secepat kilat</b><span>Ketuk menu atau scan barcode — total &amp; kembalian kehitung otomatis.</span></div></li>
-        <li><div class="n">2</div><div><b>Laporan yang ngertiin usaha</b><span>Omzet per jam, laba, menu terlaris — plus export Excel rapi.</span></div></li>
-        <li><div class="n">3</div><div><b>5 tema pilihan</b><span>Dari Klasik sampai Midnight Gold — ganti suasana kasir sesuai gayamu, siang maupun malam.</span></div></li>
+        <li><div class="n">1</div><div><b>Kasir secepat kilat</b><span>Ketuk menu atau scan barcode, total &amp; kembalian kehitung otomatis.</span></div></li>
+        <li><div class="n">2</div><div><b>Laporan yang ngertiin usaha</b><span>Omzet per jam, laba, menu terlaris, plus export Excel rapi.</span></div></li>
+        <li><div class="n">3</div><div><b>5 tema pilihan</b><span>Dari Klasik sampai Midnight Gold. Ganti suasana kasir sesuai gayamu, siang maupun malam.</span></div></li>
       </ul>
     </div>
   </section>
@@ -473,11 +475,11 @@
   <section id="fitur">
     <div class="eyebrow">Fitur</div>
     <h2>Lengkap, <em>Harga Warteg</em> ☕</h2>
-    <p class="lead">Ini layar <b>asli aplikasi</b> — bukan gambar tempelan. Geser untuk intip semuanya.</p>
+    <p class="lead">Ini layar <b>asli aplikasi</b>, bukan gambar tempelan. Geser untuk intip semuanya.</p>
     <div class="showcase">
       <button class="sh-btn prev" onclick="document.getElementById('phones').scrollBy({left:-260,behavior:'smooth'})" aria-label="Sebelumnya">‹</button>
       <div class="phones" id="phones">
-      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-kasir.jpg" alt="Layar kasir dengan foto menu asli" loading="lazy"></div><figcaption><b>Kasir Kilat</b><span>Tap menu, bayar — kembalian kehitung otomatis</span></figcaption></figure>
+      <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-kasir.jpg" alt="Layar kasir dengan foto menu asli" loading="lazy"></div><figcaption><b>Kasir Kilat</b><span>Tap menu, bayar, kembalian kehitung otomatis</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-cart.jpg" alt="Keranjang belanja dengan foto produk" loading="lazy"></div><figcaption><b>Checkout</b><span>Catatan per item, diskon, tunai/QRIS/transfer</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-laporan-v2.jpg" alt="Laporan omzet harian" loading="lazy"></div><figcaption><b>Laporan Rapi</b><span>Omzet, laba, produk terlaris + export Excel</span></figcaption></figure>
       <figure class="ph"><div class="frame"><div class="notch"></div><img src="img/p-stok.jpg" alt="Manajemen stok barang" loading="lazy"></div><figcaption><b>Kelola Stok</b><span>Stok berkurang otomatis + peringatan menipis</span></figcaption></figure>
@@ -507,7 +509,6 @@
   </section>
 
   <section id="untuk-siapa">
-    <div class="eyebrow">Cocok Buat Kamu</div>
     <h2>Dibuat Untuk <em>Usahamu</em> 🏪</h2>
     <p class="lead">Apapun jualanmu, OGKasir siap membantu.</p>
     <div class="grid cols4">
@@ -519,20 +520,19 @@
   </section>
 
   <section id="cara">
-    <div class="eyebrow">Mulai Cepat</div>
     <h2>Mulai Dalam <em>3 Langkah</em></h2>
     <p class="lead">Nggak perlu daftar, nggak perlu kartu kredit.</p>
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>⬇️ Download &amp; Install</h3><p>Unduh APK di bawah, izinkan "instal dari sumber tak dikenal" sekali saja.</p></div>
       <div class="step"><div class="n">2</div><h3>🎉 Trial 7 Hari Gratis</h3><p>Semua fitur terbuka penuh selama 7 hari. Cocok buat jualan harianmu.</p></div>
-      <div class="step"><div class="n">3</div><h3>💬 Aktivasi via WA</h3><p>Cocok? Chat kami, bayar, terima kode aktivasi — masukkan di aplikasi. Beres!</p></div>
+      <div class="step"><div class="n">3</div><h3>💬 Aktivasi via WA</h3><p>Cocok? Chat kami, bayar, terima kode aktivasi, lalu masukkan di aplikasi. Beres!</p></div>
     </div>
   </section>
 
   <section id="harga">
     <div class="eyebrow">Harga Jujur</div>
-    <h2>🔥 Promo Launching — <em>Diskon s/d 35%</em></h2>
-    <p class="lead">Bulan pertama cuma <b style="color:var(--gold)">Rp8rb</b> — khusus pembelian pertama. Selanjutnya pilih paket perpanjangan di bawah. Tanpa biaya sembunyi — batal kapan saja, datamu tetap milikmu.</p>
+    <h2>🔥 Promo Launching: <em>Diskon s/d 35%</em></h2>
+    <p class="lead">Bulan pertama cuma <b style="color:var(--gold)">Rp8rb</b>, khusus pembelian pertama. Selanjutnya pilih paket perpanjangan di bawah. Tanpa biaya sembunyi. Batal kapan saja, datamu tetap milikmu.</p>
     <div class="prices">
       <div class="price-card first">
         <div class="badge">🎉 PROMO PERKENALAN</div>
@@ -564,13 +564,12 @@
   </section>
 
   <section id="artikel">
-    <div class="eyebrow">Blog</div>
     <h2>Artikel 📝</h2>
     <p class="lead">Tips dan panduan buat pemilik warkop &amp; UMKM.</p>
     <div class="faq">
       <details class="qa" open><summary>Laporan Omzet Harian Warkop: Cara Bikin yang Rapi Tanpa Ribet</summary><div class="a">Komponen wajib laporan harian, contoh format sederhana, dan cara bikin laporannya otomatis tanpa hitung manual. <a href="artikel-laporan-omzet-harian-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
       <details class="qa"><summary>Cara Menghitung HPP Minuman Warkop Biar Nggak Rugi</summary><div class="a">Rumus sederhana HPP per gelas + contoh hitungan kopi susu gula aren, biar harga jualmu nggak bikin rugi. <a href="artikel-cara-menghitung-hpp-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
-      <details class="qa"><summary>Fitur Bon di Aplikasi Kasir Coffeeshop</summary><div class="a">Pesan dulu, bayar belakangan: bon pelanggan tercatat rapi — nama, meja, struk BELUM DIBAYAR, dan total piutang terpantau otomatis. <a href="artikel-fitur-bon-kasir-coffeeshop.html" style="color:var(--gold)">Baca artikel →</a></div></details>
+      <details class="qa"><summary>Fitur Bon di Aplikasi Kasir Coffeeshop</summary><div class="a">Pesan dulu, bayar belakangan: bon pelanggan tercatat rapi: nama, meja, struk BELUM DIBAYAR, dan total piutang terpantau otomatis. <a href="artikel-fitur-bon-kasir-coffeeshop.html" style="color:var(--gold)">Baca artikel →</a></div></details>
       <details class="qa"><summary>Aplikasi Kasir Warkop: Berhenti Andalkan Buku Tulis</summary><div class="a">Masalah klasik pencatatan manual, ciri aplikasi kasir yang bagus buat warkop, dan cara mulai digitalisasinya langkah demi langkah. <a href="artikel-aplikasi-kasir-warkop.html" style="color:var(--gold)">Baca artikel →</a></div></details>
     </div>
   </section>
@@ -580,21 +579,20 @@
     <h2>Sering <em>Ditanyakan</em></h2>
     <p class="lead"></p>
     <div class="faq">
-      <details class="qa"><summary>Apakah ada backup cloud?</summary><div class="a">Ada! Cloud Backup OGKasir menyimpan salinan data kasirmu di cloud FinOwi — kalau ganti HP atau HP hilang, pulihkan semuanya dalam hitungan menit pakai kode pemulihan pribadimu. Ada juga backup otomatis tiap 30 hari. 100% gratis untuk pelanggan aktif. <a href="cloud-backup.html" style="color:var(--gold)">Pelajari →</a></div></details>
+      <details class="qa"><summary>Apakah ada backup cloud?</summary><div class="a">Ada! Cloud Backup OGKasir menyimpan salinan data kasirmu di cloud FinOwi. Kalau ganti HP atau HP hilang, pulihkan semuanya dalam hitungan menit pakai kode pemulihan pribadimu. Ada juga backup otomatis tiap 30 hari. 100% gratis untuk pelanggan aktif. <a href="cloud-backup.html" style="color:var(--gold)">Pelajari →</a></div></details>
       <details class="qa" open><summary>Apakah butuh internet?</summary><div class="a">Tidak. OGKasir jalan 100% offline. Internet hanya dipakai sesekali untuk cek update aplikasi.</div></details>
-      <details class="qa"><summary>Apakah dataku hilang saat update / lisensi habis?</summary><div class="a">Tidak. Data transaksi, menu &amp; stok tetap aman — update menimpa aplikasi tanpa menghapus data, dan lisensi habis hanya mengunci fitur sampai diperpanjang.</div></details>
+      <details class="qa"><summary>Apakah dataku hilang saat update / lisensi habis?</summary><div class="a">Tidak. Data transaksi, menu &amp; stok tetap aman. Update menimpa aplikasi tanpa menghapus data, dan lisensi habis hanya mengunci fitur sampai diperpanjang.</div></details>
       <details class="qa"><summary>Printer apa yang didukung?</summary><div class="a">Printer thermal Bluetooth 58mm (mis. XPrinter). Pairing di Bluetooth HP, pilih di Pengaturan → Printer, lalu cetak dari layar struk.</div></details>
       <details class="qa"><summary>HP apa yang didukung?</summary><div class="a">Android 10 ke atas.</div></details>
-      <details class="qa"><summary>Bagaimana cara bayar lisensinya?</summary><div class="a">Chat WhatsApp kami setelah trial — bayar via transfer, terima kode aktivasi, masukkan di aplikasi. Tanpa daftar akun apa pun.</div></details>
-      <details class="qa"><summary>Apakah promo bulan pertama Rp8rb berlaku selamanya?</summary><div class="a">Tidak — Rp8rb hanya untuk bulan pertama, satu kali per pelanggan. Bulan berikutnya Rp49rb, atau lebih hemat dengan paket 90 hari / 1 tahun.</div></details>
+      <details class="qa"><summary>Bagaimana cara bayar lisensinya?</summary><div class="a">Chat WhatsApp kami setelah trial, bayar via transfer, terima kode aktivasi, masukkan di aplikasi. Tanpa daftar akun apa pun.</div></details>
+      <details class="qa"><summary>Apakah promo bulan pertama Rp8rb berlaku selamanya?</summary><div class="a">Tidak. Rp8rb hanya untuk bulan pertama, satu kali per pelanggan. Bulan berikutnya Rp49rb, atau lebih hemat dengan paket 90 hari / 1 tahun.</div></details>
     </div>
   </section>
 
   <section id="download">
     <div class="dl">
-      <div class="eyebrow">Download</div>
-      <h2>Siap Naik Kelas? 🚀</h2>
-      <p>Download OGKasir sekarang — gratis 7 hari, full fitur. Warkopmu pantas dapat kasir yang rapi.</p>
+        <h2>Siap Naik Kelas? 🚀</h2>
+      <p>Download OGKasir sekarang, gratis 7 hari, full fitur. Warkopmu pantas dapat kasir yang rapi.</p>
       <a class="btn" id="dlBtn" href="#" style="pointer-events:none;opacity:.5">Memuat versi terbaru…</a>
       <div id="ver2" style="font-size:13px;color:var(--faint);margin-top:12px"></div>
       <div class="install">
@@ -602,15 +600,14 @@
         1. Ketuk tombol download di atas<br>
         2. Buka file APK yang terunduh<br>
         3. Izinkan <b>"Instal dari sumber tak dikenal"</b> saat diminta<br>
-        4. Ketuk <b>Install</b> — selesai! 🎉
+        4. Ketuk <b>Install</b>, selesai! 🎉
       </div>
     </div>
   </section>
 
   <section id="kontak">
-    <div class="eyebrow">Kontak</div>
     <h2>Ada <em>Pertanyaan?</em></h2>
-    <p class="lead">Chat kami — fast respon.</p>
+    <p class="lead">Chat kami, fast respon.</p>
     <div class="kontak">
       <a class="btn wa" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya-tanya%20tentang%20OGKasir.">💬 WhatsApp</a>
       <a class="btn ghost" href="https://www.instagram.com/ogkasir">📸 Instagram @ogkasir</a>
@@ -637,14 +634,42 @@ fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest')
         btn.style.pointerEvents = 'auto';
         btn.style.opacity = '1';
       });
-      document.getElementById('dlBtn').textContent = '⬇️ Download OGKasir ' + (d.name || '');
+  
+    // scroll reveal
+    (function(){
+      var els = document.querySelectorAll('section > *:not(script)');
+      els.forEach(function(el){ el.classList.add('reveal'); });
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(es){
+          es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        els.forEach(function(el){ io.observe(el); });
+      } else {
+        els.forEach(function(el){ el.classList.add('visible'); });
+      }
+    })();
+    document.getElementById('dlBtn').textContent = '⬇️ Download OGKasir ' + (d.name || '');
       document.getElementById('dlBtnTop').textContent = '⬇️ Download Sekarang';
       document.getElementById('ver').textContent = info;
       document.getElementById('ver2').textContent = info;
     }
   })
   .catch(() => {
-    document.getElementById('dlBtn').textContent = 'Gagal memuat — coba lagi nanti';
+
+    // scroll reveal
+    (function(){
+      var els = document.querySelectorAll('section > *:not(script)');
+      els.forEach(function(el){ el.classList.add('reveal'); });
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(es){
+          es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        els.forEach(function(el){ io.observe(el); });
+      } else {
+        els.forEach(function(el){ el.classList.add('visible'); });
+      }
+    })();
+    document.getElementById('dlBtn').textContent = 'Gagal memuat. Coba lagi nanti';
     document.getElementById('dlBtnTop').textContent = '⬇️ Download';
     document.getElementById('dlBtnTop').style.pointerEvents = 'auto';
     document.getElementById('dlBtnTop').style.opacity = '1';
