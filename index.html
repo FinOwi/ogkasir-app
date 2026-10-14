@@ -131,6 +131,11 @@
   .phone::after { content:''; position:absolute; right:-3px; top:25%; width:4px; height:11%; background:#2b3050; border-radius:2px; z-index:3; }
   .phone .glare { position:absolute; inset:13px; border-radius:40px; background:linear-gradient(115deg,rgba(255,255,255,.11) 0,transparent 28%); pointer-events:none; z-index:2; }
   .phone img.screen { width: 100%; border-radius: 40px; display: block; }
+  .ipad { width: 480px; max-width: 58vw; border-radius: 30px; background: linear-gradient(145deg,#6b7190,#161a30 35%,#0a0d1c 60%,#4b5272); padding: 14px; box-shadow: 0 50px 100px rgba(0,0,0,.55), 0 0 60px rgba(255,183,0,.08), inset 0 0 0 2px rgba(255,255,255,.14); position: relative; z-index: 1; align-self: center; margin-left: -30px; margin-right: -20px; transform: rotate(1.5deg); }
+  .ipad img.screen { width: 100%; border-radius: 18px; display: block; aspect-ratio: 1400/973; object-fit: cover; }
+  .ipad .glare { position:absolute; inset:14px; border-radius:18px; background:linear-gradient(115deg,rgba(255,255,255,.09) 0,transparent 30%); pointer-events:none; }
+  .ipad .cam { position: absolute; top: 50%; left: 22px; transform: translateY(-50%); width: 8px; height: 8px; background: #000; border-radius: 50%; z-index: 2; }
+  @media (max-width: 900px) { .ipad { display: none; } }
   .phone .notch { position: absolute; top: 26px; left: 50%; transform: translateX(-50%); width: 104px; height: 25px; background: #000; border-radius: 99px; z-index: 3; }
   .float-card { position: absolute; z-index: 3; display: flex; align-items: center; gap: 11px; background: rgba(16,22,40,.82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 18px; padding: 13px 17px; box-shadow: 0 18px 44px rgba(0,0,0,.45); font-size: 13.5px; text-align: left; animation: floaty 5s ease-in-out infinite; white-space: nowrap; }
   .float-card b { display: block; font-size: 15px; }
@@ -420,6 +425,10 @@
       <div class="phone">
         <div class="notch"></div><i class="glare"></i>
         <img class="screen" src="screenshot-kasir.jpg" alt="Tampilan aplikasi kasir OGKasir di HP">
+      </div>
+      <div class="ipad">
+        <div class="cam"></div><i class="glare"></i>
+        <img class="screen" src="screenshot-laporan-ipad.jpg" alt="Tampilan laporan omzet OGKasir di tablet" loading="lazy">
       </div>
       <div class="float-card fc1"><div class="ic">✅</div><div><b>Terjual Rp72.000</b><small>7 item · baru saja</small></div></div>
       <div class="float-card fc2"><div class="ic">📦</div><div><b>Stok diperbarui</b><small>Otomatis tiap transaksi</small></div></div>

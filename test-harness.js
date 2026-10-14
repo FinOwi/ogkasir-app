@@ -179,7 +179,7 @@ try {
   Lap.period = 'today';
   ok(Lap.render().indexOf('Omzet') >= 0, 'laporan render');
   Lap.drawChart(Lap.range());
-  ok(Set.render().indexOf('Lisensi') >= 0, 'pengaturan + kartu lisensi');
+  ok(AppSet.render().indexOf('Lisensi') >= 0, 'pengaturan + kartu lisensi');
 
   /* ---- aktivasi & lock ---- */
   var dc = Lic.deviceCode();
@@ -290,7 +290,7 @@ try {
   ok(!Printer.connected && KDB.data.settings.printerType === '' && KDB.data.settings.printerWifiIp === '', 'disconnect bersihkan setting WiFi');
   // render pengaturan memuat kartu printer tanpa error
   App.page = 'set';
-  var setHtml = Set.render();
+  var setHtml = AppSet.render();
   ok(setHtml.indexOf('Printer Struk') >= 0, 'kartu printer muncul di pengaturan');
   ok(setHtml.indexOf('Printer.pickWifi()') >= 0, 'opsi printer WiFi ada di kartu printer');
   ok(setHtml.indexOf('Printer.pick()') >= 0, 'opsi printer Bluetooth ada di kartu printer');
@@ -435,10 +435,10 @@ try {
   ok(I18N.payName('Tunai') === 'Cash' && I18N.payName('QRIS') === 'QRIS', 'payName tampil Inggris, data tetap');
   I18N.setLang('id');
   // 17. Custom Tampilan: rename kartu
-  var setHtml = Set.render();
+  var setHtml = AppSet.render();
   ok(setHtml.indexOf('Custom Tampilan') >= 0, 'kartu Custom Tampilan tampil');
   I18N.setLang('en');
-  ok(Set.render().indexOf('Custom Appearance') >= 0, 'kartu tampil Inggris');
+  ok(AppSet.render().indexOf('Custom Appearance') >= 0, 'kartu tampil Inggris');
   I18N.setLang('id');
   // 18. Jam live: hari, tanggal, jam
   var clock = App.clockHtml();
@@ -452,7 +452,7 @@ try {
   // 19. Profil pengguna
   KDB.data.settings.userName = 'Budi';
   KDB.data.settings.userEmoji = '😎';
-  ok(Set.render().indexOf('Profil Pengguna') >= 0, 'kartu Profil Pengguna tampil');
+  ok(AppSet.render().indexOf('Profil Pengguna') >= 0, 'kartu Profil Pengguna tampil');
   var tx0 = { no: 1, at: Date.now(), items: [{ qty: 1, name: 'Kopi', price: 10000 }], sub: 10000, disc: 0, total: 10000, pay: 'Tunai', cash: 10000, change: 0, status: 'paid' };
   var rc = Kasir.receiptText(tx0);
   ok(rc.indexOf('Kasir') >= 0 && rc.indexOf('Budi') >= 0, 'struk teks ada baris Kasir');
@@ -469,13 +469,13 @@ try {
   KDB.data.settings.logo = 'data:image/png;base64,AAA';
   App.renderHeader();
   ok(els['kHeader'].innerHTML.indexOf('<img src="data:image/png') >= 0, 'logo custom tampil di header');
-  ok(Set.render().indexOf('Logo toko (opsional)') >= 0, 'field logo tampil di Profil Toko');
-  Set.clearLogo();
+  ok(AppSet.render().indexOf('Logo toko (opsional)') >= 0, 'field logo tampil di Profil Toko');
+  AppSet.clearLogo();
   ok(KDB.data.settings.logo === '', 'clearLogo menghapus logo');
   App.renderHeader();
   ok(els['kHeader'].innerHTML.indexOf('\u26a1') >= 0, 'setelah hapus: petir kembali');
   I18N.setLang('en');
-  ok(Set.render().indexOf('Shop logo (optional)') >= 0, 'field logo tampil Inggris');
+  ok(AppSet.render().indexOf('Shop logo (optional)') >= 0, 'field logo tampil Inggris');
   I18N.setLang('id');
   // 13. Theme: aksen custom + reset
   KDB.data.settings.accent = '#2563eb'; KDB.data.settings.theme = 'light';
@@ -490,11 +490,11 @@ try {
   ok(Kasir.render().indexOf('k-list') >= 0, 'render kasir pakai list saat menuView=list');
   KDB.data.settings.menuView = 'grid';
   ok(Kasir.render().indexOf('k-grid') >= 0, 'render kasir pakai grid saat menuView=grid');
-  // 15. Set.lang ganti bahasa + render ulang
-  Set.lang('en');
-  ok(I18N.lang === 'en' && KDB.data.settings.lang === 'en', 'Set.lang menyimpan & mengaktifkan Inggris');
+  // 15. AppSet.lang ganti bahasa + render ulang
+  AppSet.lang('en');
+  ok(I18N.lang === 'en' && KDB.data.settings.lang === 'en', 'AppSet.lang menyimpan & mengaktifkan Inggris');
   ok(document.getElementById('kNav').innerHTML.indexOf('Cashier') >= 0, 'nav tampil Inggris');
-  var enHtml = Kasir.render() + Menu.render() + Stok.render() + Lap.render() + Set.render();
+  var enHtml = Kasir.render() + Menu.render() + Stok.render() + Lap.render() + AppSet.render();
   ok(enHtml.indexOf('undefined') < 0, 'render mode Inggris tanpa undefined');
   ok(enHtml.indexOf('Cash') >= 0 && enHtml.indexOf('Stock') >= 0, 'mode Inggris tampil terjemahan');
   // 16. BUG: filter kategori 'Semua' harus kanonis — produk tidak hilang di mode Inggris
@@ -505,7 +505,7 @@ try {
   var chipHtml = Kasir.render();
   ok(chipHtml.indexOf('All') >= 0 && chipHtml.indexOf('k-list') < 0, 'chip Semua tampil sebagai All');
   I18N.setLang('id');
-  Set.lang('id');
+  AppSet.lang('id');
   ok(document.getElementById('kNav').innerHTML.indexOf('Kasir') >= 0, 'nav kembali Indonesia');
 
   // 7. label Belum Bayar (bukan Piutang)
@@ -629,13 +629,13 @@ try {
   // preset editor
   var np0 = Kasir.notePresets().length;
   document.getElementById('sPreset').value = 'Sambal terpisah';
-  Set.addPreset();
+  AppSet.addPreset();
   ok(Kasir.notePresets().indexOf('Sambal terpisah') >= 0, 'preset baru tersimpan');
-  Set.delPreset(Kasir.notePresets().indexOf('Sambal terpisah'));
+  AppSet.delPreset(Kasir.notePresets().indexOf('Sambal terpisah'));
   ok(Kasir.notePresets().length === np0, 'preset terhapus, jumlah kembali');
   // kartu preset muncul di pengaturan
   App.page = 'set';
-  ok(Set.render().indexOf('Preset Catatan') >= 0, 'kartu preset ada di pengaturan');
+  ok(AppSet.render().indexOf('Preset Catatan') >= 0, 'kartu preset ada di pengaturan');
   // tema tampilan: 5 pilihan
   ok(Theme.THEMES.length === 5, '5 tema tersedia');
   var rec = {};
@@ -656,11 +656,11 @@ try {
   ok(de.style._p['--brand'] === '#ff0000', 'aksen custom tetap menimpa di tema baru');
   KDB.data.settings.accent = '';
   de.setAttribute = _sa;
-  Set.theme('fintech');
-  ok(KDB.data.settings.theme === 'fintech', 'Set.theme menyimpan pilihan');
-  Set.theme('ngaco');
-  ok(KDB.data.settings.theme === 'light', 'Set.theme menolak invalid');
-  ok(Set.render().indexOf('Tema tampilan') >= 0, 'pemilih tema ada di pengaturan');
+  AppSet.theme('fintech');
+  ok(KDB.data.settings.theme === 'fintech', 'AppSet.theme menyimpan pilihan');
+  AppSet.theme('ngaco');
+  ok(KDB.data.settings.theme === 'light', 'AppSet.theme menolak invalid');
+  ok(AppSet.render().indexOf('Tema tampilan') >= 0, 'pemilih tema ada di pengaturan');
   KDB.data.settings.theme = 'light';
   Theme.apply();
   // cloud backup: key, url, payload
@@ -699,8 +699,8 @@ try {
     setTimeout(function () {
       ok(sentUrl === 'https://srv.test/api/backup', 'jalur custom tetap jalan');
       // kartu cloud tampil di pengaturan
-      ok(Set.cloudCard().indexOf('Cloud Backup') >= 0, 'kartu cloud backup tampil');
-      ok(Set.cloudCard().indexOf('AB12-CD34-EF56') >= 0, 'kode pemulihan tampil');
+      ok(AppSet.cloudCard().indexOf('Cloud Backup') >= 0, 'kartu cloud backup tampil');
+      ok(AppSet.cloudCard().indexOf('AB12-CD34-EF56') >= 0, 'kode pemulihan tampil');
       global.fetch = _fetch; UI.toast = _toast;
       KDB.data.settings.cloudUrl = ''; KDB.data.settings.cloudKey = ''; KDB.data.settings.cloudTs = 0;
     }, 50);
@@ -741,7 +741,7 @@ try {
       ok(KDB.data.settings.cloudAuto === false, 'toggleAuto mati');
       Cloud.toggleAuto(true);
       ok(KDB.data.settings.cloudAuto === true, 'toggleAuto nyala');
-      ok(Set.cloudCard().indexOf('Backup otomatis bulanan') >= 0, 'toggle tampil di kartu');
+      ok(AppSet.cloudCard().indexOf('Backup otomatis bulanan') >= 0, 'toggle tampil di kartu');
       global.fetch = _fetch2;
       s.cloudKey = ''; s.cloudTs = 0; s.cloudAuto = true;
     }, 50);
