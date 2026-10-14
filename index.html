@@ -131,6 +131,37 @@
   .phone::after { content:''; position:absolute; right:-3px; top:25%; width:4px; height:11%; background:#2b3050; border-radius:2px; z-index:3; }
   .phone .glare { position:absolute; inset:13px; border-radius:40px; background:linear-gradient(115deg,rgba(255,255,255,.11) 0,transparent 28%); pointer-events:none; z-index:2; }
   .phone img.screen { width: 100%; border-radius: 40px; display: block; }
+  /* hero v2: browser + 2 HP + pil notifikasi (ala referensi) */
+  .hero-visual.v2 { min-height: 680px; align-items: flex-end; }
+  .browser-mock { width: 880px; max-width: 94vw; border-radius: 20px; overflow: hidden; background: #171d33; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 40px 90px rgba(0,0,0,.5), 0 0 60px rgba(255,183,0,.07); position: relative; z-index: 1; margin-bottom: 30px; }
+  .bm-bar { display: flex; align-items: center; gap: 12px; padding: 11px 16px; background: rgba(255,255,255,.045); }
+  .bm-dots { display: flex; gap: 7px; }
+  .bm-dots i { width: 11px; height: 11px; border-radius: 50%; background: #3a4560; }
+  .bm-dots i:first-child { background: #ff5f57; } .bm-dots i:nth-child(2) { background: #febc2e; } .bm-dots i:nth-child(3) { background: #28c840; }
+  .bm-url { flex: 1; text-align: center; font-size: 12.5px; color: var(--mut); background: rgba(0,0,0,.28); border-radius: 8px; padding: 6px 12px; }
+  .browser-mock > img { width: 100%; display: block; }
+  .hero-visual.v2 .phone { position: absolute; bottom: 0; z-index: 3; width: 236px; }
+  .phone-a { left: calc(50% - 440px); }
+  .phone-b { right: calc(50% - 440px); }
+  .pill { position: absolute; z-index: 4; background: #fff; color: #23233a; border-radius: 99px; padding: 12px 24px; font-size: 15px; box-shadow: 0 16px 44px rgba(0,0,0,.4); display: flex; align-items: center; gap: 10px; animation: floaty 5s ease-in-out infinite; white-space: nowrap; }
+  .pill b { font-size: 17px; }
+  .pill-top { top: 2%; left: 50%; transform: translateX(-50%); }
+  .pill-top .grn { color: #0a9d5c; font-size: 20px; }
+  .pill-left { left: calc(50% - 680px); top: 42%; animation-delay: 1.4s; }
+  .pill-left .chk { width: 30px; height: 30px; border-radius: 50%; background: #e6f7ee; color: #0a9d5c; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; }
+  .pill-bottom { bottom: 2%; left: 50%; transform: translateX(-50%); animation-delay: 2.6s; }
+  .pill-bottom .live { color: #0a9d5c; font-weight: 800; font-size: 14px; }
+  .dev-label { position: absolute; bottom: -34px; z-index: 3; color: var(--mut); font-size: 14px; font-weight: 600; }
+  .dl-a { left: calc(50% - 440px + 118px); transform: translateX(-50%); }
+  .dl-b { right: calc(50% - 440px + 118px); transform: translateX(50%); }
+  @media (max-width: 1100px) { .pill-left { left: 1%; } }
+  @media (max-width: 900px) {
+    .hero-visual.v2 { min-height: 0; }
+    .browser-mock, .phone-b, .pill-left, .dl-b { display: none; }
+    .hero-visual.v2 .phone-a { position: relative; left: auto; }
+    .pill-top { top: -8px; } .pill-bottom { bottom: -18px; }
+    .dl-a { position: relative; bottom: auto; left: auto; transform: none; margin-top: 10px; }
+  }
   .ipad { width: 480px; max-width: 58vw; border-radius: 30px; background: linear-gradient(145deg,#6b7190,#161a30 35%,#0a0d1c 60%,#4b5272); padding: 14px; box-shadow: 0 50px 100px rgba(0,0,0,.55), 0 0 60px rgba(255,183,0,.08), inset 0 0 0 2px rgba(255,255,255,.14); position: relative; z-index: 1; align-self: center; margin-left: -30px; margin-right: -20px; transform: rotate(1.5deg); }
   .ipad img.screen { width: 100%; border-radius: 18px; display: block; aspect-ratio: 1400/973; object-fit: cover; }
   .ipad .glare { position:absolute; inset:14px; border-radius:18px; background:linear-gradient(115deg,rgba(255,255,255,.09) 0,transparent 30%); pointer-events:none; }
@@ -421,18 +452,24 @@
     </div>
     <div id="ver"></div>
 
-    <div class="hero-visual">
-      <div class="phone">
+    <div class="hero-visual v2">
+      <div class="browser-mock">
+        <div class="bm-bar"><span class="bm-dots"><i></i><i></i><i></i></span><span class="bm-url">🔒 ogkasir.my.id</span></div>
+        <img src="screenshot-laporan-ipad.jpg" alt="Dashboard laporan omzet OGKasir di browser" loading="lazy">
+      </div>
+      <div class="phone phone-a">
         <div class="notch"></div><i class="glare"></i>
-        <img class="screen" src="screenshot-kasir.jpg" alt="Tampilan aplikasi kasir OGKasir di HP">
+        <img class="screen" src="screenshot-kasir.jpg" alt="Kasir OGKasir dengan foto produk di Android">
       </div>
-      <div class="ipad">
-        <div class="cam"></div><i class="glare"></i>
-        <img class="screen" src="screenshot-laporan-ipad.jpg" alt="Tampilan laporan omzet OGKasir di tablet" loading="lazy">
+      <div class="phone phone-b">
+        <div class="notch"></div><i class="glare"></i>
+        <img class="screen" src="screenshot-menu.jpg" alt="Daftar menu OGKasir dengan foto produk di iPhone">
       </div>
-      <div class="float-card fc1"><div class="ic">✅</div><div><b>Terjual Rp72.000</b><small>7 item · baru saja</small></div></div>
-      <div class="float-card fc2"><div class="ic">📦</div><div><b>Stok diperbarui</b><small>Otomatis tiap transaksi</small></div></div>
-      <div class="float-card fc3"><div class="ic"><span class="live-dot"></span></div><div><b>Omzet tercatat</b><small style="color:#9ccc9f;font-weight:700">● Live</small></div></div>
+      <div class="pill pill-top"><b class="grn">+Rp38.000</b> <span>baru saja</span></div>
+      <div class="pill pill-left"><span class="chk">✓</span> <b>Terjual Rp114.400</b></div>
+      <div class="pill pill-bottom"><span>Omzet hari ini</span> <b>Rp863.900</b> <span class="live">● Live</span></div>
+      <div class="dev-label dl-a">Android</div>
+      <div class="dev-label dl-b">iPhone</div>
     </div>
 
     <div class="stats">
