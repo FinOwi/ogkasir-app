@@ -141,8 +141,7 @@
   .bm-url { flex: 1; text-align: center; font-size: 12.5px; color: var(--mut); background: rgba(0,0,0,.28); border-radius: 8px; padding: 6px 12px; }
   .browser-mock > img { width: 100%; display: block; }
   .hero-visual.v2 .phone { position: absolute; bottom: 0; z-index: 3; width: 236px; }
-  .phone-a { left: calc(50% - 440px); }
-  .phone-b { right: calc(50% - 440px); }
+  .phone-a { right: calc(50% - 440px); }
   .pill { position: absolute; z-index: 4; background: #fff; color: #23233a; border-radius: 99px; padding: 12px 24px; font-size: 15px; box-shadow: 0 16px 44px rgba(0,0,0,.4); display: flex; align-items: center; gap: 10px; animation: floaty 5s ease-in-out infinite; white-space: nowrap; }
   .pill b { font-size: 17px; }
   .pill-top { top: 2%; left: 50%; transform: translateX(-50%); }
@@ -152,15 +151,14 @@
   .pill-bottom { bottom: 2%; left: 50%; transform: translateX(-50%); animation-delay: 2.6s; }
   .pill-bottom .live { color: #0a9d5c; font-weight: 800; font-size: 14px; }
   .dev-label { position: absolute; bottom: -34px; z-index: 3; color: var(--mut); font-size: 14px; font-weight: 600; }
-  .dl-a { left: calc(50% - 440px + 118px); transform: translateX(-50%); }
-  .dl-b { right: calc(50% - 440px + 118px); transform: translateX(50%); }
+  .dl-a { right: calc(50% - 440px + 118px); transform: translateX(50%); }
   @media (max-width: 1100px) { .pill-left { left: 1%; } }
   @media (max-width: 900px) {
     .hero-visual.v2 { min-height: 0; }
-    .browser-mock, .phone-b, .pill-left, .dl-b { display: none; }
-    .hero-visual.v2 .phone-a { position: relative; left: auto; }
+    .browser-mock, .pill-left { display: none; }
+    .hero-visual.v2 .phone-a { position: relative; right: auto; }
     .pill-top { top: -8px; } .pill-bottom { bottom: -18px; }
-    .dl-a { position: relative; bottom: auto; left: auto; transform: none; margin-top: 10px; }
+    .dl-a { position: relative; bottom: auto; right: auto; transform: none; margin-top: 10px; }
   }
   .ipad { width: 480px; max-width: 58vw; border-radius: 30px; background: linear-gradient(145deg,#6b7190,#161a30 35%,#0a0d1c 60%,#4b5272); padding: 14px; box-shadow: 0 50px 100px rgba(0,0,0,.55), 0 0 60px rgba(255,183,0,.08), inset 0 0 0 2px rgba(255,255,255,.14); position: relative; z-index: 1; align-self: center; margin-left: -30px; margin-right: -20px; transform: rotate(1.5deg); }
   .ipad img.screen { width: 100%; border-radius: 18px; display: block; aspect-ratio: 1400/973; object-fit: cover; }
@@ -455,21 +453,16 @@
     <div class="hero-visual v2">
       <div class="browser-mock">
         <div class="bm-bar"><span class="bm-dots"><i></i><i></i><i></i></span><span class="bm-url">🔒 ogkasir.my.id</span></div>
-        <img src="screenshot-laporan-ipad.jpg" alt="Dashboard laporan omzet OGKasir di browser" loading="lazy">
+        <img src="screenshot-menu-grid.jpg" alt="Semua menu OGKasir dalam grid foto produk" loading="lazy">
       </div>
       <div class="phone phone-a">
         <div class="notch"></div><i class="glare"></i>
-        <img class="screen" src="screenshot-kasir.jpg" alt="Kasir OGKasir dengan foto produk di Android">
-      </div>
-      <div class="phone phone-b">
-        <div class="notch"></div><i class="glare"></i>
-        <img class="screen" src="screenshot-menu.jpg" alt="Daftar menu OGKasir dengan foto produk di iPhone">
+        <img class="screen" src="screenshot-laporan.jpg" alt="Laporan omzet OGKasir di Android">
       </div>
       <div class="pill pill-top"><b class="grn">+Rp38.000</b> <span>baru saja</span></div>
       <div class="pill pill-left"><span class="chk">✓</span> <b>Terjual Rp114.400</b></div>
       <div class="pill pill-bottom"><span>Omzet hari ini</span> <b>Rp863.900</b> <span class="live">● Live</span></div>
       <div class="dev-label dl-a">Android</div>
-      <div class="dev-label dl-b">iPhone</div>
     </div>
 
     <div class="stats">
