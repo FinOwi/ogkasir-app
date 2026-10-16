@@ -156,18 +156,22 @@
   .dl-a { right: calc(50% - 440px + 118px); transform: translateX(50%); }
   @media (max-width: 1100px) { .pill-left { left: 1%; } }
   @media (max-width: 900px) {
-    .hero-visual.v2 { min-height: 0; }
+    .hero-visual.v2 { min-height: 0; flex-direction: column; align-items: center; padding-bottom: 46px; }
     .browser-mock, .pill-left { display: none; }
     .hero-visual.v2 .phone-a { position: relative; right: auto; }
-    .pill-top { top: -8px; } .pill-bottom { bottom: -18px; }
-    .dl-a { position: relative; bottom: auto; right: auto; transform: none; margin-top: 10px; }
+    .pill { padding: 10px 18px; font-size: 13px; max-width: 92vw; }
+    .pill b { font-size: 14px; }
+    .pill-top { top: -6px; }
+    .pill-top .grn { font-size: 16px; }
+    .pill-bottom { bottom: 0; }
+    .dl-a { position: relative; bottom: auto; right: auto; transform: none; margin-top: 12px; }
   }
   .ipad { width: 480px; max-width: 58vw; border-radius: 30px; background: linear-gradient(145deg,#6b7190,#161a30 35%,#0a0d1c 60%,#4b5272); padding: 14px; box-shadow: 0 50px 100px rgba(0,0,0,.55), 0 0 60px rgba(255,183,0,.08), inset 0 0 0 2px rgba(255,255,255,.14); position: relative; z-index: 1; align-self: center; margin-left: -30px; margin-right: -20px; transform: rotate(1.5deg); }
   .ipad img.screen { width: 100%; border-radius: 18px; display: block; aspect-ratio: 1400/973; object-fit: cover; }
   .ipad .glare { position:absolute; inset:14px; border-radius:18px; background:linear-gradient(115deg,rgba(255,255,255,.09) 0,transparent 30%); pointer-events:none; }
   .ipad .cam { position: absolute; top: 50%; left: 22px; transform: translateY(-50%); width: 8px; height: 8px; background: #000; border-radius: 50%; z-index: 2; }
   @media (max-width: 900px) { .ipad { display: none; } }
-  .phone .notch { position: absolute; top: 26px; left: 50%; transform: translateX(-50%); width: 104px; height: 25px; background: #000; border-radius: 99px; z-index: 3; }
+  .phone .notch { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 15px; height: 15px; background: #000; border-radius: 50%; z-index: 3; box-shadow: inset 0 0 4px rgba(120,160,255,.4), 0 0 0 3px rgba(0,0,0,.15); }
   .float-card { position: absolute; z-index: 3; display: flex; align-items: center; gap: 11px; background: rgba(16,22,40,.82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 18px; padding: 13px 17px; box-shadow: 0 18px 44px rgba(0,0,0,.45); font-size: 13.5px; text-align: left; animation: floaty 5s ease-in-out infinite; white-space: nowrap; }
   .float-card b { display: block; font-size: 15px; }
   .float-card small { color: var(--mut); font-size: 12px; }
@@ -176,7 +180,7 @@
   .fc2 { right: calc(50% - 330px); top: 46%; animation-delay: 1.6s; }
   .fc3 { left: calc(50% - 296px); bottom: 16%; animation-delay: 3.1s; }
   .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #4caf50; box-shadow: 0 0 10px #4caf50; animation: pulse 1.6s infinite; }
-  @keyframes floaty { 50% { transform: translateY(-11px); } }
+  @keyframes floaty { 50% { translate: 0 -11px; } }
   @media (max-width: 900px) { .fc1 { left: 2%; } .fc2 { right: 2%; } .fc3 { left: 4%; } }
   @media (max-width: 560px) {
     .float-card { padding: 10px 13px; font-size: 12px; gap: 8px; border-radius: 14px; }
@@ -544,13 +548,13 @@
         <div class="chips"><span class="chip">Otomatis</span><span class="chip">Kode pemulihan pribadi</span><span class="chip">Gratis</span></div>
       </div>
       <div class="tcard">
-        <div class="vrow"><span class="vbadge">v1.35</span><span class="vbadge new">BARU</span></div>
+        <div class="vrow"><span class="vbadge">v1.35</span></div>
         <h3>🎨 5 Pilihan Tema</h3>
         <p>Bosan tampilan itu-itu saja? Pilih gayamu: <b>Klasik, Gelap, Midnight Gold, Clean Fintech,</b> atau <b>Bold Warkop</b>. Satu ketuk di Pengaturan → Custom Tampilan. Seluruh aplikasi berubah mengikuti.</p>
         <div class="chips"><span class="chip">Midnight Gold</span><span class="chip">Clean Fintech</span><span class="chip">Bold Warkop</span></div>
       </div>
       <div class="tcard">
-        <div class="vrow"><span class="vbadge">v1.34</span><span class="vbadge new">BARU</span></div>
+        <div class="vrow"><span class="vbadge">v1.34</span></div>
         <h3>📝 Catatan Per Item & ➕ Tambah Pesanan</h3>
         <p><b>"Es teh-nya gula sedikit ya!"</b>: catat permintaan khusus per item dengan sekali ketuk (ada preset siap pakai + bebas ketik), tercetak otomatis di struk. Pelanggan nambah pesanan? Tambahkan ke tagihan yang sama tanpa ribet, stok terhitung otomatis.</p>
         <div class="chips"><span class="chip">Preset cepat</span><span class="chip">Masuk struk</span><span class="chip">Stok otomatis</span></div>
