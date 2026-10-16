@@ -417,6 +417,9 @@
   .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
   .chip { font-size: 12.5px; font-weight: 700; color: var(--gold); background: rgba(255,213,79,.1);
     border: 1px solid rgba(255,213,79,.3); padding: 5px 12px; border-radius: 99px; }
+  .tcard-old .tcard:last-child { margin-bottom: 6px; }
+  .tcard-more { display: block; margin: 6px auto 0; background: transparent; border: 1px solid var(--line); color: var(--mut); font-family: var(--font); font-size: 14px; font-weight: 700; padding: 11px 26px; border-radius: 99px; cursor: pointer; transition: border-color .2s, color .2s; }
+  .tcard-more:hover { border-color: rgba(255,213,79,.5); color: var(--gold); }
 
   /* download panel glow */
   .dl { position: relative; overflow: hidden; }
@@ -528,6 +531,7 @@
         <p>16 foto produk menggantikan emoji di data contoh, plus migrasi otomatis — pengguna lama langsung dapat foto tanpa hapus data.</p>
         <div class="chips"><span class="chip">16 foto</span><span class="chip">Otomatis</span></div>
       </div>
+      <div class="tcard-old" id="tcardOld" hidden>
       <div class="tcard">
         <div class="vrow"><span class="vbadge">v1.40</span></div>
         <h3>🔍 Kontras & Keterbacaan</h3>
@@ -564,6 +568,8 @@
         <p><b>"Es teh-nya gula sedikit ya!"</b>: catat permintaan khusus per item dengan sekali ketuk (ada preset siap pakai + bebas ketik), tercetak otomatis di struk. Pelanggan nambah pesanan? Tambahkan ke tagihan yang sama tanpa ribet, stok terhitung otomatis.</p>
         <div class="chips"><span class="chip">Preset cepat</span><span class="chip">Masuk struk</span><span class="chip">Stok otomatis</span></div>
       </div>
+      </div>
+      <button class="tcard-more" id="tcardMore" aria-expanded="false">Lihat versi lama ↓</button>
     </div>
   </section>
 
@@ -840,6 +846,17 @@ fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest')
 // Scroll-reveal: elemen muncul halus saat masuk viewport
 (function () {
   if (!('IntersectionObserver' in window)) return;
+  var moreBtn = document.getElementById('tcardMore'), oldBox = document.getElementById('tcardOld');
+  if (moreBtn && oldBox) moreBtn.addEventListener('click', function() {
+    var open = oldBox.hidden;
+    oldBox.hidden = !open;
+    moreBtn.setAttribute('aria-expanded', String(open));
+    moreBtn.textContent = open ? 'Tutup versi lama ↑' : 'Lihat versi lama ↓';
+    if (open) {
+      oldBox.querySelectorAll('.tcard').forEach(function(c){ c.classList.add('visible'); });
+      oldBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
   var els = document.querySelectorAll('.bcard, .feat, .step, .price-card, .qa, .dl, .show-list li, .browser-frame, .float-card, .stats, .tcard');
   els.forEach(function (el) {
     var sibs = Array.prototype.slice.call(el.parentNode.children);
