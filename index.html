@@ -27,6 +27,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
 <style>
   html { scroll-behavior: smooth; }
@@ -117,7 +118,7 @@
   .stats { display: flex; justify-content: center; max-width: 780px; margin: 34px auto 0; background: linear-gradient(160deg, var(--card2), var(--card)); border: 1px solid var(--line); border-radius: 20px; padding: 24px 12px; box-shadow: 0 18px 44px rgba(0,0,0,.3); }
   .stat { flex: 1; text-align: center; padding: 0 14px; }
   .stat + .stat { border-left: 1px solid var(--line); }
-  .stat b { display: block; font-size: clamp(25px, 4.5vw, 36px); font-weight: 800; letter-spacing: -1px; background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stat b { display: block; font-size: clamp(25px, 4.5vw, 36px); font-weight: 800; letter-spacing: -1px; font-variant-numeric: tabular-nums; background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .stat span { font-size: 13px; color: var(--mut); font-weight: 600; }
   .flag-id { display: block; width: 46px; height: 32px; margin: 4px auto 10px; border-radius: 7px; background: linear-gradient(180deg, #e70011 0 50%, #f8f8f8 50% 100%); box-shadow: 0 6px 16px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.18); }
   @media (max-width: 560px) { .stats { flex-wrap: wrap; gap: 18px 0; } .stat { flex: 1 1 42%; } .stat + .stat { border-left: none; } }
@@ -283,6 +284,7 @@
   .reveal.visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .marquee-track { animation: none !important; } }
   h1, h2 { text-wrap: balance; letter-spacing: -.025em; }
+  section p.lead, .bcard p, .tcard p, .feat p, .demo-note { text-wrap: pretty; }
   /* kartu fitur bergambar */
   .feat { padding: 0; overflow: hidden; }
   .fshot { aspect-ratio: 16/10; overflow: hidden; border-bottom: 1px solid var(--line); background: #0e0e12; }
@@ -317,7 +319,7 @@
   .price-card .badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: linear-gradient(180deg, var(--gold), var(--gold-d)); color: #3b2a1e; font-size: 12px; font-weight: 800; padding: 6px 18px; border-radius: 99px; white-space: nowrap; box-shadow: 0 8px 20px rgba(255,183,0,.4); letter-spacing: .5px; }
   .price-card h3 { font-size: 18px; color: var(--mut); font-weight: 700; }
   .price-card .old { text-decoration: line-through; opacity: .4; font-size: 18px; margin-top: 8px; }
-  .price-card .rp { font-size: 40px; font-weight: 800; letter-spacing: -1.5px; background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 4px 0 8px; }
+  .price-card .rp { font-size: 40px; font-weight: 800; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; background: linear-gradient(120deg, var(--gold), var(--gold2)); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 4px 0 8px; }
   .price-card .per { font-size: 14px; color: var(--mut); margin-bottom: 18px; }
   .price-card ul { list-style: none; font-size: 14px; color: var(--mut); line-height: 2.1; margin-bottom: 24px; text-align: left; }
   .price-card ul li::before { content: '✓ '; color: var(--gold); font-weight: 800; }
@@ -496,7 +498,7 @@
     </div>
   </section>
   <section id="baru">
-    <h2>Selalu Ada Yang <em>Baru</em> ✨</h2>
+    <h2>Selalu ada yang <em>baru</em> ✨</h2>
     <p class="lead">OGKasir terus berkembang: update gratis untuk semua pelanggan aktif.</p>
     <div class="timeline">
       <div class="tcard">
@@ -563,20 +565,20 @@
   </section>
 
   <section id="kenapa">
-    <h2>Dibuat Buat Usaha Kecil, <em>Bukan Buat Ribet</em></h2>
+    <h2>Dibuat buat usaha kecil, <em>bukan buat ribet</em></h2>
     <p class="lead">Bukan software perusahaan besar yang ribet. Ini kasir yang ngertiin warkop.</p>
     <div class="bento">
-      <div class="bcard wide"><div class="tile">📵</div><h3>Offline-First, Data Milikmu</h3><p>Jalan penuh tanpa internet: kasir, stok, laporan, semua tetap jalan. Data tersimpan di HP kamu sendiri, bukan di server orang. Internet mati? Jualan tetap jalan.</p></div>
-      <div class="bcard"><div class="tile">💰</div><h3>Harga Jujur</h3><p>Bulan pertama Rp8rb. Rp49rb/bln setelahnya, tanpa potongan per transaksi, tanpa biaya sembunyi.</p></div>
-      <div class="bcard"><div class="tile">👆</div><h3>Gampang Dipakai</h3><p>Karyawan baru bisa pakai dalam 5 menit. Tap menu, tap bayar, kembalian kehitung otomatis.</p></div>
+      <div class="bcard wide"><div class="tile">📵</div><h3>Offline-first, data milikmu</h3><p>Jalan penuh tanpa internet: kasir, stok, laporan, semua tetap jalan. Data tersimpan di HP kamu sendiri, bukan di server orang. Internet mati? Jualan tetap jalan.</p></div>
+      <div class="bcard"><div class="tile">💰</div><h3>Harga jujur</h3><p>Bulan pertama Rp8rb. Rp49rb/bln setelahnya, tanpa potongan per transaksi, tanpa biaya sembunyi.</p></div>
+      <div class="bcard"><div class="tile">👆</div><h3>Gampang dipakai</h3><p>Karyawan baru bisa pakai dalam 5 menit. Tap menu, tap bayar, kembalian kehitung otomatis.</p></div>
       <div class="bcard"><div class="tile">💬</div><h3>Support via WhatsApp</h3><p>Ada kendala? Chat langsung, fast respon. Nggak perlu tiket, nggak perlu antre.</p></div>
-      <div class="bcard"><div class="tile">🔄</div><h3>Selalu Update</h3><p>Fitur baru mengalir terus: catatan per item, tambah pesanan, 5 tema, cloud backup. Semua gratis untuk pelanggan aktif.</p></div>
+      <div class="bcard"><div class="tile">🔄</div><h3>Selalu update</h3><p>Fitur baru mengalir terus: catatan per item, tambah pesanan, 5 tema, cloud backup. Semua gratis untuk pelanggan aktif.</p></div>
       <div class="bcard"><div class="tile">📱</div><h3>Ringan di HP</h3><p>APK kecil, jalan mulus di HP kentang sekalipun. Android 10 ke atas siap gas.</p></div>
     </div>
   </section>
 
   <section id="tampilan">
-    <h2>Lihat Isinya <em>Dulu</em></h2>
+    <h2>Lihat isinya <em>dulu</em></h2>
     <p class="lead">Layar asli aplikasi, bukan mockup tempelan. Yang kamu lihat, itu yang kamu dapat.</p>
     <div class="show-grid">
       <div class="browser-frame">
@@ -593,7 +595,7 @@
 
   <section id="fitur">
     <div class="eyebrow">Fitur</div>
-    <h2>Lengkap, <em>Harga Warteg</em> ☕</h2>
+    <h2>Lengkap, <em>harga warteg</em> ☕</h2>
     <p class="lead">Ini layar <b>asli aplikasi</b>, bukan gambar tempelan. Geser untuk intip semuanya.</p>
     <div class="showcase">
       <button class="sh-btn prev" onclick="document.getElementById('phones').scrollBy({left:-260,behavior:'smooth'})" aria-label="Sebelumnya">‹</button>
@@ -628,7 +630,7 @@
   </section>
 
   <section id="demo">
-    <h2>Coba <em>Langsung</em>, Nggak Perlu Install 🎮</h2>
+    <h2>Coba <em>langsung</em>, nggak perlu install 🎮</h2>
     <p class="lead">Ini aplikasi kasir beneran yang jalan di browser HP kamu. Klik-klik aja, nggak perlu download, nggak perlu daftar.</p>
     <div class="demo-wrap">
       <div class="demo-phone">
@@ -651,7 +653,7 @@
   </section>
 
   <section id="untuk-siapa">
-    <h2>Dibuat Untuk <em>Usahamu</em> 🏪</h2>
+    <h2>Dibuat untuk <em>usahamu</em> 🏪</h2>
     <p class="lead">Apapun jualanmu, OGKasir siap membantu.</p>
     <div class="grid cols4">
       <div class="feat"><div class="tile">☕</div><h3>Warkop &amp; Kedai Kopi</h3><p>Catat pesanan cepat saat ramai, tahu menu paling laris tiap minggu.</p></div>
@@ -662,25 +664,25 @@
   </section>
 
   <section id="cara">
-    <h2>Mulai Dalam <em>3 Langkah</em></h2>
+    <h2>Mulai dalam <em>3 langkah</em></h2>
     <p class="lead">Nggak perlu daftar, nggak perlu kartu kredit.</p>
     <div class="steps">
-      <div class="step"><div class="n">1</div><h3>⬇️ Download &amp; Install</h3><p>Unduh APK di bawah, izinkan "instal dari sumber tak dikenal" sekali saja.</p></div>
-      <div class="step"><div class="n">2</div><h3>🎉 Trial 7 Hari Gratis</h3><p>Semua fitur terbuka penuh selama 7 hari. Cocok buat jualan harianmu.</p></div>
+      <div class="step"><div class="n">1</div><h3>⬇️ Download &amp; install</h3><p>Unduh APK di bawah, izinkan "instal dari sumber tak dikenal" sekali saja.</p></div>
+      <div class="step"><div class="n">2</div><h3>🎉 Trial 7 hari gratis</h3><p>Semua fitur terbuka penuh selama 7 hari. Cocok buat jualan harianmu.</p></div>
       <div class="step"><div class="n">3</div><h3>💬 Aktivasi via WA</h3><p>Cocok? Chat kami, bayar, terima kode aktivasi, lalu masukkan di aplikasi. Beres!</p></div>
     </div>
   </section>
 
   <section id="harga">
-    <div class="eyebrow">Harga Jujur</div>
-    <h2>🔥 Promo Launching: <em>Diskon s/d 35%</em></h2>
+    <div class="eyebrow">Harga jujur</div>
+    <h2>🔥 Promo launching: <em>diskon s/d 35%</em></h2>
     <p class="lead">Bulan pertama cuma <b style="color:var(--gold)">Rp8rb</b>, khusus pembelian pertama. Selanjutnya pilih paket perpanjangan di bawah. Tanpa biaya sembunyi. Batal kapan saja, datamu tetap milikmu.</p>
     <div class="prices">
       <div class="price-card first">
         <div class="badge">🎉 PROMO PERKENALAN</div>
         <div class="row">
           <div class="txt">
-            <h3>Bulan Pertama</h3><div class="old">Rp 49.000</div><div class="rp">Rp 8rb</div>
+            <h3>Bulan pertama</h3><div class="old">Rp 49.000</div><div class="rp">Rp 8rb</div>
             <div class="per">30 hari penuh · semua fitur · 1 HP kasir · <b>khusus pembelian pertama (1x)</b></div>
           </div>
           <a class="btn" href="https://wa.me/6288279406268?text=Halo!%20Saya%20mau%20promo%20bulan%20pertama%20OGKasir%20Rp8rb.">Klaim Rp8rb</a>
@@ -721,7 +723,7 @@
 
   <section id="faq">
     <div class="eyebrow">FAQ</div>
-    <h2>Sering <em>Ditanyakan</em></h2>
+    <h2>Sering <em>ditanyakan</em></h2>
     <p class="lead"></p>
     <div class="faq">
       <details class="qa"><summary>Apakah ada backup cloud?</summary><div class="a">Ada! Cloud Backup OGKasir menyimpan salinan data kasirmu di cloud FinOwi. Kalau ganti HP atau HP hilang, pulihkan semuanya dalam hitungan menit pakai kode pemulihan pribadimu. Ada juga backup otomatis tiap 30 hari. 100% gratis untuk pelanggan aktif. <a href="cloud-backup.html" style="color:var(--gold)">Pelajari →</a></div></details>
@@ -736,7 +738,7 @@
 
   <section id="download">
     <div class="dl">
-        <h2>Siap Naik Kelas? 🚀</h2>
+        <h2>Siap naik kelas? 🚀</h2>
       <p>Download OGKasir sekarang, gratis 7 hari, full fitur. Warkopmu pantas dapat kasir yang rapi.</p>
       <a class="btn" id="dlBtn" href="#" style="pointer-events:none;opacity:.5">Memuat versi terbaru…</a>
       <div id="ver2" style="font-size:13px;color:var(--faint);margin-top:12px"></div>
@@ -751,7 +753,7 @@
   </section>
 
   <section id="kontak">
-    <h2>Ada <em>Pertanyaan?</em></h2>
+    <h2>Ada <em>pertanyaan?</em></h2>
     <p class="lead">Chat kami, fast respon.</p>
     <div class="kontak">
       <a class="btn wa" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya-tanya%20tentang%20OGKasir.">💬 WhatsApp</a>
