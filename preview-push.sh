@@ -3,6 +3,10 @@
 # Pakai: ./preview-push.sh
 set -e
 cd "$(dirname "$0")"
+# Compile Tailwind utilities (butuh ~/workspace/tools/tailwindcss)
+if [ -x ~/workspace/tools/tailwindcss ]; then
+  (cd app/src/main/assets/www && ~/workspace/tools/tailwindcss -i css/tw.css -o css/tailwind.css --minify)
+fi
 TOKEN=$(cat ~/workspace/duitku/.github-token)
 rm -rf /tmp/ogprev
 mkdir -p /tmp/ogprev

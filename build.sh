@@ -4,6 +4,10 @@
 set -e
 export PATH=~/jdk17/bin:$PATH
 cd "$(dirname "$0")"
+# Compile Tailwind utilities (butuh ~/workspace/tools/tailwindcss)
+if [ -x ~/workspace/tools/tailwindcss ]; then
+  (cd app/src/main/assets/www && ~/workspace/tools/tailwindcss -i css/tw.css -o css/tailwind.css --minify)
+fi
 BT=~/android-sdk/build-tools/34.0.0
 PASS=$(cat keystore/.storepass)
 VC=$(grep -oP 'versionCode="\K[0-9]+' app/src/main/AndroidManifest.xml)

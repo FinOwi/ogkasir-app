@@ -11,3 +11,4 @@ license-gen-template.html
 
 # Source code aplikasi — tidak dipublikasikan (web + rilis APK tidak butuh ini)
 app/
+tailwindcss

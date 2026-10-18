@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
     <loc>https://ogkasir.my.id/</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -43,6 +43,12 @@
     <priority>0.8</priority>
   </url>
 <url>
+    <loc>https://ogkasir.my.id/artikel-amankah-install-ogkasir-luar-play-store.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+<url>
     <loc>https://ogkasir.my.id/artikel-keuntungan-bersih-warkop.html</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>monthly</changefreq>
@@ -51,5 +57,12 @@
 <url><loc>https://ogkasir.my.id/cloud-backup.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
 <url><loc>https://ogkasir.my.id/video.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 <url><loc>https://ogkasir.my.id/aplikasi-kasir-warkop.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+<url><loc>https://ogkasir.my.id/aplikasi-kasir-warkop-medan.html</loc><lastmod>2026-10-16</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
 <url><loc>https://ogkasir.my.id/blog.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url>
+    <loc>https://ogkasir.my.id/artikel-break-even-point-warkop.html</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
