@@ -25,6 +25,9 @@
 "offers":{"@type":"Offer","price":"8000","priceCurrency":"IDR"},
 "url":"https://ogkasir.my.id/"}
 </script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Apakah ada backup cloud?", "acceptedAnswer": {"@type": "Answer", "text": "Ada! Cloud Backup OGKasir menyimpan salinan data kasirmu di cloud FinOwi. Kalau ganti HP atau HP hilang, pulihkan semuanya dalam hitungan menit pakai kode pemulihan pribadimu. Ada juga backup otomatis tiap 30 hari. 100% gratis untuk pelanggan aktif."}}, {"@type": "Question", "name": "Apakah butuh internet?", "acceptedAnswer": {"@type": "Answer", "text": "Tidak. OGKasir jalan 100% offline. Internet hanya dipakai sesekali untuk cek update aplikasi."}}, {"@type": "Question", "name": "Apakah dataku hilang saat update / lisensi habis?", "acceptedAnswer": {"@type": "Answer", "text": "Tidak. Data transaksi, menu & stok tetap aman. Update menimpa aplikasi tanpa menghapus data, dan lisensi habis hanya mengunci fitur sampai diperpanjang."}}, {"@type": "Question", "name": "Printer apa yang didukung?", "acceptedAnswer": {"@type": "Answer", "text": "Printer thermal Bluetooth 58mm (mis. XPrinter). Pairing di Bluetooth HP, pilih di Pengaturan → Printer, lalu cetak dari layar struk."}}, {"@type": "Question", "name": "HP apa yang didukung?", "acceptedAnswer": {"@type": "Answer", "text": "Android 10 ke atas."}}, {"@type": "Question", "name": "Bagaimana cara bayar lisensinya?", "acceptedAnswer": {"@type": "Answer", "text": "Chat WhatsApp kami setelah trial, bayar via transfer, terima kode aktivasi, masukkan di aplikasi. Tanpa daftar akun apa pun."}}, {"@type": "Question", "name": "Apakah promo bulan pertama Rp8rb berlaku selamanya?", "acceptedAnswer": {"@type": "Answer", "text": "Tidak. Rp8rb hanya untuk bulan pertama, satu kali per pelanggan. Bulan berikutnya Rp49rb, atau lebih hemat dengan paket 90 hari / 1 tahun."}}]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -508,7 +511,13 @@
     <p class="lead">OGKasir terus berkembang: update gratis untuk semua pelanggan aktif.</p>
     <div class="timeline">
       <div class="tcard">
-        <div class="vrow"><span class="vbadge">v1.44</span><span class="vbadge new">BARU</span></div>
+        <div class="vrow"><span class="vbadge">v1.45</span><span class="vbadge new">BARU</span></div>
+        <h3>📱 Lebih Responsif + Tailwind CSS</h3>
+        <p>Tampilan makin rapi di semua ukuran layar: <b>grid 2 kolom di HP kecil</b>, navigasi ringkas di mode landscape — plus fondasi Tailwind CSS untuk pengembangan lebih cepat.</p>
+        <div class="chips"><span class="chip">HP kecil</span><span class="chip">Landscape</span><span class="chip">Gratis</span></div>
+      </div>
+      <div class="tcard">
+        <div class="vrow"><span class="vbadge">v1.44</span></div>
         <h3>✨ Logo Baru yang Lebih Elegan</h3>
         <p>Identitas OGKasir diperbarui: <b>mark "OG" emas bentuk mesin kasir</b> — ikon aplikasi, splash screen, dan logo website kini tampil lebih simple dan premium.</p>
         <div class="chips"><span class="chip">Ikon baru</span><span class="chip">Splash baru</span><span class="chip">Gratis</span></div>
@@ -525,13 +534,13 @@
         <p>Transisi pindah tab lebih halus, status bar selaras tema, dan header lebih rapi. Aplikasi terasa seperti aplikasi bawaan HP.</p>
         <div class="chips"><span class="chip">Transisi halus</span><span class="chip">5 tema</span></div>
       </div>
+      <div class="tcard-old" id="tcardOld" hidden>
       <div class="tcard">
         <div class="vrow"><span class="vbadge">v1.41</span></div>
         <h3>📸 Foto Produk</h3>
         <p>16 foto produk menggantikan emoji di data contoh, plus migrasi otomatis — pengguna lama langsung dapat foto tanpa hapus data.</p>
         <div class="chips"><span class="chip">16 foto</span><span class="chip">Otomatis</span></div>
       </div>
-      <div class="tcard-old" id="tcardOld" hidden>
       <div class="tcard">
         <div class="vrow"><span class="vbadge">v1.40</span></div>
         <h3>🔍 Kontras & Keterbacaan</h3>
@@ -720,7 +729,9 @@
     <h2>Artikel 📝</h2>
     <p class="lead">Tips dan panduan buat pemilik warkop &amp; UMKM.</p>
     <div class="faq">
-      <details class="qa" open><summary>Cara Menghitung Keuntungan Bersih Warkop per Bulan</summary><div class="a">Rumus sederhana keuntungan bersih, contoh hitungan nyata Rp18,5 juta, dan 5 kesalahan umum yang bikin hitungan melenceng. <a href="artikel-keuntungan-bersih-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
+      <details class="qa" open><summary>Cara Menghitung Break Even Point Warkop: Kapan Modal Balik?</summary><div class="a">Rumus BEP sederhana, contoh hitungan modal balik Rp8,3 juta, dan cara memantau titik impas tiap bulan. <a href="artikel-break-even-point-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
+      <details class="qa"><summary>Amankah Install OGKasir dari Luar Play Store?</summary><div class="a">Penjelasan jujur soal peringatan "sumber tak dikenal", kenapa OGKasir belum di Play Store, dan cara memastikan APK yang kamu unduh asli. <a href="artikel-amankah-install-ogkasir-luar-play-store.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
+      <details class="qa"><summary>Cara Menghitung Keuntungan Bersih Warkop per Bulan</summary><div class="a">Rumus sederhana keuntungan bersih, contoh hitungan nyata Rp18,5 juta, dan 5 kesalahan umum yang bikin hitungan melenceng. <a href="artikel-keuntungan-bersih-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
       <details class="qa"><summary>Pelanggan Suka Ngutang? 7 Cara Elegan Atur Bon Warkop</summary><div class="a">Aturan bon tertulis, pencatatan rapi per pelanggan, batas akumulasi utang, dan cara menagih yang sopan tapi tegas. <a href="artikel-tips-pelanggan-ngutang-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
       <details class="qa"><summary>Cara Backup Data Penjualan Warkop Biar Aman, HP Hilang pun Data Selamat</summary><div class="a">Backup manual ke Drive, cloud backup otomatis, dan cara pulihkan data saat HP hilang atau rusak. <a href="artikel-backup-data-penjualan-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
 <details class="qa"><summary>Laporan Omzet Harian Warkop: Cara Bikin yang Rapi Tanpa Ribet</summary><div class="a">Komponen wajib laporan harian, contoh format sederhana, dan cara bikin laporannya otomatis tanpa hitung manual. <a href="artikel-laporan-omzet-harian-warkop.html" style="color:var(--gold)">Baca artikel &rarr;</a></div></details>
@@ -772,7 +783,7 @@
 </div>
 
 <footer>
-  © 2026 OGKasir · Aplikasi kasir warkop &amp; F&amp;B · Android 10+ · Data tersimpan aman di HP kamu
+  © 2026 OGKasir · Aplikasi kasir warkop &amp; F&amp;B · Android 10+ · Data tersimpan aman di HP kamu · <a href="aplikasi-kasir-warkop-medan.html" style="color:var(--gold)">Warkop Medan</a>
 </footer>
 
 <a class="wa-float" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya-tanya%20tentang%20OGKasir." aria-label="Chat WhatsApp">💬</a>
