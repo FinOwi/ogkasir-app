@@ -433,6 +433,10 @@ var AccountPage = (function () {
     $('viewRecovery').hidden = view !== 'recovery';
     $('viewSetup').hidden = view !== 'setup';
     $('viewAccount').hidden = view !== 'account';
+    /* Setelah masuk, panel emas dilepas — halaman akun tampil penuh
+       (dulu shell kosong mengambang di atas konten akun). */
+    var shell = document.querySelector('.shell');
+    if (shell) shell.style.display = view === 'account' ? 'none' : '';
   }
   function showSetup(p) {
     p = p || {};
