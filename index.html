@@ -82,20 +82,34 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-
 .panel .p-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:30px;flex-wrap:wrap;gap:10px}
 .panel .p-head b{font-size:15px;letter-spacing:-.01em}
 .panel .p-head span{font-family:var(--mono);font-size:12px;color:var(--ok);background:var(--ok-soft);padding:4px 10px;border-radius:99px;font-weight:700}
-.phones{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;max-width:860px;margin:0 auto;align-items:start}
-@media(max-width:760px){.phones{grid-template-columns:1fr;max-width:270px}}
-.phones figure{text-align:center}
-.phones figcaption{font-size:14px;font-weight:600;padding:16px 0 24px}
-.phones figcaption small{display:block;color:var(--muted);font-weight:500;font-size:13px}
-.phone-mock{position:relative;width:100%;max-width:250px;margin:0 auto;border-radius:47px;background:linear-gradient(145deg,#7d7d88,#17181f 38%,#0a0b10 62%,#4c4d58);padding:11px;box-shadow:0 34px 60px rgba(16,20,28,.30),0 6px 18px rgba(16,20,28,.18),inset 0 0 0 2px rgba(255,255,255,.22)}
+.showcase{display:grid;grid-template-columns:1.55fr .8fr;gap:34px;align-items:center;max-width:1040px;margin:0 auto}
+@media(max-width:880px){.showcase{grid-template-columns:1fr}}
+.showcase figcaption{font-size:14px;font-weight:600;padding:16px 0 6px;text-align:center}
+.showcase figcaption small{display:block;color:var(--muted);font-weight:500;font-size:13px}
+.ipad-mock{position:relative;border-radius:28px;background:linear-gradient(145deg,#7d7d88,#17181f 38%,#0a0b10 62%,#4c4d58);padding:15px;box-shadow:0 34px 64px rgba(16,20,28,.30),0 6px 18px rgba(16,20,28,.18),inset 0 0 0 2px rgba(255,255,255,.22)}
+.ipad-mock .scr{position:relative;border-radius:15px;overflow:hidden;background:#000}
+.ipad-mock img{width:100%;display:block}
+.ipad-mock .cam{position:absolute;left:5.5px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:#232833;box-shadow:inset 0 0 3px rgba(120,160,255,.5);z-index:3}
+.ipad-mock .glare{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.10) 0,transparent 28%);pointer-events:none;z-index:2}
+.phone-zone{position:relative}
+.phone-mock{position:relative;width:100%;max-width:248px;margin:0 auto;border-radius:47px;background:linear-gradient(145deg,#7d7d88,#17181f 38%,#0a0b10 62%,#4c4d58);padding:11px;box-shadow:0 34px 60px rgba(16,20,28,.30),0 6px 18px rgba(16,20,28,.18),inset 0 0 0 2px rgba(255,255,255,.22)}
 .phone-mock::before{content:"";position:absolute;left:-2.5px;top:19%;width:3.5px;height:7%;background:#2b2c34;border-radius:2px;box-shadow:0 52px 0 #2b2c34}
 .phone-mock::after{content:"";position:absolute;right:-2.5px;top:24%;width:3.5px;height:11%;background:#2b2c34;border-radius:2px}
 .phone-mock .scr{position:relative;border-radius:37px;overflow:hidden;background:#000}
 .phone-mock img{width:100%;display:block}
 .phone-mock .notch{position:absolute;top:19px;left:50%;transform:translateX(-50%);width:15px;height:15px;background:#000;border-radius:50%;box-shadow:inset 0 0 4px rgba(120,160,255,.45),0 0 0 3px rgba(0,0,0,.12);z-index:3}
 .phone-mock .glare{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.13) 0,transparent 30%);pointer-events:none;z-index:2}
-.phones figure.mid .phone-mock{transform:translateY(-16px)}
-@media(max-width:760px){.phones figure.mid .phone-mock{transform:none}}
+.omzet-card{position:absolute;left:-64px;bottom:44px;width:228px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 22px 44px rgba(16,20,28,.16);padding:16px 18px;z-index:4;text-align:left}
+.omzet-card .ol{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted)}
+.omzet-card .ov{font-size:23px;font-weight:800;letter-spacing:-.03em;margin:2px 0 10px}
+.omzet-card .ov span{color:var(--ok);font-size:13px;font-weight:700;letter-spacing:0}
+.obars{display:flex;align-items:flex-end;gap:5px;height:62px}
+.obar{flex:1;background:linear-gradient(180deg,var(--accent2),var(--accent));border-radius:3px 3px 0 0;transform:scaleY(0);transform-origin:bottom;height:100%}
+.omzet-card.vis .obar{animation:orise .65s cubic-bezier(.2,.9,.2,1) forwards;animation-delay:calc(var(--i)*.09s)}
+@keyframes orise{to{transform:scaleY(1)}}
+@media(max-width:880px){.omzet-card{position:relative;left:auto;bottom:auto;margin:18px auto 0}}
+@media(prefers-reduced-motion:reduce){.obar{transform:scaleY(1)}.omzet-card.vis .obar{animation:none}}
+
 /* headings */
 .sec-head{text-align:center;max-width:720px;margin:0 auto 56px}
 .sec-head .kick{font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
@@ -215,13 +229,14 @@ footer .fh{font-weight:700;font-size:14px;margin-bottom:10px}
 
   <div class="panel">
     <div class="p-head"><b>Layar asli aplikasi OGKasir v1.45</b><span>● Layar 100% asli</span></div>
-    <div class="phones">
-      <figure><div class="phone-mock"><div class="scr"><img src="img/p-kasir-v2.jpg" alt="Layar kasir OGKasir"><div class="notch"></div><div class="glare"></div></div></div><figcaption>Kasir<small>Tap menu, bayar, kembalian otomatis</figcaption></figure>
-      <figure class="mid"><div class="phone-mock"><div class="scr"><img src="img/p-laporan-v3.jpg" alt="Layar laporan OGKasir"><div class="notch"></div><div class="glare"></div></div></div><figcaption>Laporan<small>Omzet, laba, menu terlaris, export Excel</figcaption></figure>
-      <figure><div class="phone-mock"><div class="scr"><img src="img/p-menu.jpg" alt="Layar menu OGKasir"><div class="notch"></div><div class="glare"></div></div></div><figcaption>Menu &amp; Stok<small>Foto asli, stok berkurang otomatis</figcaption></figure>
+    <div class="showcase">
+      <figure><div class="ipad-mock"><div class="scr"><img src="img/tablet-kasir.jpg" alt="Menu produk kasir OGKasir di tablet"><div class="cam" style="background:#232833"></div><div class="glare"></div></div></div><figcaption>Menu Produk — Kasir di Tablet<small>Grid foto menu asli, enak dipakai di layar besar</small></figcaption></figure>
+      <div class="phone-zone">
+        <figure><div class="phone-mock"><div class="scr"><img src="img/p-laporan-v3.jpg" alt="Laporan omzet OGKasir di smartphone"><div class="notch"></div><div class="glare"></div></div></div><figcaption>Laporan Omzet — Smartphone<small>Grafik omzet harian, laba &amp; menu terlaris</small></figcaption></figure>
+        <div class="omzet-card" id="omzetCard"><div class="ol">📊 OMZET HARIAN</div><div class="ov" id="omzetVal">Rp0 <span>▲ naik</span></div><div class="obars"><div class="obar" style="--i:0;height:26%"></div><div class="obar" style="--i:1;height:34%"></div><div class="obar" style="--i:2;height:30%"></div><div class="obar" style="--i:3;height:44%"></div><div class="obar" style="--i:4;height:52%"></div><div class="obar" style="--i:5;height:48%"></div><div class="obar" style="--i:6;height:66%"></div><div class="obar" style="--i:7;height:94%"></div></div></div>
+      </div>
     </div>
   </div>
-
   <div class="strip">
     <p>Dibuat untuk cara jualanmu, apa pun usahanya</p>
     <div class="logos"><span>Warkop</span><span>Warung Makan</span><span>Toko Kelontong</span><span>Kedai Minuman</span><span>Angkringan</span><span>Toko Kue</span><span>Kantin</span></div>
@@ -374,6 +389,11 @@ fetch('https://api.github.com/repos/FinOwi/ogkasir-app/releases/latest').then(fu
   if(apk){['dlBtn','dlBtnTop'].forEach(function(id){var b=document.getElementById(id);if(b)b.href=apk.browser_download_url});
     var b=document.getElementById('dlBtn'); if(b) b.textContent='Download OGKasir '+(d.name||'')+' →';}
 }).catch(function(){});
+
+(function(){var card=document.getElementById('omzetVal');if(!card)return;var el=document.getElementById('omzetVal'),box=document.getElementById('omzetCard'),done=false;
+var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!done){done=true;box.classList.add('vis');var t0=performance.now(),to=863900;
+(function r(){var k=Math.min(1,(performance.now()-t0)/1500);el.innerHTML='Rp'+Math.round(to*(1-Math.pow(1-k,3))).toLocaleString('id-ID')+' <span>▲ naik</span>';if(k<1)requestAnimationFrame(r)})();o.disconnect()}})},{threshold:.35});
+o.observe(box)})();
 </script>
 </body>
 </html>
