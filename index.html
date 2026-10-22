@@ -195,6 +195,84 @@ footer .fh{font-weight:700;font-size:14px;margin-bottom:10px}
 .demo-frame{width:320px;max-width:88vw;border:1px solid var(--line);border-radius:26px;overflow:hidden;background:#fff;padding:10px}
 .demo-frame .scr{border-radius:18px;overflow:hidden;height:600px;background:var(--surface2)}
 .demo-frame iframe{width:100%;height:100%;border:0;display:block}
+/* ===== Demo tablet: menu kasir -> bayar -> struk ===== */
+.demo-grid.wide{grid-template-columns:1fr;max-width:960px;gap:26px;justify-items:stretch}
+.tab-mock{background:#101114;border-radius:30px;padding:16px 20px;position:relative;box-shadow:0 30px 60px rgba(16,20,28,.28),inset 0 0 0 2px #2c2e35}
+.tab-mock::before{content:"";position:absolute;left:7px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#3a3d46;box-shadow:inset 0 0 2px #000}
+.tab-mock .glare{position:absolute;inset:0;border-radius:30px;background:linear-gradient(115deg,rgba(255,255,255,.09),transparent 42%);pointer-events:none}
+.tab-scr{position:relative;border-radius:16px;overflow:hidden;background:#FAF6EF;aspect-ratio:16/10.4}
+.tdemo{position:absolute;inset:0;display:flex;flex-direction:column;font-size:14px;color:#221C10}
+.tdemo-head{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#FFFDF8;border-bottom:1px solid #EAE2D2}
+.tdemo-head .lg{width:30px;height:30px;border-radius:9px;background:#B8761F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+.tdemo-head b{font-size:15px}
+.tdemo-head .dt{margin-left:auto;color:#8A7B5F;font-size:12.5px;text-align:right;line-height:1.35}
+.tdemo-steps{display:flex;gap:8px;padding:9px 16px;background:#FFFDF8;border-bottom:1px solid #EAE2D2}
+.tstep{flex:1;text-align:center;padding:6px 4px;border-radius:999px;background:#F1EAD9;color:#8A7B5F;font-weight:700;font-size:12.5px}
+.tstep.on{background:#0B2B4B;color:#fff}
+.tdemo-main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 292px;min-height:0}
+.tdemo-menu{padding:12px 14px;overflow:auto}
+.tdemo-tools{display:flex;gap:8px;margin-bottom:11px}
+.tdemo-search{flex:1;background:#fff;border:1px solid #EAE2D2;border-radius:11px;padding:8px 12px;color:#8A7B5F;font-size:13px}
+.tdemo-search input{border:0;outline:0;font:inherit;width:100%;background:transparent;color:#221C10}
+.tchips{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.tchip{border:1px solid #E3D9C2;background:#fff;color:#6B5B3E;border-radius:999px;padding:6px 14px;font-weight:700;font-size:12.5px;cursor:pointer}
+.tchip.on{background:#C07F26;border-color:#C07F26;color:#fff}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.tcard{background:#fff;border:1px solid #EFE7D4;border-radius:14px;overflow:hidden;cursor:pointer;text-align:left;padding:0;font:inherit;transition:transform .08s, box-shadow .08s}
+.tcard:active{transform:scale(.97)}
+.tcard img{width:100%;height:74px;object-fit:cover;display:block}
+.tcard .nm{padding:7px 10px 9px;font-weight:700;font-size:13px;line-height:1.3}
+.tcard .pr{display:inline-block;margin:0 10px 10px;background:#E8862E;color:#fff;font-weight:800;font-size:12px;padding:3px 9px;border-radius:7px}
+.tcard .qty{position:relative}
+.tdemo-cart{background:#FFFDF8;border-left:1px solid #EAE2D2;display:flex;flex-direction:column;min-height:0}
+.tdemo-cart h4{margin:0;padding:12px 14px 8px;font-size:14px}
+.tcart-list{flex:1;overflow:auto;padding:0 14px}
+.tcart-empty{color:#8A7B5F;font-size:13px;text-align:center;padding:22px 8px;line-height:1.55}
+.tci{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed #EAE2D2}
+.tci .inf{flex:1;min-width:0}
+.tci .inf b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tci .inf span{font-size:12px;color:#8A7B5F}
+.tqb{display:flex;align-items:center;gap:6px}
+.tqb button{width:24px;height:24px;border-radius:8px;border:1px solid #E3D9C2;background:#fff;font-weight:800;cursor:pointer;line-height:1}
+.tqb b{min-width:16px;text-align:center;font-size:13px}
+.tdemo-total{padding:11px 14px;border-top:1px solid #EAE2D2}
+.tdemo-total .row{display:flex;justify-content:space-between;font-weight:800;font-size:15.5px;margin-bottom:10px}
+.tbtn{width:100%;border:0;border-radius:12px;padding:12px;font:inherit;font-weight:800;font-size:14.5px;cursor:pointer;background:#C07F26;color:#fff}
+.tbtn:disabled{background:#D9CFB8;color:#8A7B5F;cursor:not-allowed}
+.tbtn.ghosty{background:#fff;color:#6B5B3E;border:1.5px solid #E3D9C2}
+.tpay{padding:4px 14px 14px;display:none;flex-direction:column;gap:9px}
+.tpay .big{font-size:23px;font-weight:800;text-align:center;padding:6px 0 2px}
+.tpay .lbl{font-size:12px;font-weight:700;color:#8A7B5F;letter-spacing:.04em}
+.tcash{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.tcash button{border:1.5px solid #E3D9C2;background:#fff;border-radius:10px;padding:8px 4px;font:inherit;font-weight:700;font-size:12.5px;cursor:pointer}
+.tcash button.on{border-color:#C07F26;background:#FBF0DC;color:#8A5A14}
+.tchange{display:flex;justify-content:space-between;font-weight:800;background:#EFF7EE;border:1px dashed #B9D8B4;border-radius:10px;padding:9px 12px}
+.tdemo-cart.paying .tcart-list,.tdemo-cart.paying .tdemo-total{display:none}
+.tdemo-cart.paying .tpay{display:flex}
+.treceipt{position:absolute;inset:0;background:rgba(20,16,8,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:5}
+.treceipt.show{display:flex}
+.treceipt-in{text-align:center;animation:tpull .45s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes tpull{from{transform:translateY(-26px);opacity:0}to{transform:none;opacity:1}}
+.tok{width:52px;height:52px;margin:0 auto 10px;border-radius:50%;background:#22A06B;color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.struk{background:#fff;color:#222;width:290px;max-width:86vw;margin:0 auto;padding:16px 16px 12px;font-family:'Courier New',monospace;font-size:12px;line-height:1.5;text-align:left;box-shadow:0 16px 34px rgba(0,0,0,.35);border-radius:4px}
+.struk .c{text-align:center}
+.struk .shop{font-size:15px;font-weight:700;letter-spacing:.02em}
+.struk hr{border:0;border-top:1.5px dashed #999;margin:8px 0}
+.struk .r{display:flex;justify-content:space-between;gap:8px}
+.struk .tot{font-size:13.5px;font-weight:700}
+.treceipt .acts{display:flex;gap:9px;justify-content:center;margin-top:14px}
+.treceipt .acts .tbtn{width:auto;padding:11px 20px}
+.treceipt .acts .tbtn.alt{background:#fff;color:#0B2B4B}
+.demo-points.row{flex-direction:row}
+@media(max-width:700px){
+  .tab-scr{aspect-ratio:auto;height:560px}
+  .tdemo-main{grid-template-columns:minmax(0,1fr) 218px}
+  .tgrid{grid-template-columns:repeat(2,1fr)}
+}
+
+.demo-grid.wide .demo-points{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 26px}
+@media(max-width:700px){.demo-grid.wide .demo-points{grid-template-columns:1fr}}
+
 .demo-points{list-style:none;margin:0 0 24px}
 .demo-points li{padding:11px 0;border-bottom:1px solid var(--line);font-size:15.5px;display:flex;gap:11px}
 .demo-points li::before{content:"▸";color:var(--accent);font-weight:800}
@@ -301,18 +379,50 @@ footer .fh{font-weight:700;font-size:14px;margin-bottom:10px}
 
 
 <section id="demo"><div class="wrap">
-  <div class="sec-head"><span class="kick">Demo langsung</span><h2>Coba langsung, nggak perlu install.</h2><p>Ini aplikasi kasir beneran yang jalan di browser HP kamu. Klik-klik aja, nggak perlu download, nggak perlu daftar.</p></div>
-  <div class="demo-grid">
-    <div class="demo-frame"><div class="scr"><iframe src="https://finowi.github.io/ogkasir-preview/?v=141" title="Demo interaktif aplikasi kasir OGKasir" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe></div></div>
+  <div class="sec-head"><span class="kick">Demo langsung</span><h2>Coba langsung, nggak perlu install.</h2><p>Simulasi kasir OGKasir di tablet: pilih menu, terima pembayaran, struk langsung keluar — persis alur di aplikasi aslinya.</p></div>
+  <div class="demo-grid wide">
+    <div class="tab-mock"><div class="glare"></div><div class="tab-scr">
+      <div class="tdemo">
+        <div class="tdemo-head"><span class="lg">⚡</span><div><b>Warkop Berkah</b><div style="font-size:11.5px;color:#8A7B5F">Kasir · OGKasir Demo</div></div><div class="dt" id="tDate"></div></div>
+        <div class="tdemo-steps"><span class="tstep on" id="ts1">1 · Pilih Menu</span><span class="tstep" id="ts2">2 · Bayar</span><span class="tstep" id="ts3">3 · Struk Keluar</span></div>
+        <div class="tdemo-main">
+          <div class="tdemo-menu">
+            <div class="tdemo-tools"><label class="tdemo-search">🔎 <input id="tSearch" placeholder="Cari nama produk…"></label></div>
+            <div class="tchips" id="tChips"></div>
+            <div class="tgrid" id="tGrid"></div>
+          </div>
+          <aside class="tdemo-cart" id="tCart">
+            <h4>🧾 Pesanan</h4>
+            <div class="tcart-list" id="tCartList"></div>
+            <div class="tpay" id="tPay">
+              <div class="lbl">TOTAL BAYAR</div><div class="big" id="tPayTotal">Rp0</div>
+              <div class="lbl">TUNAI DITERIMA</div>
+              <div class="tcash" id="tCash">
+                <button data-cash="pas">Uang Pas</button><button data-cash="10000">10rb</button><button data-cash="20000">20rb</button><button data-cash="50000">50rb</button><button data-cash="100000">100rb</button><button data-cash="200000">200rb</button>
+              </div>
+              <div class="tchange"><span>Kembalian</span><span id="tChange">—</span></div>
+              <button class="tbtn" id="tBtnProses" disabled>Proses Bayar ✓</button>
+              <button class="tbtn ghosty" id="tBtnKembali">← Kembali ke Menu</button>
+            </div>
+            <div class="tdemo-total"><div class="row"><span>Total</span><span id="tTotal">Rp0</span></div><button class="tbtn" id="tBtnBayar" disabled>Bayar →</button></div>
+          </aside>
+        </div>
+        <div class="treceipt" id="tReceipt"><div class="treceipt-in">
+          <div class="tok">✓</div>
+          <div class="struk" id="tStruk"></div>
+          <div class="acts"><button class="tbtn" id="tBtnBaru">🧾 Transaksi Baru</button><a class="tbtn alt" href="#harga" style="text-decoration:none;display:inline-flex;align-items:center;background:#fff;color:#0B2B4B">Lihat Harga</a></div>
+        </div></div>
+      </div>
+    </div></div>
     <div>
       <ul class="demo-points">
-        <li><span><b>Tap menu</b> buat masukin ke keranjang, kayak lagi jualan beneran.</span></li>
-        <li><span><b>Coba checkout:</b> total dan kembalian kehitung otomatis.</span></li>
-        <li><span><b>Buka Laporan:</b> intip omzet, grafik, dan menu terlaris.</span></li>
+        <li><span><b>Tap menu</b> di tablet buat masukin ke pesanan, kayak lagi jualan beneran.</span></li>
+        <li><span><b>Bayar:</b> pilih uang tunai — total dan kembalian kehitung otomatis.</span></li>
+        <li><span><b>Struk keluar</b> lengkap dengan rincian belanja & kembalian.</span></li>
       </ul>
-      <a class="btn primary" href="https://finowi.github.io/ogkasir-preview/" target="_blank" rel="noopener">⛶ Buka Fullscreen</a>
+      <a class="btn primary" href="https://finowi.github.io/ogkasir-preview/" target="_blank" rel="noopener">⛶ Buka Aplikasi Lengkap</a>
       <a class="btn ghost" href="#harga">Lihat Harga</a>
-      <p class="demo-note">Mode demo pakai data contoh dan tidak menyimpan apa-apa. Fitur khusus HP seperti cetak printer dan update otomatis nonaktif di demo browser.</p>
+      <p class="demo-note">Ini simulasi ringkas tampilan kasir OGKasir dengan data contoh. Aplikasi lengkapnya — laporan omzet, stok, karyawan, cetak struk ke printer thermal — bisa dicoba lewat tombol Buka Aplikasi Lengkap.</p>
     </div>
   </div>
 </div></section>
@@ -393,5 +503,145 @@ var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isInters
 (function r(){var k=Math.min(1,(performance.now()-t0)/1500);el.innerHTML='Rp'+Math.round(to*(1-Math.pow(1-k,3))).toLocaleString('id-ID')+' <span>▲ naik</span>';if(k<1)requestAnimationFrame(r)})();o.disconnect()}})},{threshold:.35});
 o.observe(box)})();
 </script>
+<script>
+/* ===== Demo tablet OGKasir: pilih menu -> bayar -> struk ===== */
+(function () {
+  var P = [
+    ['Kopi Tubruk', 'Kopi', 8000, 'img/produk/kopi-tubruk.jpg'],
+    ['Kopi Hitam', 'Kopi', 10000, 'img/produk/kopi-hitam.jpg'],
+    ['Es Kopi Susu', 'Kopi', 15000, 'img/produk/es-kopi-susu.jpg'],
+    ['Kopi Susu Panas', 'Kopi', 13000, 'img/produk/kopi-susu-panas.jpg'],
+    ['Teh Manis Panas', 'Minuman', 5000, 'img/produk/teh-manis-panas.jpg'],
+    ['Es Teh Manis', 'Minuman', 6000, 'img/produk/es-teh-manis.jpg'],
+    ['Es Jeruk', 'Minuman', 8000, 'img/produk/es-jeruk.jpg'],
+    ['Air Mineral', 'Minuman', 4000, 'img/produk/air-mineral.jpg'],
+    ['Indomie Goreng', 'Makanan', 12000, 'img/produk/indomie-goreng.jpg'],
+    ['Indomie Rebus', 'Makanan', 12000, 'img/produk/indomie-rebus.jpg'],
+    ['Nasi Goreng', 'Makanan', 15000, 'img/produk/nasi-goreng.jpg'],
+    ['Mie Goreng Jawa', 'Makanan', 14000, 'img/produk/mie-goreng-jawa.jpg'],
+    ['Pisang Goreng', 'Snack', 10000, 'img/produk/pisang-goreng.jpg'],
+    ['Roti Bakar', 'Snack', 12000, 'img/produk/roti-bakar.jpg'],
+    ['Tahu Crispy', 'Snack', 8000, 'img/produk/tahu-crispy.jpg'],
+    ['Kentang Goreng', 'Snack', 12000, 'img/produk/kentang-goreng.jpg']
+  ];
+  var CATS = ['Semua', 'Kopi', 'Minuman', 'Makanan', 'Snack'];
+  var cart = {}, cat = 'Semua', cash = null, txNo = 231;
+  var $ = function (id) { return document.getElementById(id); };
+  function rp(n) { return 'Rp' + n.toLocaleString('id-ID'); }
+  function total() { var t = 0; for (var k in cart) t += P[k][2] * cart[k]; return t; }
+  function count() { var t = 0; for (var k in cart) t += cart[k]; return t; }
+
+  var d = new Date();
+  var hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][d.getDay()];
+  var bln = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'][d.getMonth()];
+  $('tDate').innerHTML = hari + ', ' + d.getDate() + ' ' + bln + ' ' + d.getFullYear() + '<br>Kasir aktif: Pemilik';
+
+  $('tChips').innerHTML = CATS.map(function (c) {
+    return '<button class="tchip' + (c === cat ? ' on' : '') + '" data-cat="' + c + '">' + c + '</button>';
+  }).join('');
+  $('tChips').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-cat]'); if (!b) return;
+    cat = b.getAttribute('data-cat');
+    [].forEach.call($('tChips').children, function (x) { x.classList.toggle('on', x.getAttribute('data-cat') === cat); });
+    renderGrid();
+  });
+  $('tSearch').addEventListener('input', renderGrid);
+
+  function renderGrid() {
+    var q = ($('tSearch').value || '').toLowerCase();
+    $('tGrid').innerHTML = P.map(function (p, i) {
+      if (cat !== 'Semua' && p[1] !== cat) return '';
+      if (q && p[0].toLowerCase().indexOf(q) < 0) return '';
+      return '<button class="tcard" data-add="' + i + '"><img src="' + p[3] + '" alt="' + p[0] + '" loading="lazy">' +
+        '<span class="nm" style="display:block">' + p[0] + '</span>' +
+        '<span class="pr">' + rp(p[2]) + '</span></button>';
+    }).join('') || '<p style="color:#8A7B5F;grid-column:1/-1;text-align:center;padding:14px">Menu tidak ditemukan.</p>';
+  }
+  $('tGrid').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-add]'); if (!b) return;
+    var i = b.getAttribute('data-add');
+    cart[i] = (cart[i] || 0) + 1;
+    renderCart();
+  });
+
+  function renderCart() {
+    var box = $('tCartList');
+    if (!count()) {
+      box.innerHTML = '<div class="tcart-empty">Keranjang masih kosong.<br>👈 Tap menu di kiri buat mulai jualan.</div>';
+    } else {
+      box.innerHTML = Object.keys(cart).map(function (k) {
+        var p = P[k];
+        return '<div class="tci"><div class="inf"><b>' + p[0] + '</b><span>' + rp(p[2]) + ' · ' + rp(p[2] * cart[k]) + '</span></div>' +
+          '<div class="tqb"><button data-dec="' + k + '">−</button><b>' + cart[k] + '</b><button data-inc="' + k + '">+</button></div></div>';
+      }).join('');
+    }
+    $('tTotal').textContent = rp(total());
+    $('tBtnBayar').disabled = !count();
+  }
+  $('tCartList').addEventListener('click', function (e) {
+    var inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]');
+    if (inc) { cart[inc.getAttribute('data-inc')]++; renderCart(); }
+    if (dec) { var k = dec.getAttribute('data-dec'); cart[k]--; if (cart[k] <= 0) delete cart[k]; renderCart(); }
+  });
+
+  function setStep(n) {
+    [1, 2, 3].forEach(function (i) { $('ts' + i).classList.toggle('on', i === n); });
+  }
+  $('tBtnBayar').addEventListener('click', function () {
+    if (!count()) return;
+    cash = null;
+    $('tPayTotal').textContent = rp(total());
+    $('tChange').textContent = '—';
+    $('tBtnProses').disabled = true;
+    [].forEach.call($('tCash').children, function (x) { x.classList.remove('on'); });
+    $('tCart').classList.add('paying');
+    setStep(2);
+  });
+  $('tBtnKembali').addEventListener('click', function () {
+    $('tCart').classList.remove('paying');
+    setStep(1);
+  });
+  $('tCash').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-cash]'); if (!b) return;
+    [].forEach.call($('tCash').children, function (x) { x.classList.toggle('on', x === b); });
+    var v = b.getAttribute('data-cash');
+    cash = v === 'pas' ? total() : parseInt(v, 10);
+    var t = total();
+    $('tChange').textContent = cash >= t ? rp(cash - t) : 'Kurang ' + rp(t - cash);
+    $('tBtnProses').disabled = cash < t;
+  });
+  $('tBtnProses').addEventListener('click', function () {
+    var t = total(), now = new Date();
+    var jam = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+    var items = Object.keys(cart).map(function (k) {
+      var p = P[k];
+      return '<div>' + p[0] + '</div><div class="r"><span>&nbsp;&nbsp;' + cart[k] + ' x ' + p[2].toLocaleString('id-ID') + '</span><span>' + (p[2] * cart[k]).toLocaleString('id-ID') + '</span></div>';
+    }).join('');
+    $('tStruk').innerHTML =
+      '<div class="c shop">WARKOP BERKAH</div>' +
+      '<div class="c">Jl. Merdeka No. 10, Medan<br>WA 0812-3456-7890</div><hr>' +
+      '<div class="r"><span>No: #DM-' + (txNo) + '</span><span>' + now.getDate() + ' ' + bln + ' ' + now.getFullYear() + ' ' + jam + '</span></div>' +
+      '<div class="r"><span>Kasir: Pemilik</span><span>Umum</span></div><hr>' +
+      items + '<hr>' +
+      '<div class="r tot"><span>TOTAL</span><span>' + t.toLocaleString('id-ID') + '</span></div>' +
+      '<div class="r"><span>Tunai</span><span>' + cash.toLocaleString('id-ID') + '</span></div>' +
+      '<div class="r"><span>Kembalian</span><span>' + (cash - t).toLocaleString('id-ID') + '</span></div><hr>' +
+      '<div class="c">Terima kasih 🙏<br>Powered by OGKasir</div>';
+    $('tReceipt').classList.add('show');
+    setStep(3);
+  });
+  $('tBtnBaru').addEventListener('click', function () {
+    cart = {}; cash = null; txNo++;
+    $('tReceipt').classList.remove('show');
+    $('tCart').classList.remove('paying');
+    renderCart();
+    setStep(1);
+  });
+
+  renderGrid();
+  renderCart();
+})();
+</script>
+
 </body>
 </html>
