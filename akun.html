@@ -118,6 +118,11 @@ main{padding:40px 0 70px}
   .shell-side ul,.shell-side .foot{display:none}
   .shell-main{padding:22px 18px 20px}
 }
+.setup-logo{width:76px;height:76px;border-radius:50%;background:var(--accent-soft);margin:2px auto 10px;display:flex;align-items:center;justify-content:center;position:relative}
+.setup-logo img{width:50px;height:50px;border-radius:13px}
+.setup-logo .bdg{position:absolute;right:-2px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:var(--ok);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:2.5px solid #fff}
+select.in{appearance:none;-webkit-appearance:none}
+textarea.in{resize:vertical}
 </style>
 </head>
 <body>
@@ -200,6 +205,34 @@ main{padding:40px 0 70px}
     <button class="btn primary block" onclick="AccountPage.doSetPassword()">Simpan Password Baru</button>
   </section>
 
+  <!-- ======== INFORMASI TOKO (setelah daftar) ======== -->
+  <section id="viewSetup" hidden>
+    <div class="setup-logo"><img src="logo.png" alt="OGKasir"><span class="bdg">✓</span></div>
+    <h2 class="center">Informasi Toko</h2>
+    <p class="sub center">Satu langkah lagi — data ini tampil di struk pelanggan &amp; akunmu.</p>
+    <div id="sAlert" class="alert"></div>
+    <div class="fld"><label for="sShop">Nama toko *</label>
+      <input class="in" id="sShop" type="text" placeholder="cth. Warkop Berkah"></div>
+    <div class="fld"><label for="sName">Nama pemilik *</label>
+      <input class="in" id="sName" type="text" autocomplete="name" placeholder="cth. Budi Santoso"></div>
+    <div class="fld"><label for="sPhone">Nomor WhatsApp *</label>
+      <input class="in" id="sPhone" type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx"></div>
+    <div class="fld"><label for="sAddr">Alamat toko</label>
+      <textarea class="in" id="sAddr" rows="2" placeholder="cth. Jl. Merdeka No. 10, Medan"></textarea></div>
+    <div class="fld"><label for="sType">Jenis usaha</label>
+      <select class="in" id="sType">
+        <option value="">— Pilih jenis usaha —</option>
+        <option>Warkop</option>
+        <option>Café / Kedai Kopi</option>
+        <option>Rumah Makan</option>
+        <option>Toko Kelontong</option>
+        <option>Jajanan / Street Food</option>
+        <option>Lainnya</option>
+      </select></div>
+    <button class="btn primary block" onclick="AccountPage.saveSetup()">Simpan &amp; Lanjutkan</button>
+    <p class="center mt small"><button class="linkish" style="color:var(--muted)" onclick="AccountPage.skipSetup()">Nanti saja</button></p>
+  </section>
+
     </div>
   </div>
 
@@ -214,6 +247,20 @@ main{padding:40px 0 70px}
         <input class="in" id="pName" placeholder="cth. Budi Santoso"></div>
       <div class="fld"><label for="pShop">Nama toko</label>
         <input class="in" id="pShop" placeholder="cth. Warkop Berkah"></div>
+      <div class="fld"><label for="pPhone">Nomor WhatsApp</label>
+        <input class="in" id="pPhone" type="tel" placeholder="08xxxxxxxxxx"></div>
+      <div class="fld"><label for="pAddr">Alamat toko</label>
+        <textarea class="in" id="pAddr" rows="2" placeholder="cth. Jl. Merdeka No. 10, Medan"></textarea></div>
+      <div class="fld"><label for="pType">Jenis usaha</label>
+        <select class="in" id="pType">
+          <option value="">— Pilih jenis usaha —</option>
+          <option>Warkop</option>
+          <option>Café / Kedai Kopi</option>
+          <option>Rumah Makan</option>
+          <option>Toko Kelontong</option>
+          <option>Jajanan / Street Food</option>
+          <option>Lainnya</option>
+        </select></div>
       <div style="display:flex;gap:9px;flex-wrap:wrap">
         <button class="btn primary sm" onclick="AccountPage.saveProfile()">Simpan Profil</button>
         <button class="btn danger sm" onclick="AccountPage.doSignOut()">Keluar Akun</button>
@@ -266,6 +313,7 @@ var AccountPage = (function () {
   var session = null, mode = 'in', recovery = false;
   var verifyCtx = null; // {type:'signup'|'email'|'recovery', email}
   var pendingName = '';
+  var justRegistered = false;
   var EYE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
   var EYEOFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.5 9.5 0 0 1 12 4c6.5 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61C4.4 8.05 2 12 2 12s3.5 8 10 8a9.7 9.7 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>';
   function togglePw(id, btn) {
@@ -394,8 +442,33 @@ var AccountPage = (function () {
     $('viewAuth').hidden = view !== 'auth';
     $('viewVerify').hidden = view !== 'verify';
     $('viewRecovery').hidden = view !== 'recovery';
+    $('viewSetup').hidden = view !== 'setup';
     $('viewAccount').hidden = view !== 'account';
   }
+  function showSetup(p) {
+    p = p || {};
+    $('sShop').value = p.shop_name || '';
+    $('sName').value = p.display_name || pendingName || '';
+    $('sPhone').value = p.phone || '';
+    $('sAddr').value = p.shop_address || '';
+    $('sType').value = p.shop_type || '';
+    alertBox('sAlert', '');
+    show('setup');
+  }
+  function saveSetup() {
+    var shop = ($('sShop').value || '').trim(), name = ($('sName').value || '').trim(),
+      phone = ($('sPhone').value || '').trim(), addr = ($('sAddr').value || '').trim(),
+      type = $('sType').value || '';
+    if (!shop) { alertBox('sAlert', 'Nama toko wajib diisi.'); return; }
+    if (!name) { alertBox('sAlert', 'Nama pemilik wajib diisi.'); return; }
+    if (phone.replace(/\D/g, '').length < 9) { alertBox('sAlert', 'Nomor WhatsApp wajib diisi dengan benar (min. 9 digit).'); return; }
+    authed('/rest/v1/account_profiles?user_id=eq.' + session.user.id, {
+      method: 'PATCH', headers: { 'Prefer': 'return=minimal' },
+      body: { display_name: name, shop_name: shop, phone: phone, shop_address: addr, shop_type: type }
+    }).then(function () { pendingName = ''; loadAccount(); })
+      .catch(function (e) { alertBox('sAlert', errMsg(e)); });
+  }
+  function skipSetup() { justRegistered = false; loadAccount(); }
   function showVerify(type, email) {
     verifyCtx = { type: type, email: email };
     var label = type === 'signup' ? 'mengonfirmasi pendaftaran'
@@ -479,6 +552,16 @@ var AccountPage = (function () {
       if (rows && rows[0]) {
         $('pName').value = rows[0].display_name || '';
         $('pShop').value = rows[0].shop_name || '';
+        $('pPhone').value = rows[0].phone || '';
+        $('pAddr').value = rows[0].shop_address || '';
+        $('pType').value = rows[0].shop_type || '';
+        // akun baru tanpa nama toko -> antar ke pengisian informasi toko
+        if (justRegistered && !rows[0].shop_name) {
+          justRegistered = false;
+          showSetup(rows[0]);
+          return;
+        }
+        justRegistered = false;
         // nama dari form daftar -> simpan ke profil
         if (pendingName && rows[0].display_name !== pendingName) {
           var nm = pendingName; pendingName = '';
@@ -533,6 +616,7 @@ var AccountPage = (function () {
     var c = creds(); if (!c) return;
     if (!$('aTerms').checked) { alertBox('authAlert', 'Centang dulu persetujuan Syarat & Ketentuan.'); return; }
     pendingName = ($('aName').value || '').trim();
+    justRegistered = true;
     $('btnUp').disabled = true;
     var sbody = { email: c.email, password: c.password, options: { emailRedirectTo: REDIRECT } };
     if (pendingName) sbody.data = { display_name: pendingName };
@@ -617,7 +701,9 @@ var AccountPage = (function () {
   function saveProfile() {
     authed('/rest/v1/account_profiles?user_id=eq.' + session.user.id, {
       method: 'PATCH', headers: { 'Prefer': 'return=minimal' },
-      body: { display_name: $('pName').value.trim() || null, shop_name: $('pShop').value.trim() || null }
+      body: { display_name: $('pName').value.trim() || null, shop_name: $('pShop').value.trim() || null,
+        phone: $('pPhone').value.trim() || null, shop_address: $('pAddr').value.trim() || null,
+        shop_type: $('pType').value || null }
     }).then(function () { alertBox('profAlert', 'Profil tersimpan.', true); })
       .catch(function (e) { alertBox('profAlert', errMsg(e)); });
   }
@@ -680,7 +766,8 @@ var AccountPage = (function () {
     doClaim: doClaim, revokeDev: revokeDev, deleteDev: deleteDev,
     doOtpLogin: doOtpLogin, doVerify: doVerify, doResend: doResend,
     backToAuth: backToAuth, showVerify: showVerify, doChangeEmail: doChangeEmail,
-    togglePw: togglePw, terms: terms, otpInput: otpInput, otpKey: otpKey, otpPaste: otpPaste
+    togglePw: togglePw, terms: terms, otpInput: otpInput, otpKey: otpKey, otpPaste: otpPaste,
+    saveSetup: saveSetup, skipSetup: skipSetup, showSetup: showSetup
   };
 })();
 </script>
