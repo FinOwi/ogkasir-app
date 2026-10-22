@@ -79,6 +79,45 @@ textarea.in{resize:vertical}
 footer{border-top:1px solid var(--line);padding:34px 0 44px;background:var(--surface)}
 footer .note{color:var(--muted);font-size:14px}
 [hidden]{display:none!important}
+/* ===== gaya referensi: panel brand + kartu form, tombol pil, OTP kotak ===== */
+.btn{border-radius:999px}
+.btn.primary{background:linear-gradient(180deg,#D99A35,#B8761F);box-shadow:0 6px 16px rgba(184,118,31,.35);border-color:transparent}
+.btn.primary:hover{background:linear-gradient(180deg,#C98F2D,#A86E14)}
+.in{background:#F2F4F7;border:1.5px solid transparent;border-radius:14px;padding:13px 15px}
+.in:focus{outline:none;border-color:var(--accent2);background:#fff;box-shadow:0 0 0 3px rgba(192,127,38,.18)}
+.tabs{background:#EEF1F6;border-radius:999px;padding:4px;gap:4px}
+.tabs button{border:0;background:transparent;border-radius:999px;color:var(--muted)}
+.tabs button.on{background:linear-gradient(180deg,#D99A35,#B8761F);color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(184,118,31,.35)}
+.pwwrap{position:relative}
+.pwwrap .in{padding-right:46px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;background:transparent;color:#8A94A6;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:10px}
+.eye svg{width:21px;height:21px}
+.linkish{color:#E07B0F}
+.ordiv{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:14px 2px}
+.ordiv:before,.ordiv:after{content:"";flex:1;height:1px;background:var(--line)}
+.otp{display:flex;gap:8px;justify-content:space-between;margin:4px 0 8px}
+.otp input{flex:1;min-width:0;height:56px;text-align:center;font-family:var(--font);font-size:21px;font-weight:800;color:var(--fg);border-radius:13px;border:1.5px solid transparent;background:#F2F4F7;padding:0}
+.otp input:focus{outline:none;border-color:var(--accent2);background:#fff;box-shadow:0 0 0 3px rgba(192,127,38,.18)}
+.agree{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.55;margin:2px 0 12px;cursor:pointer}
+.agree input{width:19px;height:19px;accent-color:var(--accent);flex:none;margin-top:1px}
+.agree a{color:#E07B0F;font-weight:700;text-decoration:none}
+main{padding:40px 0 70px}
+.shell{max-width:920px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:grid;grid-template-columns:340px 1fr;box-shadow:0 18px 44px rgba(16,20,28,.08)}
+.shell-side{background:linear-gradient(165deg,#D99A35,#A86E14 78%);color:#fff;padding:34px 28px;display:flex;flex-direction:column}
+.shell-side img{width:58px;height:58px;border-radius:16px;background:#fff;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+.shell-side h2{font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.25;margin:16px 0 8px}
+.shell-side p{font-size:14px;opacity:.92;line-height:1.6}
+.shell-side ul{list-style:none;margin-top:20px;display:grid;gap:11px;font-size:14px}
+.shell-side li{display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+.shell-side li b{flex:none;width:21px;height:21px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px}
+.shell-side .foot{margin-top:auto;padding-top:26px;font-size:12.5px;opacity:.78}
+.shell-main{padding:30px 30px 26px}
+@media(max-width:840px){
+  .shell{grid-template-columns:1fr}
+  .shell-side{padding:24px 22px}
+  .shell-side ul,.shell-side .foot{display:none}
+  .shell-main{padding:22px 18px 20px}
+}
 </style>
 </head>
 <body>
@@ -91,57 +130,78 @@ footer .note{color:var(--muted);font-size:14px}
 </div></nav>
 
 <main><div class="wrap">
-  <div class="hero">
-    <h1>Akun OGKasir</h1>
-    <p>Satu akun untuk semua perangkat tokomu. Lisensi mengikuti akun — bukan lagi terkunci di satu HP.</p>
-  </div>
+  <div class="shell">
+    <aside class="shell-side">
+      <img src="logo.png" alt="Logo OGKasir">
+      <h2>Satu Akun,<br>Semua Perangkat</h2>
+      <p>Lisensi mengikuti akun — bukan lagi terkunci di satu HP. Kelola akun, perangkat &amp; lisensimu di sini.</p>
+      <ul>
+        <li><b>✓</b><span>Lisensi akun berlaku sampai 3 perangkat sekaligus</span></li>
+        <li><b>✓</b><span>Data toko tersinkron aman antar perangkat</span></li>
+        <li><b>✓</b><span>Kasir tetap jalan offline — internet hanya saat masuk &amp; sinkron</span></li>
+      </ul>
+      <p class="foot">OGKasir oleh FinOwi Id · Medan, Indonesia</p>
+    </aside>
+    <div class="shell-main">
 
   <!-- ======== BELUM MASUK ======== -->
-  <section id="viewAuth" class="card">
+  <section id="viewAuth">
     <div class="tabs">
       <button id="tabIn" class="on" onclick="AccountPage.tab('in')">Masuk</button>
       <button id="tabUp" onclick="AccountPage.tab('up')">Daftar</button>
     </div>
     <div id="authAlert" class="alert"></div>
+    <div class="fld" id="fldName" hidden><label for="aName">Nama</label>
+      <input class="in" id="aName" type="text" autocomplete="name" placeholder="cth. Budi Santoso"></div>
     <div class="fld"><label for="aEmail">Email</label>
       <input class="in" id="aEmail" type="email" autocomplete="email" placeholder="email@contoh.com"></div>
     <div class="fld"><label for="aPass">Password</label>
-      <input class="in" id="aPass" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter"></div>
-    <button class="btn primary block" id="btnIn" onclick="AccountPage.doSignIn()">Masuk</button>
-    <button class="btn primary block" id="btnUp" onclick="AccountPage.doSignUp()" hidden>Buat Akun</button>
-    <button class="btn ghost block mt" id="btnOtp" onclick="AccountPage.doOtpLogin()">📩 Masuk pakai kode email (tanpa password)</button>
-    <p class="center mt small">
-      <button class="linkish" onclick="AccountPage.doReset()">Lupa password?</button>
-      <span id="authHint"> · Belum punya akun? Ketuk tab <b>Daftar</b>.</span>
+      <div class="pwwrap"><input class="in" id="aPass" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter">
+      <button type="button" class="eye" onclick="AccountPage.togglePw('aPass',this)" aria-label="Lihat password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.5 9.5 0 0 1 12 4c6.5 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61C4.4 8.05 2 12 2 12s3.5 8 10 8a9.7 9.7 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg></button></div></div>
+    <p id="forgotRow" style="text-align:right;margin:-4px 0 12px">
+      <button class="linkish" onclick="AccountPage.doReset()">Lupa Password?</button>
     </p>
+    <label class="agree" id="agreeRow" hidden><input type="checkbox" id="aTerms"><span>Saya setuju dengan <a href="#" onclick="return AccountPage.terms(event)">Syarat &amp; Ketentuan</a> OGKasir.</span></label>
+    <button class="btn primary block" id="btnIn" onclick="AccountPage.doSignIn()">Masuk</button>
+    <button class="btn primary block" id="btnUp" onclick="AccountPage.doSignUp()" hidden>Daftar Sekarang</button>
+    <div class="ordiv">atau</div>
+    <button class="btn ghost block" id="btnOtp" onclick="AccountPage.doOtpLogin()">📩 Masuk pakai kode email (tanpa password)</button>
+    <p class="center mt small"><span id="authHint">Belum punya akun? Ketuk tab <b>Daftar</b> di atas.</span></p>
     <p class="small mt">Akun dipakai untuk lisensi &amp; sinkronisasi data antar perangkat di aplikasi OGKasir. Kasir tetap bisa jalan offline — akun hanya perlu internet saat masuk &amp; sinkronisasi.</p>
   </section>
 
   <!-- ======== KODE VERIFIKASI (OTP) ======== -->
-  <section id="viewVerify" class="card" hidden>
-    <h2>📩 Masukkan Kode Verifikasi</h2>
-    <p class="sub" id="vText">Kami mengirim kode 6 digit ke email kamu. Masukkan kodenya di sini untuk melanjutkan.</p>
+  <section id="viewVerify" hidden>
+    <h2 class="center">📩 Kode Verifikasi</h2>
+    <p class="sub center" id="vText">Kami mengirim kode 6 digit ke email kamu. Masukkan kodenya di sini untuk melanjutkan.</p>
     <div id="vAlert" class="alert"></div>
-    <div class="fld"><label for="vCode">Kode 6 digit</label>
-      <input class="in" id="vCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456"
-        style="letter-spacing:6px;font-size:20px;text-align:center" maxlength="6"></div>
+    <div class="otp" id="vBoxes">
+      <input inputmode="numeric" autocomplete="one-time-code" maxlength="1" oninput="AccountPage.otpInput(this)" onkeydown="AccountPage.otpKey(event,this)" onpaste="AccountPage.otpPaste(event)">
+      <input inputmode="numeric" autocomplete="off" maxlength="1" oninput="AccountPage.otpInput(this)" onkeydown="AccountPage.otpKey(event,this)">
+      <input inputmode="numeric" autocomplete="off" maxlength="1" oninput="AccountPage.otpInput(this)" onkeydown="AccountPage.otpKey(event,this)">
+      <input inputmode="numeric" autocomplete="off" maxlength="1" oninput="AccountPage.otpInput(this)" onkeydown="AccountPage.otpKey(event,this)">
+      <input inputmode="numeric" autocomplete="off" maxlength="1" oninput="AccountPage.otpInput(this)" onkeydown="AccountPage.otpKey(event,this)">
+      <input inputmode="numeric" autocomplete="off" maxlength="1" oninput="AccountPage.otpInput(this)" onkeydown="AccountPage.otpKey(event,this)">
+    </div>
     <button class="btn primary block" onclick="AccountPage.doVerify()">Verifikasi</button>
-    <p class="center mt small">
-      <button class="linkish" onclick="AccountPage.doResend()">Kirim ulang kode</button> ·
-      <button class="linkish" onclick="AccountPage.backToAuth()">Kembali</button>
-    </p>
+    <p class="center mt small">Tidak menerima kode? <button class="linkish" onclick="AccountPage.doResend()">Kirim ulang kode</button></p>
+    <p class="center small"><button class="linkish" style="color:var(--muted)" onclick="AccountPage.backToAuth()">Kembali</button></p>
     <p class="small mt">Salah ketik email? Kode tidak akan sampai ke email yang salah. Kembali lalu daftar ulang dengan email yang benar — akun salah ketik tidak akan aktif tanpa verifikasi, jadi aman diabaikan.</p>
   </section>
 
-  <!-- ======== PASSWORD BARU (dari link reset) ======== -->
-  <section id="viewRecovery" class="card" hidden>
+  <!-- ======== PASSWORD BARU (setelah kode reset terverifikasi) ======== -->
+  <section id="viewRecovery" hidden>
     <h2>Buat Password Baru</h2>
-    <p class="sub">Kamu datang dari link reset password. Buat password baru untuk akunmu.</p>
+    <p class="sub">Buat password baru untuk akunmu.</p>
     <div id="recAlert" class="alert"></div>
     <div class="fld"><label for="rPass">Password baru</label>
-      <input class="in" id="rPass" type="password" autocomplete="new-password" placeholder="Minimal 6 karakter"></div>
+      <div class="pwwrap"><input class="in" id="rPass" type="password" autocomplete="new-password" placeholder="Minimal 6 karakter">
+      <button type="button" class="eye" onclick="AccountPage.togglePw('rPass',this)" aria-label="Lihat password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.5 9.5 0 0 1 12 4c6.5 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61C4.4 8.05 2 12 2 12s3.5 8 10 8a9.7 9.7 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg></button></div></div>
     <button class="btn primary block" onclick="AccountPage.doSetPassword()">Simpan Password Baru</button>
   </section>
+
+    </div>
+  </div>
 
   <!-- ======== SUDAH MASUK ======== -->
   <div id="viewAccount" hidden>
@@ -205,6 +265,46 @@ var AccountPage = (function () {
   var REDIRECT = 'https://ogkasir.my.id/akun.html';
   var session = null, mode = 'in', recovery = false;
   var verifyCtx = null; // {type:'signup'|'email'|'recovery', email}
+  var pendingName = '';
+  var EYE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYEOFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.5 9.5 0 0 1 12 4c6.5 0 10 8 10 8a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61C4.4 8.05 2 12 2 12s3.5 8 10 8a9.7 9.7 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/></svg>';
+  function togglePw(id, btn) {
+    var inp = $(id); if (!inp) return;
+    var show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    btn.innerHTML = show ? EYE : EYEOFF;
+  }
+  function terms(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    alert('Syarat & Ketentuan OGKasir\n\n• Akun OGKasir dipakai untuk lisensi & sinkronisasi data tokomu, maksimal 3 perangkat per akun.\n• Kamu bertanggung jawab menjaga kerahasiaan password akunmu.\n• Data toko yang tersinkron tersimpan aman di server dan hanya bisa diakses akunmu.\n• Lisensi mengikuti masa berlaku paket yang kamu beli; penggunaan di luar ketentuan dapat membuat lisensi ditangguhkan.\n• Aplikasi tetap bisa dipakai offline — akun hanya perlu internet saat masuk & sinkronisasi.');
+    return false;
+  }
+  function otpBoxes() { return $('vBoxes').querySelectorAll('input'); }
+  function otpInput(el) {
+    el.value = (el.value || '').replace(/\D/g, '').slice(-1);
+    if (el.value && el.nextElementSibling) el.nextElementSibling.focus();
+  }
+  function otpKey(e, el) {
+    if (e.key === 'Backspace' && !el.value && el.previousElementSibling) {
+      el.previousElementSibling.value = '';
+      el.previousElementSibling.focus();
+      e.preventDefault();
+    }
+  }
+  function otpPaste(e) {
+    e.preventDefault();
+    var cd = e.clipboardData || window.clipboardData;
+    var txt = ((cd && cd.getData('text')) || '').replace(/\D/g, '').slice(0, 6);
+    var b = otpBoxes();
+    for (var i = 0; i < b.length; i++) b[i].value = txt[i] || '';
+    var last = Math.min(Math.max(txt.length - 1, 0), 5);
+    if (b[last]) b[last].focus();
+  }
+  function otpValue() {
+    var b = otpBoxes(), v = '';
+    for (var i = 0; i < b.length; i++) v += b[i].value || '';
+    return v.trim();
+  }
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -302,10 +402,11 @@ var AccountPage = (function () {
       : type === 'recovery' ? 'mengatur ulang password' : 'masuk ke akunmu';
     $('vText').textContent = 'Kami mengirim kode 6 digit ke ' + email + ' untuk ' + label +
       '. Masukkan kodenya di sini untuk melanjutkan.';
-    $('vCode').value = '';
+    var b = otpBoxes();
+    for (var i = 0; i < b.length; i++) b[i].value = '';
     alertBox('vAlert', '');
     show('verify');
-    setTimeout(function () { $('vCode').focus(); }, 60);
+    setTimeout(function () { if (b[0]) b[0].focus(); }, 60);
   }
   function backToAuth() { verifyCtx = null; show('auth'); }
   function tab(m) {
@@ -314,9 +415,12 @@ var AccountPage = (function () {
     $('tabUp').className = m === 'up' ? 'on' : '';
     $('btnIn').hidden = m !== 'in';
     $('btnUp').hidden = m !== 'up';
+    $('fldName').hidden = m !== 'up';
+    $('agreeRow').hidden = m !== 'up';
+    $('forgotRow').hidden = m !== 'in';
     $('authHint').innerHTML = m === 'in'
-      ? ' · Belum punya akun? Ketuk tab <b>Daftar</b>.'
-      : ' · Sudah punya akun? Ketuk tab <b>Masuk</b>.';
+      ? 'Belum punya akun? Ketuk tab <b>Daftar</b> di atas.'
+      : 'Sudah punya akun? Ketuk tab <b>Masuk</b> di atas.';
     alertBox('authAlert', '');
   }
   function fmtDate(ms) {
@@ -373,6 +477,15 @@ var AccountPage = (function () {
       if (rows && rows[0]) {
         $('pName').value = rows[0].display_name || '';
         $('pShop').value = rows[0].shop_name || '';
+        // nama dari form daftar -> simpan ke profil
+        if (pendingName && rows[0].display_name !== pendingName) {
+          var nm = pendingName; pendingName = '';
+          $('pName').value = nm;
+          authed('/rest/v1/account_profiles?user_id=eq.' + session.user.id, {
+            method: 'PATCH', headers: { 'Prefer': 'return=minimal' },
+            body: { display_name: nm }
+          }).catch(function () {});
+        }
         // email profil mengikuti email login (setelah ganti email terkonfirmasi)
         if (rows[0].email && session.user.email && rows[0].email !== session.user.email) {
           authed('/rest/v1/account_profiles?user_id=eq.' + session.user.id, {
@@ -416,10 +529,14 @@ var AccountPage = (function () {
   }
   function doSignUp() {
     var c = creds(); if (!c) return;
+    if (!$('aTerms').checked) { alertBox('authAlert', 'Centang dulu persetujuan Syarat & Ketentuan.'); return; }
+    pendingName = ($('aName').value || '').trim();
     $('btnUp').disabled = true;
+    var sbody = { email: c.email, password: c.password, options: { emailRedirectTo: REDIRECT } };
+    if (pendingName) sbody.data = { display_name: pendingName };
     req('/auth/v1/signup', {
       method: 'POST', auth: false,
-      body: { email: c.email, password: c.password, options: { emailRedirectTo: REDIRECT } }
+      body: sbody
     }).then(function (j) {
       $('btnUp').disabled = false;
       if (j && j.access_token && j.user) { setSession(j); loadAccount(); }
@@ -435,7 +552,7 @@ var AccountPage = (function () {
       .catch(function (e) { $('btnOtp').disabled = false; alertBox('authAlert', errMsg(e)); });
   }
   function doVerify() {
-    var tok = ($('vCode').value || '').trim();
+    var tok = otpValue();
     if (!verifyCtx) { backToAuth(); return; }
     if (!/^\d{6}$/.test(tok)) { alertBox('vAlert', 'Kode harus 6 digit angka.'); return; }
     req('/auth/v1/verify', {
@@ -560,7 +677,8 @@ var AccountPage = (function () {
     doSetPassword: doSetPassword, doSignOut: doSignOut, saveProfile: saveProfile,
     doClaim: doClaim, revokeDev: revokeDev, deleteDev: deleteDev,
     doOtpLogin: doOtpLogin, doVerify: doVerify, doResend: doResend,
-    backToAuth: backToAuth, showVerify: showVerify, doChangeEmail: doChangeEmail
+    backToAuth: backToAuth, showVerify: showVerify, doChangeEmail: doChangeEmail,
+    togglePw: togglePw, terms: terms, otpInput: otpInput, otpKey: otpKey, otpPaste: otpPaste
   };
 })();
 </script>
