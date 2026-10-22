@@ -120,7 +120,7 @@ footer .note{color:var(--muted);font-size:14px}
   <!-- ======== KODE VERIFIKASI (OTP) ======== -->
   <section id="viewVerify" class="card" hidden>
     <h2>📩 Masukkan Kode Verifikasi</h2>
-    <p class="sub" id="vText">Kami mengirim kode 6 digit ke email kamu. Masukkan di sini — tidak perlu klik link apa pun.</p>
+    <p class="sub" id="vText">Kami mengirim kode 6 digit ke email kamu. Masukkan kodenya di sini untuk melanjutkan.</p>
     <div id="vAlert" class="alert"></div>
     <div class="fld"><label for="vCode">Kode 6 digit</label>
       <input class="in" id="vCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456"
@@ -221,7 +221,7 @@ var AccountPage = (function () {
     var m = (e && e.message) || 'Gagal menghubungi server';
     if (/device_limit/i.test(m)) return 'Perangkat akun sudah penuh — cabut perangkat lama di bawah, atau tambah slot lisensi.';
     if (/Invalid login credentials/i.test(m)) return 'Email atau password salah.';
-    if (/Email not confirmed/i.test(m)) return 'Email belum diverifikasi — cek inbox/spam email kamu, klik link verifikasinya dulu.';
+    if (/Email not confirmed/i.test(m)) return 'Email belum diverifikasi — masukkan kode verifikasi dari email kamu.';
     if (/User already registered/i.test(m)) return 'Email ini sudah terdaftar — langsung masuk saja.';
     if (/Password should be/i.test(m)) return 'Password terlalu lemah — minimal 6 karakter.';
     if (/bad_format/i.test(m)) return 'Format kode salah — kode aktivasi 24 karakter.';
@@ -301,7 +301,7 @@ var AccountPage = (function () {
     var label = type === 'signup' ? 'mengonfirmasi pendaftaran'
       : type === 'recovery' ? 'mengatur ulang password' : 'masuk ke akunmu';
     $('vText').textContent = 'Kami mengirim kode 6 digit ke ' + email + ' untuk ' + label +
-      '. Masukkan di sini — tidak perlu klik link apa pun. (Link di email yang sama juga tetap bisa diklik.)';
+      '. Masukkan kodenya di sini untuk melanjutkan.';
     $('vCode').value = '';
     alertBox('vAlert', '');
     show('verify');
@@ -403,7 +403,16 @@ var AccountPage = (function () {
     $('btnIn').disabled = true;
     req('/auth/v1/token?grant_type=password', { method: 'POST', auth: false, body: c })
       .then(function (j) { $('btnIn').disabled = false; setSession(j); loadAccount(); })
-      .catch(function (e) { $('btnIn').disabled = false; alertBox('authAlert', errMsg(e)); });
+      .catch(function (e) {
+        $('btnIn').disabled = false;
+        if (/Email not confirmed/i.test((e && e.message) || '')) {
+          // akun belum terverifikasi -> langsung antar ke panel kode
+          showVerify('signup', c.email);
+          alertBox('vAlert', 'Akunmu belum terverifikasi. Masukkan kode dari email kamu — atau ketuk Kirim Ulang Kode bila emailnya belum tiba.', true);
+          return;
+        }
+        alertBox('authAlert', errMsg(e));
+      });
   }
   function doSignUp() {
     var c = creds(); if (!c) return;
