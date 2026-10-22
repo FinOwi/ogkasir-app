@@ -109,11 +109,28 @@ footer .note{color:var(--muted);font-size:14px}
       <input class="in" id="aPass" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter"></div>
     <button class="btn primary block" id="btnIn" onclick="AccountPage.doSignIn()">Masuk</button>
     <button class="btn primary block" id="btnUp" onclick="AccountPage.doSignUp()" hidden>Buat Akun</button>
+    <button class="btn ghost block mt" id="btnOtp" onclick="AccountPage.doOtpLogin()">📩 Masuk pakai kode email (tanpa password)</button>
     <p class="center mt small">
       <button class="linkish" onclick="AccountPage.doReset()">Lupa password?</button>
       <span id="authHint"> · Belum punya akun? Ketuk tab <b>Daftar</b>.</span>
     </p>
     <p class="small mt">Akun dipakai untuk lisensi &amp; sinkronisasi data antar perangkat di aplikasi OGKasir. Kasir tetap bisa jalan offline — akun hanya perlu internet saat masuk &amp; sinkronisasi.</p>
+  </section>
+
+  <!-- ======== KODE VERIFIKASI (OTP) ======== -->
+  <section id="viewVerify" class="card" hidden>
+    <h2>📩 Masukkan Kode Verifikasi</h2>
+    <p class="sub" id="vText">Kami mengirim kode 6 digit ke email kamu. Masukkan di sini — tidak perlu klik link apa pun.</p>
+    <div id="vAlert" class="alert"></div>
+    <div class="fld"><label for="vCode">Kode 6 digit</label>
+      <input class="in" id="vCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456"
+        style="letter-spacing:6px;font-size:20px;text-align:center" maxlength="6"></div>
+    <button class="btn primary block" onclick="AccountPage.doVerify()">Verifikasi</button>
+    <p class="center mt small">
+      <button class="linkish" onclick="AccountPage.doResend()">Kirim ulang kode</button> ·
+      <button class="linkish" onclick="AccountPage.backToAuth()">Kembali</button>
+    </p>
+    <p class="small mt">Salah ketik email? Kode tidak akan sampai ke email yang salah. Kembali lalu daftar ulang dengan email yang benar — akun salah ketik tidak akan aktif tanpa verifikasi, jadi aman diabaikan.</p>
   </section>
 
   <!-- ======== PASSWORD BARU (dari link reset) ======== -->
@@ -140,6 +157,14 @@ footer .note{color:var(--muted);font-size:14px}
       <div style="display:flex;gap:9px;flex-wrap:wrap">
         <button class="btn primary sm" onclick="AccountPage.saveProfile()">Simpan Profil</button>
         <button class="btn danger sm" onclick="AccountPage.doSignOut()">Keluar Akun</button>
+      </div>
+      <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:16px">
+        <h2 style="font-size:16px">✉️ Ganti Email</h2>
+        <p class="sub">Email login salah ketik atau mau pindah email? Minta konfirmasi ke email baru — kamu mungkin juga diminta konfirmasi dari email lama. Setelah selesai, masuk kembali dengan email baru (password tetap).</p>
+        <div id="emAlert" class="alert"></div>
+        <div class="fld"><label for="pNewEmail">Email baru</label>
+          <input class="in" id="pNewEmail" type="email" autocomplete="email" placeholder="email-baru@contoh.com"></div>
+        <button class="btn ghost sm" onclick="AccountPage.doChangeEmail()">Minta Konfirmasi Ganti Email</button>
       </div>
     </section>
 
@@ -179,6 +204,7 @@ var AccountPage = (function () {
   var SKEY = 'ogkasir_web_auth_v1';
   var REDIRECT = 'https://ogkasir.my.id/akun.html';
   var session = null, mode = 'in', recovery = false;
+  var verifyCtx = null; // {type:'signup'|'email'|'recovery', email}
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -203,6 +229,9 @@ var AccountPage = (function () {
     if (/bad_signature/i.test(m)) return 'Kode aktivasi tidak valid.';
     if (/code_expired/i.test(m)) return 'Kode sudah kedaluwarsa.';
     if (/code_already_claimed/i.test(m)) return 'Kode ini sudah pernah diklaim ke akun lain.';
+    if (/token has expired|otp.*(expired|invalid)|invalid.*token/i.test(m)) return 'Kode salah atau sudah kedaluwarsa — minta kode baru lewat Kirim Ulang.';
+    if (/email.*rate limit|over_email_send/i.test(m)) return 'Terlalu banyak email dikirim — tunggu beberapa menit lalu coba lagi.';
+    if (/Signups not allowed|signup.*disabled/i.test(m)) return 'Pendaftaran sedang ditutup sementara — hubungi admin OGKasir via WhatsApp.';
     if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'Tidak bisa hubungi server — cek koneksi internet.';
     return m;
   }
@@ -263,9 +292,22 @@ var AccountPage = (function () {
   /* ---------- tampilan ---------- */
   function show(view) {
     $('viewAuth').hidden = view !== 'auth';
+    $('viewVerify').hidden = view !== 'verify';
     $('viewRecovery').hidden = view !== 'recovery';
     $('viewAccount').hidden = view !== 'account';
   }
+  function showVerify(type, email) {
+    verifyCtx = { type: type, email: email };
+    var label = type === 'signup' ? 'mengonfirmasi pendaftaran'
+      : type === 'recovery' ? 'mengatur ulang password' : 'masuk ke akunmu';
+    $('vText').textContent = 'Kami mengirim kode 6 digit ke ' + email + ' untuk ' + label +
+      '. Masukkan di sini — tidak perlu klik link apa pun. (Link di email yang sama juga tetap bisa diklik.)';
+    $('vCode').value = '';
+    alertBox('vAlert', '');
+    show('verify');
+    setTimeout(function () { $('vCode').focus(); }, 60);
+  }
+  function backToAuth() { verifyCtx = null; show('auth'); }
   function tab(m) {
     mode = m;
     $('tabIn').className = m === 'in' ? 'on' : '';
@@ -331,6 +373,13 @@ var AccountPage = (function () {
       if (rows && rows[0]) {
         $('pName').value = rows[0].display_name || '';
         $('pShop').value = rows[0].shop_name || '';
+        // email profil mengikuti email login (setelah ganti email terkonfirmasi)
+        if (rows[0].email && session.user.email && rows[0].email !== session.user.email) {
+          authed('/rest/v1/account_profiles?user_id=eq.' + session.user.id, {
+            method: 'PATCH', headers: { 'Prefer': 'return=minimal' },
+            body: { email: session.user.email }
+          }).catch(function () {});
+        }
       }
     }).catch(function () {});
     authed('/rest/v1/account_devices?select=*&order=last_seen_at.desc').then(function (rows) {
@@ -365,15 +414,65 @@ var AccountPage = (function () {
     }).then(function (j) {
       $('btnUp').disabled = false;
       if (j && j.access_token && j.user) { setSession(j); loadAccount(); }
-      else alertBox('authAlert', 'Akun dibuat! Cek inbox/spam email kamu dan klik link verifikasinya, lalu masuk di sini.', true);
+      else showVerify('signup', c.email);
     }).catch(function (e) { $('btnUp').disabled = false; alertBox('authAlert', errMsg(e)); });
+  }
+  function doOtpLogin() {
+    var em = ($('aEmail').value || '').trim();
+    if (!em || em.indexOf('@') < 0) { alertBox('authAlert', 'Isi email dulu, lalu ketuk tombol kode email.'); return; }
+    $('btnOtp').disabled = true;
+    req('/auth/v1/otp', { method: 'POST', auth: false, body: { email: em, create_user: false } })
+      .then(function () { $('btnOtp').disabled = false; showVerify('email', em); })
+      .catch(function (e) { $('btnOtp').disabled = false; alertBox('authAlert', errMsg(e)); });
+  }
+  function doVerify() {
+    var tok = ($('vCode').value || '').trim();
+    if (!verifyCtx) { backToAuth(); return; }
+    if (!/^\d{6}$/.test(tok)) { alertBox('vAlert', 'Kode harus 6 digit angka.'); return; }
+    req('/auth/v1/verify', {
+      method: 'POST', auth: false,
+      body: { type: verifyCtx.type, email: verifyCtx.email, token: tok }
+    }).then(function (j) {
+      setSession(j);
+      var wasRecovery = verifyCtx.type === 'recovery';
+      verifyCtx = null;
+      if (wasRecovery) { recovery = true; show('recovery'); }
+      else loadAccount();
+    }).catch(function (e) { alertBox('vAlert', errMsg(e)); });
+  }
+  function doResend() {
+    if (!verifyCtx) return;
+    var em = verifyCtx.email, p;
+    if (verifyCtx.type === 'signup') {
+      p = req('/auth/v1/resend', { method: 'POST', auth: false, body: { type: 'signup', email: em, options: { emailRedirectTo: REDIRECT } } });
+    } else if (verifyCtx.type === 'recovery') {
+      p = req('/auth/v1/recover', { method: 'POST', auth: false, body: { email: em, redirectTo: REDIRECT } });
+    } else {
+      p = req('/auth/v1/otp', { method: 'POST', auth: false, body: { email: em, create_user: false } });
+    }
+    p.then(function () { alertBox('vAlert', 'Kode baru dikirim ke ' + em + '. Cek inbox/spam.', true); })
+     .catch(function (e) { alertBox('vAlert', errMsg(e)); });
   }
   function doReset() {
     var em = ($('aEmail').value || '').trim();
     if (!em || em.indexOf('@') < 0) { alertBox('authAlert', 'Isi email dulu, lalu ketuk Lupa password.'); return; }
     req('/auth/v1/recover', { method: 'POST', auth: false, body: { email: em, redirectTo: REDIRECT } })
-      .then(function () { alertBox('authAlert', 'Link reset password dikirim ke email kamu. Klik link-nya untuk buat password baru.', true); })
+      .then(function () { showVerify('recovery', em); })
       .catch(function (e) { alertBox('authAlert', errMsg(e)); });
+  }
+  function doChangeEmail() {
+    var em = ($('pNewEmail').value || '').trim();
+    if (!em || em.indexOf('@') < 0) { alertBox('emAlert', 'Isi email baru yang benar dulu.'); return; }
+    if (session && em.toLowerCase() === (session.user.email || '').toLowerCase()) {
+      alertBox('emAlert', 'Itu email kamu yang sekarang.'); return;
+    }
+    authed('/auth/v1/user', { method: 'PUT', body: { email: em } })
+      .then(function () {
+        alertBox('emAlert', 'Permintaan terkirim! Cek email baru ' + em + ' dan klik link konfirmasinya' +
+          ' (kadang juga perlu konfirmasi dari email lama). Setelah itu keluar lalu masuk lagi dengan email baru.', true);
+        $('pNewEmail').value = '';
+      })
+      .catch(function (e) { alertBox('emAlert', errMsg(e)); });
   }
   function doSetPassword() {
     var pw = $('rPass').value || '';
@@ -450,7 +549,9 @@ var AccountPage = (function () {
   return {
     tab: tab, doSignIn: doSignIn, doSignUp: doSignUp, doReset: doReset,
     doSetPassword: doSetPassword, doSignOut: doSignOut, saveProfile: saveProfile,
-    doClaim: doClaim, revokeDev: revokeDev, deleteDev: deleteDev
+    doClaim: doClaim, revokeDev: revokeDev, deleteDev: deleteDev,
+    doOtpLogin: doOtpLogin, doVerify: doVerify, doResend: doResend,
+    backToAuth: backToAuth, showVerify: showVerify, doChangeEmail: doChangeEmail
   };
 })();
 </script>

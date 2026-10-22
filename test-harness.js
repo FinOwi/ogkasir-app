@@ -818,6 +818,67 @@ try {
     KDB.save();
   })();
 
+  /* ===== Akun: verifikasi OTP, sinkron email profil, ganti email (fetch stub) ===== */
+  (function () {
+    var calls = [];
+    var realFetch = global.fetch;
+    global.fetch = function (url, opts) {
+      opts = opts || {};
+      var body = {};
+      try { body = opts.body ? JSON.parse(opts.body) : {}; } catch (e) {}
+      calls.push({ url: url, method: opts.method || 'GET', body: body });
+      function json(obj, status) {
+        return Promise.resolve({ ok: !status || status < 300, status: status || 200,
+          text: function () { return Promise.resolve(JSON.stringify(obj)); } });
+      }
+      if (url.indexOf('/auth/v1/verify') >= 0) {
+        if (body.token === '123456') return json({ access_token: 'tok1', refresh_token: 'ref1', expires_in: 3600, user: { id: 'u-tes', email: body.email } });
+        return Promise.resolve({ ok: false, status: 403,
+          text: function () { return Promise.resolve(JSON.stringify({ msg: 'Token has expired or is invalid' })); } });
+      }
+      if (url.indexOf('/auth/v1/otp') >= 0) return json({});
+      if (url.indexOf('/auth/v1/resend') >= 0) return json({});
+      if (url.indexOf('/auth/v1/user') >= 0 && (opts.method || '') === 'PUT') return json({ id: 'u-tes', email: body.email || 'a@b.c' });
+      if (url.indexOf('account_profiles') >= 0 && (opts.method || 'GET') === 'GET') return json([{ user_id: 'u-tes', email: 'lama@b.c', display_name: 'Tes' }]);
+      if (url.indexOf('account_profiles') >= 0) return json([]);
+      if (url.indexOf('account_licenses') >= 0) return json([]);
+      if (url.indexOf('account_register_device') >= 0) return json({ device_count: 1, max_devices: 3 });
+      if (url.indexOf('sync_documents') >= 0) return json([]);
+      if (url.indexOf('sync_push') >= 0) return json({ version: 1, updated_at: new Date().toISOString() });
+      return json({});
+    };
+    Account.signOut().then(function () {
+      return Account.verifyOtp('signup', 'baru@b.c', '000000').then(function () {
+        ok(false, 'kode OTP salah harus ditolak');
+      }, function (e) {
+        ok(/kedaluwarsa/i.test(Account.errMsg(e)), 'error OTP salah dipetakan ramah');
+      });
+    }).then(function () {
+      return Account.verifyOtp('signup', 'baru@b.c', '123456');
+    }).then(function () {
+      ok(Account.signedIn() && Account.email() === 'baru@b.c', 'verifyOtp kode benar -> sesi tersimpan');
+      var patch = calls.filter(function (c) { return c.method === 'PATCH' && c.url.indexOf('account_profiles') >= 0; });
+      ok(patch.length >= 1 && patch[0].body.email === 'baru@b.c', 'email profil disinkronkan setelah verifikasi');
+      var reg = calls.filter(function (c) { return c.url.indexOf('account_register_device') >= 0; });
+      ok(reg.length >= 1 && Account.devInfo && Account.devInfo.device_count === 1, 'perangkat terdaftar setelah verifikasi');
+      return Account.updateEmail('pindah@b.c');
+    }).then(function () {
+      var put = calls.filter(function (c) { return c.method === 'PUT' && c.url.indexOf('/auth/v1/user') >= 0; });
+      ok(put.length >= 1 && put[0].body.email === 'pindah@b.c', 'updateEmail mengirim email baru ke server');
+      return Account.signInOtp('baru@b.c');
+    }).then(function () {
+      var otp = calls.filter(function (c) { return c.url.indexOf('/auth/v1/otp') >= 0; });
+      ok(otp.length >= 1, 'signInOtp meminta kode ke server');
+      return Account.signOut();
+    }).then(function () {
+      ok(!Account.signedIn(), 'signOut membersihkan sesi');
+      global.fetch = realFetch;
+    }).catch(function (e) {
+      ok(false, 'alur OTP exception: ' + (e && e.message));
+      global.fetch = realFetch;
+    });
+  })();
+
   setTimeout(function () {
     console.log(fails.length ? '\n' + fails.length + ' GAGAL' : '\nSEMUA LOLOS ✓');
     process.exit(fails.length ? 1 : 0);
