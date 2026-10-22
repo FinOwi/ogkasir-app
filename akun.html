@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Akun OGKasir — Masuk & Kelola Lisensi</title>
-<meta name="description" content="Masuk ke akun OGKasir: kelola lisensi akun, perangkat terdaftar, dan klaim kode aktivasi. Satu akun untuk semua perangkat tokomu.">
+<meta name="description" content="Masuk ke akun OGKasir: kelola lisensi akun, perangkat terdaftar, dan perangkatmu. Satu akun untuk semua perangkat tokomu.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -287,16 +287,6 @@ textarea.in{resize:vertical}
       <div id="devBody"><p class="small">Memuat…</p></div>
     </section>
 
-    <section class="card wide">
-      <h2>🎟️ Klaim Kode Aktivasi</h2>
-      <p class="sub">Punya kode aktivasi OGKasir dari pembelian sebelumnya? Klaim menjadi lisensi akun. Kode Device terlihat di aplikasi: Dashboard → Lisensi. Kode hanya bisa diklaim satu kali.</p>
-      <div id="claimAlert" class="alert"></div>
-      <div class="fld"><label for="cDev">Kode Device (dari aplikasi)</label>
-        <input class="in" id="cDev" placeholder="XXXX-XXXX" style="text-transform:uppercase;letter-spacing:1px" autocomplete="off"></div>
-      <div class="fld"><label for="cCode">Kode Aktivasi</label>
-        <input class="in" id="cCode" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" style="text-transform:uppercase;letter-spacing:1px" autocomplete="off"></div>
-      <button class="btn primary sm" onclick="AccountPage.doClaim()">Klaim Kode</button>
-    </section>
   </div>
 </div></main>
 
@@ -376,7 +366,6 @@ var AccountPage = (function () {
     if (/device_mismatch/i.test(m)) return 'Kode ini untuk device lain — cek lagi Kode Device dari aplikasimu.';
     if (/bad_signature/i.test(m)) return 'Kode aktivasi tidak valid.';
     if (/code_expired/i.test(m)) return 'Kode sudah kedaluwarsa.';
-    if (/code_already_claimed/i.test(m)) return 'Kode ini sudah pernah diklaim ke akun lain.';
     if (/token has expired|otp.*(expired|invalid)|invalid.*token/i.test(m)) return 'Kode salah atau sudah kedaluwarsa — minta kode baru lewat Kirim Ulang.';
     if (/email.*rate limit|over_email_send/i.test(m)) return 'Terlalu banyak email dikirim — tunggu beberapa menit lalu coba lagi.';
     if (/Signups not allowed|signup.*disabled/i.test(m)) return 'Pendaftaran sedang ditutup sementara — hubungi admin OGKasir via WhatsApp.';
@@ -512,7 +501,7 @@ var AccountPage = (function () {
     var el = $('licBody');
     if (!lic) {
       el.innerHTML = '<div class="row"><span class="k">Status</span><span class="tag">Belum ada lisensi akun</span></div>' +
-        '<p class="small mt">Lisensi akun diberikan saat pembelian, atau klaim kode aktivasi lamamu di bagian bawah halaman ini. Tanpa lisensi akun pun aplikasi tetap jalan dengan trial &amp; lisensi perangkat seperti biasa.</p>';
+        '<p class="small mt">Lisensi akun diaktifkan oleh FinOwi setelah pembelian — hubungi kami via WhatsApp untuk aktivasi atau perpanjangan. Tanpa lisensi akun pun aplikasi tetap jalan dengan masa trial.</p>';
       return;
     }
     var badge = lic.status === 'active' ? '<span class="tag grn">Aktif</span>'
@@ -707,17 +696,6 @@ var AccountPage = (function () {
     }).then(function () { alertBox('profAlert', 'Profil tersimpan.', true); })
       .catch(function (e) { alertBox('profAlert', errMsg(e)); });
   }
-  function doClaim() {
-    var dev = ($('cDev').value || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
-    var code = $('cCode').value || '';
-    if (dev.length !== 8) { alertBox('claimAlert', 'Kode Device 8 karakter — lihat di aplikasi: Dashboard → Lisensi.'); return; }
-    authed('/rest/v1/rpc/account_claim_code', { method: 'POST', body: { p_code: code, p_device: dev } })
-      .then(function () {
-        alertBox('claimAlert', 'Kode berhasil diklaim — lisensi akunmu sekarang aktif. 🎉', true);
-        loadAccount();
-      })
-      .catch(function (e) { alertBox('claimAlert', errMsg(e)); });
-  }
   function revokeDev(id) {
     if (!confirm('Cabut perangkat ini? Perangkat itu harus masuk ulang untuk memakai akun.')) return;
     authed('/rest/v1/account_devices?id=eq.' + id, {
@@ -763,7 +741,7 @@ var AccountPage = (function () {
   return {
     tab: tab, doSignIn: doSignIn, doSignUp: doSignUp, doReset: doReset,
     doSetPassword: doSetPassword, doSignOut: doSignOut, saveProfile: saveProfile,
-    doClaim: doClaim, revokeDev: revokeDev, deleteDev: deleteDev,
+    revokeDev: revokeDev, deleteDev: deleteDev,
     doOtpLogin: doOtpLogin, doVerify: doVerify, doResend: doResend,
     backToAuth: backToAuth, showVerify: showVerify, doChangeEmail: doChangeEmail,
     togglePw: togglePw, terms: terms, otpInput: otpInput, otpKey: otpKey, otpPaste: otpPaste,
