@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Akun OGKasir — Masuk & Kelola Lisensi</title>
+<meta name="description" content="Masuk ke akun OGKasir: kelola lisensi akun, perangkat terdaftar, dan klaim kode aktivasi. Satu akun untuk semua perangkat tokomu.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="canonical" href="https://ogkasir.my.id/akun.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F6F7F9; --surface:#fff; --surface2:#EEF1F6; --fg:#10141C; --muted:#556072; --line:#DDE2EA;
+  --accent:#B57A1E; --accent2:#C07F26; --accent-fg:#fff; --accent-soft:#FAF0DC;
+  --ok:#127A45; --ok-soft:#E1F4E9; --bad:#B3261E; --bad-soft:#FBE9E7;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;z-index:50;background:rgba(246,247,249,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;text-decoration:none}
+.brand img{width:34px;height:34px;border-radius:9px}
+.nav-right{display:flex;gap:9px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15.5px;padding:13px 26px;border-radius:6px;text-decoration:none;border:1px solid transparent;transition:.15s;cursor:pointer;font-family:var(--font)}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{background:#9A6518}
+.btn.ghost{background:var(--surface);border-color:var(--line);color:var(--fg)}
+.btn.ghost:hover{border-color:#B9C2D0}
+.btn.sm{padding:9px 18px;font-size:14px}
+.btn.block{width:100%;justify-content:center}
+.btn.danger{background:var(--surface);border-color:var(--line);color:var(--bad)}
+.btn:disabled{opacity:.55;cursor:wait}
+main{padding:56px 0 80px}
+.hero{text-align:center;max-width:640px;margin:0 auto 30px}
+.hero h1{font-size:34px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.hero p{color:var(--muted);font-size:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;max-width:520px;margin:0 auto 18px}
+.card.wide{max-width:720px}
+.card h2{font-size:19px;font-weight:700;margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tabs button{flex:1;padding:11px;border-radius:8px;border:1px solid var(--line);background:var(--surface2);font-family:var(--font);font-weight:600;font-size:15px;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--fg);color:#fff;border-color:var(--fg)}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+.in{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;font-family:var(--font);font-size:15.5px;background:var(--surface);color:var(--fg)}
+.in:focus{outline:2px solid var(--accent2);outline-offset:0;border-color:var(--accent2)}
+textarea.in{resize:vertical}
+.alert{border-radius:8px;padding:11px 14px;font-size:14px;margin-bottom:14px;display:none}
+.alert.err{display:block;background:var(--bad-soft);color:var(--bad)}
+.alert.okk{display:block;background:var(--ok-soft);color:var(--ok)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row .k{color:var(--muted);font-size:14px}
+.row .v{font-weight:600;font-size:14.5px;text-align:right}
+.tag{display:inline-block;padding:3px 11px;border-radius:999px;font-size:12.5px;font-weight:700;background:var(--surface2);color:var(--muted)}
+.tag.grn{background:var(--ok-soft);color:var(--ok)}
+.tag.red{background:var(--bad-soft);color:var(--bad)}
+.tag.gold{background:var(--accent-soft);color:var(--accent)}
+.dev{border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:10px}
+.dev .t{font-weight:700;font-size:15px}
+.dev .m{color:var(--muted);font-size:13px}
+.dev .acts{display:flex;gap:8px;margin-top:9px}
+.chip{padding:6px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer}
+.chip:hover{border-color:#B9C2D0}
+.chip.red{color:var(--bad)}
+.linkish{background:none;border:none;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer;font-family:var(--font);padding:0}
+.small{font-size:13.5px;color:var(--muted)}
+.center{text-align:center}
+.mt{margin-top:14px}.mb{margin-bottom:14px}
+footer{border-top:1px solid var(--line);padding:34px 0 44px;background:var(--surface)}
+footer .note{color:var(--muted);font-size:14px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="https://ogkasir.my.id/"><img src="logo.png" alt="Logo OGKasir">OGKasir</a>
+  <div class="nav-right">
+    <a class="btn ghost sm" href="https://ogkasir.my.id/">Beranda</a>
+    <a class="btn ghost sm" href="https://wa.me/6288279406268?text=Halo!%20Saya%20ingin%20tanya-tanya%20tentang%20akun%20OGKasir.">Chat WA</a>
+  </div>
+</div></nav>
+
+<main><div class="wrap">
+  <div class="hero">
+    <h1>Akun OGKasir</h1>
+    <p>Satu akun untuk semua perangkat tokomu. Lisensi mengikuti akun — bukan lagi terkunci di satu HP.</p>
+  </div>
+
+  <!-- ======== BELUM MASUK ======== -->
+  <section id="viewAuth" class="card">
+    <div class="tabs">
+      <button id="tabIn" class="on" onclick="AccountPage.tab('in')">Masuk</button>
+      <button id="tabUp" onclick="AccountPage.tab('up')">Daftar</button>
+    </div>
+    <div id="authAlert" class="alert"></div>
+    <div class="fld"><label for="aEmail">Email</label>
+      <input class="in" id="aEmail" type="email" autocomplete="email" placeholder="email@contoh.com"></div>
+    <div class="fld"><label for="aPass">Password</label>
+      <input class="in" id="aPass" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter"></div>
+    <button class="btn primary block" id="btnIn" onclick="AccountPage.doSignIn()">Masuk</button>
+    <button class="btn primary block" id="btnUp" onclick="AccountPage.doSignUp()" hidden>Buat Akun</button>
+    <p class="center mt small">
+      <button class="linkish" onclick="AccountPage.doReset()">Lupa password?</button>
+      <span id="authHint"> · Belum punya akun? Ketuk tab <b>Daftar</b>.</span>
+    </p>
+    <p class="small mt">Akun dipakai untuk lisensi &amp; sinkronisasi data antar perangkat di aplikasi OGKasir. Kasir tetap bisa jalan offline — akun hanya perlu internet saat masuk &amp; sinkronisasi.</p>
+  </section>
+
+  <!-- ======== PASSWORD BARU (dari link reset) ======== -->
+  <section id="viewRecovery" class="card" hidden>
+    <h2>Buat Password Baru</h2>
+    <p class="sub">Kamu datang dari link reset password. Buat password baru untuk akunmu.</p>
+    <div id="recAlert" class="alert"></div>
+    <div class="fld"><label for="rPass">Password baru</label>
+      <input class="in" id="rPass" type="password" autocomplete="new-password" placeholder="Minimal 6 karakter"></div>
+    <button class="btn primary block" onclick="AccountPage.doSetPassword()">Simpan Password Baru</button>
+  </section>
+
+  <!-- ======== SUDAH MASUK ======== -->
+  <div id="viewAccount" hidden>
+    <section class="card wide">
+      <h2>👤 Profil Akun</h2>
+      <p class="sub">Kelola identitas akunmu di sini. Nama toko juga bisa diatur dari aplikasi.</p>
+      <div id="profAlert" class="alert"></div>
+      <div class="row"><span class="k">Email</span><span class="v" id="pEmail">—</span></div>
+      <div class="fld mt"><label for="pName">Nama kamu</label>
+        <input class="in" id="pName" placeholder="cth. Budi Santoso"></div>
+      <div class="fld"><label for="pShop">Nama toko</label>
+        <input class="in" id="pShop" placeholder="cth. Warkop Berkah"></div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button class="btn primary sm" onclick="AccountPage.saveProfile()">Simpan Profil</button>
+        <button class="btn danger sm" onclick="AccountPage.doSignOut()">Keluar Akun</button>
+      </div>
+    </section>
+
+    <section class="card wide">
+      <h2>🔑 Lisensi Akun</h2>
+      <p class="sub">Lisensi yang mengikuti akun ini, berlaku di semua perangkat terdaftar.</p>
+      <div id="licBody"><p class="small">Memuat…</p></div>
+    </section>
+
+    <section class="card wide">
+      <h2>📱 Perangkat Terdaftar</h2>
+      <p class="sub">Perangkat yang memakai akun ini. Cabut perangkat yang sudah tidak dipakai untuk membebaskan slot.</p>
+      <div id="devBody"><p class="small">Memuat…</p></div>
+    </section>
+
+    <section class="card wide">
+      <h2>🎟️ Klaim Kode Aktivasi</h2>
+      <p class="sub">Punya kode aktivasi OGKasir dari pembelian sebelumnya? Klaim menjadi lisensi akun. Kode Device terlihat di aplikasi: Dashboard → Lisensi. Kode hanya bisa diklaim satu kali.</p>
+      <div id="claimAlert" class="alert"></div>
+      <div class="fld"><label for="cDev">Kode Device (dari aplikasi)</label>
+        <input class="in" id="cDev" placeholder="XXXX-XXXX" style="text-transform:uppercase;letter-spacing:1px" autocomplete="off"></div>
+      <div class="fld"><label for="cCode">Kode Aktivasi</label>
+        <input class="in" id="cCode" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" style="text-transform:uppercase;letter-spacing:1px" autocomplete="off"></div>
+      <button class="btn primary sm" onclick="AccountPage.doClaim()">Klaim Kode</button>
+    </section>
+  </div>
+</div></main>
+
+<footer><div class="wrap">
+  <p class="note">OGKasir oleh FinOwi Id, Medan, Indonesia. · <a href="https://ogkasir.my.id/">ogkasir.my.id</a></p>
+</div></footer>
+
+<script>
+var AccountPage = (function () {
+  var SUPA = 'https://ypdfdaxgqgkaupsyiauy.supabase.co';
+  var ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZGZkYXhncWdrYXVwc3lpYXV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MjQ2MzEsImV4cCI6MjEwNzQwMDYzMX0.w9d2wZhcdgevpSEsFcPYt1x122w09X2Ai1GFkAIlLRE';
+  var SKEY = 'ogkasir_web_auth_v1';
+  var REDIRECT = 'https://ogkasir.my.id/akun.html';
+  var session = null, mode = 'in', recovery = false;
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function $(id) { return document.getElementById(id); }
+  function alertBox(id, msg, ok) {
+    var el = $(id); if (!el) return;
+    el.className = 'alert ' + (ok ? 'okk' : 'err'); el.textContent = msg || '';
+    if (!msg) el.className = 'alert';
+  }
+  function errMsg(e) {
+    var m = (e && e.message) || 'Gagal menghubungi server';
+    if (/device_limit/i.test(m)) return 'Perangkat akun sudah penuh — cabut perangkat lama di bawah, atau tambah slot lisensi.';
+    if (/Invalid login credentials/i.test(m)) return 'Email atau password salah.';
+    if (/Email not confirmed/i.test(m)) return 'Email belum diverifikasi — cek inbox/spam email kamu, klik link verifikasinya dulu.';
+    if (/User already registered/i.test(m)) return 'Email ini sudah terdaftar — langsung masuk saja.';
+    if (/Password should be/i.test(m)) return 'Password terlalu lemah — minimal 6 karakter.';
+    if (/bad_format/i.test(m)) return 'Format kode salah — kode aktivasi 24 karakter.';
+    if (/device_mismatch/i.test(m)) return 'Kode ini untuk device lain — cek lagi Kode Device dari aplikasimu.';
+    if (/bad_signature/i.test(m)) return 'Kode aktivasi tidak valid.';
+    if (/code_expired/i.test(m)) return 'Kode sudah kedaluwarsa.';
+    if (/code_already_claimed/i.test(m)) return 'Kode ini sudah pernah diklaim ke akun lain.';
+    if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'Tidak bisa hubungi server — cek koneksi internet.';
+    return m;
+  }
+
+  function saveSession() {
+    try {
+      if (session) localStorage.setItem(SKEY, JSON.stringify(session));
+      else localStorage.removeItem(SKEY);
+    } catch (e) {}
+  }
+  function loadSession() {
+    try { session = JSON.parse(localStorage.getItem(SKEY) || 'null'); } catch (e) { session = null; }
+  }
+  function setSession(j) {
+    session = {
+      access_token: j.access_token, refresh_token: j.refresh_token,
+      expires_at: Date.now() + (j.expires_in || 3600) * 1000,
+      user: { id: j.user.id, email: j.user.email }
+    };
+    saveSession();
+  }
+  function req(path, opts) {
+    opts = opts || {};
+    var token = (opts.auth !== false && session && session.access_token) ? session.access_token : ANON;
+    var headers = { 'apikey': ANON, 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    if (opts.headers) for (var k in opts.headers) headers[k] = opts.headers[k];
+    return fetch(SUPA + path, {
+      method: opts.method || 'GET', headers: headers,
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    }).then(function (r) {
+      return r.text().then(function (txt) {
+        var j = null; try { j = txt ? JSON.parse(txt) : null; } catch (e) {}
+        if (!r.ok) {
+          var err = new Error((j && (j.msg || j.message || j.error_description || j.error)) || ('HTTP ' + r.status));
+          err.status = r.status; throw err;
+        }
+        return j;
+      });
+    });
+  }
+  function refresh() {
+    if (!session || !session.refresh_token) return Promise.reject(new Error('no_session'));
+    return req('/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST', auth: false, body: { refresh_token: session.refresh_token }
+    }).then(setSession);
+  }
+  function authed(path, opts) {
+    if (!session) return Promise.reject(new Error('not_signed_in'));
+    var go = function () { return req(path, opts); };
+    var pre = Promise.resolve();
+    if (session.expires_at && Date.now() > session.expires_at - 60000) pre = refresh().catch(function () {});
+    return pre.then(go).catch(function (e) {
+      if (e && e.status === 401) return refresh().then(go);
+      throw e;
+    });
+  }
+
+  /* ---------- tampilan ---------- */
+  function show(view) {
+    $('viewAuth').hidden = view !== 'auth';
+    $('viewRecovery').hidden = view !== 'recovery';
+    $('viewAccount').hidden = view !== 'account';
+  }
+  function tab(m) {
+    mode = m;
+    $('tabIn').className = m === 'in' ? 'on' : '';
+    $('tabUp').className = m === 'up' ? 'on' : '';
+    $('btnIn').hidden = m !== 'in';
+    $('btnUp').hidden = m !== 'up';
+    $('authHint').innerHTML = m === 'in'
+      ? ' · Belum punya akun? Ketuk tab <b>Daftar</b>.'
+      : ' · Sudah punya akun? Ketuk tab <b>Masuk</b>.';
+    alertBox('authAlert', '');
+  }
+  function fmtDate(ms) {
+    if (!ms) return '—';
+    var d = new Date(ms);
+    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  function fmtDateTime(ms) {
+    if (!ms) return '—';
+    return new Date(ms).toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function renderLic(lic, devCount) {
+    var el = $('licBody');
+    if (!lic) {
+      el.innerHTML = '<div class="row"><span class="k">Status</span><span class="tag">Belum ada lisensi akun</span></div>' +
+        '<p class="small mt">Lisensi akun diberikan saat pembelian, atau klaim kode aktivasi lamamu di bagian bawah halaman ini. Tanpa lisensi akun pun aplikasi tetap jalan dengan trial &amp; lisensi perangkat seperti biasa.</p>';
+      return;
+    }
+    var badge = lic.status === 'active' ? '<span class="tag grn">Aktif</span>'
+      : lic.status === 'trial' ? '<span class="tag gold">Trial</span>'
+      : lic.status === 'suspended' ? '<span class="tag red">Ditangguhkan</span>'
+      : '<span class="tag red">Tidak aktif</span>';
+    var exp = lic.expires_at ? fmtDate(Date.parse(lic.expires_at)) : (lic.status === 'active' ? 'Unlimited' : '—');
+    el.innerHTML =
+      '<div class="row"><span class="k">Status</span>' + badge + '</div>' +
+      '<div class="row"><span class="k">Paket</span><span class="v">' + esc(lic.plan_label || '—') + '</span></div>' +
+      '<div class="row"><span class="k">Berlaku sampai</span><span class="v">' + esc(exp) + '</span></div>' +
+      '<div class="row"><span class="k">Perangkat terdaftar</span><span class="v">' + devCount + ' / ' + (lic.max_devices || 3) + '</span></div>';
+  }
+  function renderDevs(devs) {
+    var el = $('devBody');
+    if (!devs || !devs.length) {
+      el.innerHTML = '<p class="small">Belum ada perangkat terdaftar. Masuk dengan akun ini di aplikasi OGKasir (Dashboard → Akun) untuk mendaftarkan perangkat pertamamu.</p>';
+      return;
+    }
+    var h = '';
+    devs.forEach(function (d) {
+      h += '<div class="dev"><div class="t">' + esc(d.device_label || 'Perangkat') +
+        (d.revoked ? ' <span class="tag red">Dicabut</span>' : ' <span class="tag grn">Aktif</span>') + '</div>' +
+        '<div class="m">Platform: ' + esc(d.platform || '-') + ' · Pertama: ' + fmtDateTime(Date.parse(d.first_seen_at)) +
+        ' · Terakhir: ' + fmtDateTime(Date.parse(d.last_seen_at)) + '</div>' +
+        '<div class="acts">' +
+        (d.revoked ? '' : '<button class="chip" onclick="AccountPage.revokeDev(\'' + d.id + '\')">Cabut</button>') +
+        '<button class="chip red" onclick="AccountPage.deleteDev(\'' + d.id + '\')">Hapus</button></div></div>';
+    });
+    el.innerHTML = h;
+  }
+  function loadAccount() {
+    show('account');
+    $('pEmail').textContent = session.user.email;
+    var devCount = 0;
+    authed('/rest/v1/account_profiles?select=*').then(function (rows) {
+      if (rows && rows[0]) {
+        $('pName').value = rows[0].display_name || '';
+        $('pShop').value = rows[0].shop_name || '';
+      }
+    }).catch(function () {});
+    authed('/rest/v1/account_devices?select=*&order=last_seen_at.desc').then(function (rows) {
+      devCount = (rows || []).filter(function (d) { return !d.revoked; }).length;
+      renderDevs(rows || []);
+      return authed('/rest/v1/account_licenses?select=*');
+    }).then(function (rows) {
+      renderLic(rows && rows[0] ? rows[0] : null, devCount);
+    }).catch(function () { renderLic(null, devCount); });
+  }
+
+  /* ---------- aksi ---------- */
+  function creds() {
+    var em = ($('aEmail').value || '').trim(), pw = $('aPass').value || '';
+    if (!em || em.indexOf('@') < 0) { alertBox('authAlert', 'Isi email yang benar dulu.'); return null; }
+    if (pw.length < 6) { alertBox('authAlert', 'Password minimal 6 karakter.'); return null; }
+    return { email: em, password: pw };
+  }
+  function doSignIn() {
+    var c = creds(); if (!c) return;
+    $('btnIn').disabled = true;
+    req('/auth/v1/token?grant_type=password', { method: 'POST', auth: false, body: c })
+      .then(function (j) { $('btnIn').disabled = false; setSession(j); loadAccount(); })
+      .catch(function (e) { $('btnIn').disabled = false; alertBox('authAlert', errMsg(e)); });
+  }
+  function doSignUp() {
+    var c = creds(); if (!c) return;
+    $('btnUp').disabled = true;
+    req('/auth/v1/signup', {
+      method: 'POST', auth: false,
+      body: { email: c.email, password: c.password, options: { emailRedirectTo: REDIRECT } }
+    }).then(function (j) {
+      $('btnUp').disabled = false;
+      if (j && j.access_token && j.user) { setSession(j); loadAccount(); }
+      else alertBox('authAlert', 'Akun dibuat! Cek inbox/spam email kamu dan klik link verifikasinya, lalu masuk di sini.', true);
+    }).catch(function (e) { $('btnUp').disabled = false; alertBox('authAlert', errMsg(e)); });
+  }
+  function doReset() {
+    var em = ($('aEmail').value || '').trim();
+    if (!em || em.indexOf('@') < 0) { alertBox('authAlert', 'Isi email dulu, lalu ketuk Lupa password.'); return; }
+    req('/auth/v1/recover', { method: 'POST', auth: false, body: { email: em, redirectTo: REDIRECT } })
+      .then(function () { alertBox('authAlert', 'Link reset password dikirim ke email kamu. Klik link-nya untuk buat password baru.', true); })
+      .catch(function (e) { alertBox('authAlert', errMsg(e)); });
+  }
+  function doSetPassword() {
+    var pw = $('rPass').value || '';
+    if (pw.length < 6) { alertBox('recAlert', 'Password minimal 6 karakter.'); return; }
+    authed('/auth/v1/user', { method: 'PUT', body: { password: pw } })
+      .then(function () { recovery = false; alertBox('recAlert', ''); loadAccount(); })
+      .catch(function (e) { alertBox('recAlert', errMsg(e)); });
+  }
+  function doSignOut() {
+    var done = function () { session = null; saveSession(); show('auth'); alertBox('authAlert', 'Sudah keluar dari akun.', true); };
+    if (!session) { done(); return; }
+    req('/auth/v1/logout', { method: 'POST' }).then(done).catch(done);
+  }
+  function saveProfile() {
+    authed('/rest/v1/account_profiles?user_id=eq.' + session.user.id, {
+      method: 'PATCH', headers: { 'Prefer': 'return=minimal' },
+      body: { display_name: $('pName').value.trim() || null, shop_name: $('pShop').value.trim() || null }
+    }).then(function () { alertBox('profAlert', 'Profil tersimpan.', true); })
+      .catch(function (e) { alertBox('profAlert', errMsg(e)); });
+  }
+  function doClaim() {
+    var dev = ($('cDev').value || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
+    var code = $('cCode').value || '';
+    if (dev.length !== 8) { alertBox('claimAlert', 'Kode Device 8 karakter — lihat di aplikasi: Dashboard → Lisensi.'); return; }
+    authed('/rest/v1/rpc/account_claim_code', { method: 'POST', body: { p_code: code, p_device: dev } })
+      .then(function () {
+        alertBox('claimAlert', 'Kode berhasil diklaim — lisensi akunmu sekarang aktif. 🎉', true);
+        loadAccount();
+      })
+      .catch(function (e) { alertBox('claimAlert', errMsg(e)); });
+  }
+  function revokeDev(id) {
+    if (!confirm('Cabut perangkat ini? Perangkat itu harus masuk ulang untuk memakai akun.')) return;
+    authed('/rest/v1/account_devices?id=eq.' + id, {
+      method: 'PATCH', headers: { 'Prefer': 'return=minimal' }, body: { revoked: true }
+    }).then(loadAccount).catch(function (e) { alert(errMsg(e)); });
+  }
+  function deleteDev(id) {
+    if (!confirm('Hapus perangkat ini dari akun? Slot-nya langsung bebas.')) return;
+    authed('/rest/v1/account_devices?id=eq.' + id, { method: 'DELETE' })
+      .then(loadAccount).catch(function (e) { alert(errMsg(e)); });
+  }
+
+  /* ---------- mulai: tangkap token dari link email (konfirmasi / reset) ---------- */
+  function boot() {
+    loadSession();
+    var hash = location.hash || '';
+    if (hash.indexOf('access_token=') >= 0) {
+      var p = {};
+      hash.replace(/^#/, '').split('&').forEach(function (kv) {
+        var i = kv.indexOf('='); if (i > 0) p[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1));
+      });
+      if (p.access_token) {
+        session = { access_token: p.access_token, refresh_token: p.refresh_token || '',
+          expires_at: Date.now() + (parseInt(p.expires_in || '3600', 10)) * 1000, user: null };
+        recovery = (p.type === 'recovery');
+        history.replaceState(null, '', location.pathname);
+        req('/auth/v1/user').then(function (u) {
+          session.user = { id: u.id, email: u.email }; saveSession();
+          if (recovery) { show('recovery'); }
+          else loadAccount();
+        }).catch(function () { session = null; saveSession(); show('auth'); });
+        return;
+      }
+    }
+    if (session && session.user) {
+      if (session.expires_at && Date.now() > session.expires_at - 60000) {
+        refresh().then(loadAccount).catch(function () { session = null; saveSession(); show('auth'); });
+      } else loadAccount();
+    } else show('auth');
+  }
+  document.addEventListener('DOMContentLoaded', boot);
+
+  return {
+    tab: tab, doSignIn: doSignIn, doSignUp: doSignUp, doReset: doReset,
+    doSetPassword: doSetPassword, doSignOut: doSignOut, saveProfile: saveProfile,
+    doClaim: doClaim, revokeDev: revokeDev, deleteDev: deleteDev
+  };
+})();
+</script>
+</body>
+</html>

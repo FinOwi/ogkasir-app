@@ -58,7 +58,8 @@ global.ZXing = { // stub: decode asli urusan library
   BrowserMultiFormatReader: function () { this.reset = function () {}; this.decodeFromVideoElementContinuously = function () {}; }
 };
 var all = ['i18n.js', 'store.js', 'ui.js', 'theme.js', 'kasir.js', 'menu.js', 'stok.js', 'laporan.js', 'xlsx.js',
-  'pengaturan.js', 'lic-crypto.js', 'license.js', 'update.js', 'printer.js', 'scan.js', 'cloud.js', 'app.js']
+  'pengaturan.js', 'lic-crypto.js', 'license.js', 'update.js', 'printer.js', 'scan.js', 'cloud.js',
+  'account.js', 'sync.js', 'app.js']
   .map(function (f) { return fs.readFileSync(dir + f, 'utf8'); }).join('\n');
 eval(all);
 
@@ -750,6 +751,72 @@ try {
   KDB.data.menus = KDB.data.menus.filter(function (m) { return m.id !== 'n1' && m.id !== 'n2' && m.id !== 'n3'; });
   KDB.data.txs = KDB.data.txs.filter(function (t) { return t !== tag1 && t !== tag3; });
   Kasir.cart = {}; Kasir.cartNote = {}; Kasir.mode = 'kasir';
+
+  /* ===== Akun & Sync: status lisensi akun, sharding, merge (tanpa jaringan) ===== */
+  (function () {
+    var D = KDB.data, savedLic = JSON.stringify(D.settings.lic || {});
+    // 1. hash perangkat: sha256 hex 64 char, stabil
+    var h1 = Account.deviceHash(), h2 = Account.deviceHash();
+    ok(/^[a-f0-9]{64}$/.test(h1) && h1 === h2, 'deviceHash sha256 stabil');
+    // 2. belum login -> licStatusSync null, Lic.status tetap jalur perangkat
+    Account.license = null;
+    ok(Account.licStatusSync() === null, 'tanpa cache akun, status akun null');
+    // 3. lisensi akun aktif 90 hari -> menang atas trial perangkat
+    D.settings.lic = { trialStart: Date.now() };
+    Account.license = { status: 'active', expires_at: new Date(Date.now() + 90 * 864e5).toISOString(), max_devices: 3 };
+    var stA = Lic.status();
+    ok(stA.state === 'active' && stA.via === 'account' && stA.daysLeft >= 89, 'lisensi akun aktif dipakai Lic.status');
+    ok(Lic.valid() === true, 'app valid dengan lisensi akun');
+    // 4. lisensi akun unlimited
+    Account.license = { status: 'active', expires_at: null };
+    var stU = Lic.status();
+    ok(stU.state === 'active' && stU.expDays === null, 'lisensi akun unlimited');
+    ok(Lic.licCard().indexOf('Unlimited') >= 0, 'kartu lisensi tampil Unlimited');
+    // 5. lisensi akun kedaluwarsa -> gugur ke status perangkat (expired: trial lama habis)
+    D.settings.lic = { trialStart: Date.now() - 30 * 864e5 };
+    Account.license = { status: 'active', expires_at: new Date(Date.now() - 864e5).toISOString() };
+    ok(Lic.status().state === 'expired', 'akun kedaluwarsa + trial habis = expired');
+    // 6. lisensi perangkat lebih panjang dari akun -> perangkat yang menang
+    var devCode = null;
+    try { devCode = LicCrypto.genCode ? LicCrypto.genCode(Lic.deviceCode(), Lic.todayDays() + 365) : null; } catch (e) {}
+    Account.license = { status: 'active', expires_at: new Date(Date.now() + 30 * 864e5).toISOString() };
+    if (devCode) {
+      var actR = Lic.activate(devCode);
+      ok(actR.ok && Lic.status().via === 'device', 'lisensi perangkat lebih panjang menang');
+    }
+    // 7. collectDocs: shard transaksi per bulan + dokumen master lengkap
+    D.txs.push({ id: 'sx1', at: new Date(2026, 0, 15).getTime(), total: 1000, items: [] });
+    D.txs.push({ id: 'sx2', at: new Date(2026, 1, 3).getTime(), total: 2000, items: [] });
+    var docs = Sync.collectDocs();
+    ok(!!docs['menus|'] && !!docs['cats|'] && !!docs['employees|'] && !!docs['settings_public|'], 'dokumen master sync lengkap');
+    ok(!!docs['txs|2026-01'] && !!docs['txs|2026-02'], 'transaksi ter-shard per bulan');
+    ok(typeof docs['settings_public|'].data.pin === 'undefined' &&
+       typeof docs['settings_public|'].data.cloudKey === 'undefined',
+       'PIN & kunci backup TIDAK ikut sync');
+    // 8. mergeById: union + versi updatedAt terbaru menang (void menyebar)
+    var merged = Sync.mergeById(
+      [{ id: 'a', at: 100, updatedAt: 100, voided: false }, { id: 'b', at: 90, updatedAt: 90 }],
+      [{ id: 'a', at: 100, updatedAt: 200, voided: true }, { id: 'c', at: 110, updatedAt: 110 }]);
+    ok(merged.length === 3 && merged[0].id === 'c' && merged[1].voided === true,
+       'merge transaksi union + void terbaru menang');
+    // 9. applyDoc txs menggabungkan tanpa menghapus transaksi lokal bulan lain
+    var before = D.txs.length;
+    Sync.applyDoc('txs', '2026-01', [{ id: 'sx9', at: new Date(2026, 0, 20).getTime(), total: 500, items: [] }]);
+    ok(D.txs.length === before + 1, 'applyDoc txs menambah tanpa menghapus lokal');
+    // 10. fingerprint berubah saat data berubah (deteksi dirty)
+    var fp1 = Sync.fingerprint(docs['menus|']);
+    D.menus.push({ id: 'smx', name: 'Menu Sync Tes', price: 1000, cat: 'x', track: false, stock: 0 });
+    var fp2 = Sync.fingerprint(Sync.collectDocs()['menus|']);
+    ok(fp1 !== fp2, 'fingerprint mendeteksi perubahan menu');
+    // 11. ringkasan sync aman saat belum login
+    ok(Sync.summary().pending === 0, 'pending sync 0 saat belum login');
+    // cleanup bagian ini
+    D.txs = D.txs.filter(function (t) { return ['sx1', 'sx2', 'sx9'].indexOf(t.id) < 0; });
+    D.menus = D.menus.filter(function (m) { return m.id !== 'smx'; });
+    Account.license = null;
+    try { D.settings.lic = JSON.parse(savedLic); } catch (e) {}
+    KDB.save();
+  })();
 
   setTimeout(function () {
     console.log(fails.length ? '\n' + fails.length + ' GAGAL' : '\nSEMUA LOLOS ✓');
