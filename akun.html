@@ -164,7 +164,7 @@ main{padding:40px 0 70px}
     <label class="agree" id="agreeRow" hidden><input type="checkbox" id="aTerms"><span>Saya setuju dengan <a href="#" onclick="return AccountPage.terms(event)">Syarat &amp; Ketentuan</a> OGKasir.</span></label>
     <button class="btn primary block" id="btnIn" onclick="AccountPage.doSignIn()">Masuk</button>
     <button class="btn primary block" id="btnUp" onclick="AccountPage.doSignUp()" hidden>Daftar Sekarang</button>
-    <div class="ordiv">atau</div>
+    <div class="ordiv" id="orDiv">atau</div>
     <button class="btn ghost block" id="btnOtp" onclick="AccountPage.doOtpLogin()">📩 Masuk pakai kode email (tanpa password)</button>
     <p class="center mt small"><span id="authHint">Belum punya akun? Ketuk tab <b>Daftar</b> di atas.</span></p>
     <p class="small mt">Akun dipakai untuk lisensi &amp; sinkronisasi data antar perangkat di aplikasi OGKasir. Kasir tetap bisa jalan offline — akun hanya perlu internet saat masuk &amp; sinkronisasi.</p>
@@ -418,6 +418,8 @@ var AccountPage = (function () {
     $('fldName').hidden = m !== 'up';
     $('agreeRow').hidden = m !== 'up';
     $('forgotRow').hidden = m !== 'in';
+    $('orDiv').hidden = m !== 'in';
+    $('btnOtp').hidden = m !== 'in';
     $('authHint').innerHTML = m === 'in'
       ? 'Belum punya akun? Ketuk tab <b>Daftar</b> di atas.'
       : 'Sudah punya akun? Ketuk tab <b>Masuk</b> di atas.';
