@@ -197,10 +197,11 @@ footer .fh{font-weight:700;font-size:14px;margin-bottom:10px}
 .demo-frame iframe{width:100%;height:100%;border:0;display:block}
 /* ===== Demo tablet: menu kasir -> bayar -> struk ===== */
 .demo-grid.wide{grid-template-columns:1fr;max-width:960px;gap:26px;justify-items:stretch}
-.tab-mock{background:#101114;border-radius:30px;padding:16px 20px;position:relative;box-shadow:0 30px 60px rgba(16,20,28,.28),inset 0 0 0 2px #2c2e35}
+.tab-scale{position:relative;width:100%}
+.tab-mock{width:920px;max-width:none;transform-origin:top left;background:#101114;border-radius:30px;padding:16px 20px;position:relative;box-shadow:0 30px 60px rgba(16,20,28,.28),inset 0 0 0 2px #2c2e35}
 .tab-mock::before{content:"";position:absolute;left:7px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#3a3d46;box-shadow:inset 0 0 2px #000}
 .tab-mock .glare{position:absolute;inset:0;border-radius:30px;background:linear-gradient(115deg,rgba(255,255,255,.09),transparent 42%);pointer-events:none}
-.tab-scr{position:relative;border-radius:16px;overflow:hidden;background:#FAF6EF;aspect-ratio:16/10.4}
+.tab-scr{position:relative;border-radius:16px;overflow:hidden;background:#FAF6EF;width:880px;height:572px}
 .tdemo{position:absolute;inset:0;display:flex;flex-direction:column;font-size:14px;color:#221C10}
 .tdemo-head{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#FFFDF8;border-bottom:1px solid #EAE2D2}
 .tdemo-head .lg{width:30px;height:30px;border-radius:9px;background:#B8761F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
@@ -264,11 +265,6 @@ footer .fh{font-weight:700;font-size:14px;margin-bottom:10px}
 .treceipt .acts .tbtn{width:auto;padding:11px 20px}
 .treceipt .acts .tbtn.alt{background:#fff;color:#0B2B4B}
 .demo-points.row{flex-direction:row}
-@media(max-width:700px){
-  .tab-scr{aspect-ratio:auto;height:560px}
-  .tdemo-main{grid-template-columns:minmax(0,1fr) 218px}
-  .tgrid{grid-template-columns:repeat(2,1fr)}
-}
 
 .demo-grid.wide .demo-points{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 26px}
 @media(max-width:700px){.demo-grid.wide .demo-points{grid-template-columns:1fr}}
@@ -381,7 +377,7 @@ footer .fh{font-weight:700;font-size:14px;margin-bottom:10px}
 <section id="demo"><div class="wrap">
   <div class="sec-head"><span class="kick">Demo langsung</span><h2>Coba langsung, nggak perlu install.</h2><p>Simulasi kasir OGKasir di tablet: pilih menu, terima pembayaran, struk langsung keluar — persis alur di aplikasi aslinya.</p></div>
   <div class="demo-grid wide">
-    <div class="tab-mock"><div class="glare"></div><div class="tab-scr">
+    <div class="tab-scale" id="tabScale"><div class="tab-mock"><div class="glare"></div><div class="tab-scr">
       <div class="tdemo">
         <div class="tdemo-head"><span class="lg">⚡</span><div><b>Warkop Berkah</b><div style="font-size:11.5px;color:#8A7B5F">Kasir · OGKasir Demo</div></div><div class="dt" id="tDate"></div></div>
         <div class="tdemo-steps"><span class="tstep on" id="ts1">1 · Pilih Menu</span><span class="tstep" id="ts2">2 · Bayar</span><span class="tstep" id="ts3">3 · Struk Keluar</span></div>
@@ -413,7 +409,7 @@ footer .fh{font-weight:700;font-size:14px;margin-bottom:10px}
           <div class="acts"><button class="tbtn" id="tBtnBaru">🧾 Transaksi Baru</button><a class="tbtn alt" href="#harga" style="text-decoration:none;display:inline-flex;align-items:center;background:#fff;color:#0B2B4B">Lihat Harga</a></div>
         </div></div>
       </div>
-    </div></div>
+    </div></div></div>
     <div>
       <ul class="demo-points">
         <li><span><b>Tap menu</b> di tablet buat masukin ke pesanan, kayak lagi jualan beneran.</span></li>
@@ -644,5 +640,10 @@ o.observe(box)})();
 })();
 </script>
 
+<script>
+(function(){var w=document.getElementById('tabScale');if(!w)return;var m=w.firstElementChild;
+function fit(){var s=Math.min(1,w.clientWidth/920);m.style.transform='scale('+s+')';w.style.height=(604*s)+'px';}
+window.addEventListener('resize',fit);window.addEventListener('load',fit);fit();})();
+</script>
 </body>
 </html>
