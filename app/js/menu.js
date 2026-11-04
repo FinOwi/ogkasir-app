@@ -22,7 +22,7 @@ var Menu = {
         var items = D.menus.filter(function (m) { return m.cat === cats[c]; });
         if (!items.length) continue;
         h += '<div class="k-small k-muted" style="margin:12px 2px 6px;font-weight:700">' + K.esc(cats[c]) + ' (' + items.length + ')</div>';
-        h += '<div class="k-card" style="padding:6px 14px">';
+        h += '<div class="k-card k-menu-card" style="padding:6px 14px">';
         for (var j = 0; j < items.length; j++) {
           var m = items[j];
           var su = K.isKg(m) ? ' kg' : '';

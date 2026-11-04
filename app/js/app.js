@@ -21,6 +21,20 @@ var App = {
       rd.onload = function () { AppSet.doRestore(rd.result); fp.value = ''; };
       rd.readAsText(fp.files[0]);
     });
+    /* Tablet: gambar ulang saat viewport melintasi breakpoint 1024px
+       (rotasi tablet / ubah ukuran jendela) agar rel & panel berganti
+       dengan benar. Di HP listener ini tidak pernah terpicu. */
+    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+      var mqT = window.matchMedia('(min-width: 1024px)');
+      var wasTablet = mqT.matches;
+      var onMqT = function (e) {
+        if (e.matches === wasTablet) return;
+        wasTablet = e.matches;
+        if (App._booted && App.unlocked) { UI.closeSheet(); App.rerender(); }
+      };
+      if (mqT.addEventListener) mqT.addEventListener('change', onMqT);
+      else if (mqT.addListener) mqT.addListener(onMqT);
+    }
     // Gerbang pengguna baru: wajib masuk/daftar + isi informasi toko dulu
     if (typeof Gate !== 'undefined' && Gate.needed()) {
       Splash.hide();
@@ -117,7 +131,7 @@ var App = {
         ['laporan', 'chart', T('Laporan')],
         ['set', 'dash', T('Dashboard')]
       ];
-    var h = '';
+    var h = '', hr = '';
     for (var i = 0; i < items.length; i++) {
       /* S4: tombol navigasi tanpa hak akses disembunyikan */
       var npk = this.pagePerm(items[i][0]);
@@ -126,8 +140,14 @@ var App = {
       h += '<button class="k-nav-it' + (main ? ' k-nav-main' : '') + (this.page === items[i][0] ? ' k-on' : '') +
         '" onclick="App.go(\'' + items[i][0] + '\')"><span class="k-ni">' +
         KIcon.get(items[i][1], main ? 27 : 24) + '</span><span class="k-nl">' + items[i][2] + '</span></button>';
+      /* Rel tablet: item yang sama persis (izin sama), Kasir item biasa */
+      hr += '<button class="k-rail-it' + (this.page === items[i][0] ? ' k-on' : '') +
+        '" onclick="App.go(\'' + items[i][0] + '\')"><span class="k-ni">' +
+        KIcon.get(items[i][1], 24) + '</span><span class="k-nl">' + items[i][2] + '</span></button>';
     }
     document.getElementById('kNav').innerHTML = h;
+    var rail = document.getElementById('kRail');
+    if (rail) rail.innerHTML = hr;
   },
 
   go: function (p) {
@@ -183,6 +203,7 @@ var App = {
         T('<button class="k-btn k-sec" onclick="App.rerender()">Coba lagi</button></div>');
     }
     Kasir.renderCartBar();
+    Kasir.bindPanel();
   },
 
   /* ---------- Ganti Kasir (pintu darurat dari halaman Kasir) ----------
@@ -299,6 +320,8 @@ var App = {
       T('<button onclick="App.pinKey(\'C\')">⌫</button><button onclick="App.pinKey(\'0\')">0</button><button onclick="App.pinKey(\'X\')">✕</button>') +
       '</div></div>';
     document.getElementById('kNav').style.display = 'none';
+    var railEl = document.getElementById('kRail');
+    if (railEl) railEl.style.display = 'none';
   },
   pinKey: function (k) {
     /* S3: kunci sementara sesudah 5x salah (PinGuard) — tombol diabaikan */
@@ -323,6 +346,8 @@ var App = {
           }
           self.unlocked = true;
           document.getElementById('kNav').style.display = 'flex';
+          var railEl2 = document.getElementById('kRail');
+          if (railEl2) railEl2.style.display = ''; // tampil diatur CSS (rel hanya >=1024px)
           self.rerender();
         } else {
           var locked = PinGuard.fail('app');

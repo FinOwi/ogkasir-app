@@ -15,6 +15,8 @@ var Kasir = {
   _editingTagId: null,  // id tagihan yg sedang ditambah pesanannya
   _billType: null,      // tipe bon baru yg dipilih di sheet bayar: 'kunjungan' | 'tempo'
   _billQ: '',           // kata kunci pencarian daftar Bon Meja
+  _panelLive: false,    // true bila render terakhir memasang panel bayar tablet
+  _panelInputs: null,   // nilai input panel yang dipertahankan lintas rerender
 
   /* ---------- catatan per item ---------- */
   notePresets: function () {
@@ -108,6 +110,80 @@ var Kasir = {
       '<span class="k-cashier-act">' + T('Ganti Kasir') + '</span></button>';
   },
 
+  /* ---------- tampilan tablet (viewport >= 1024px) ----------
+     Pola layout meniru referensi KasirMan Flutter (rel kiri + panel bayar
+     permanen), warna tetap dari tema aktif. Di bawah 1024px isTablet()
+     selalu false dan SEMUA jalur tablet di bawah tidak pernah berjalan —
+     tampilan & alur HP persis seperti sebelumnya. */
+  isTablet: function () {
+    return typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
+      window.matchMedia('(min-width: 1024px)').matches;
+  },
+  /* Panel bayar hanya untuk halaman Kasir mode kasir (bukan Riwayat/
+     Tagihan/Struk) — di situlah state keranjang yang sama ditampilkan. */
+  panelActive: function () {
+    return this.isTablet() && typeof App !== 'undefined' && App.page === 'kasir' && this.mode === 'kasir';
+  },
+  /* Bungkus konten mode kasir menjadi dua panel pada tablet; chip kasir
+     aktif + segmented tetap di atas selebar halaman. */
+  _kasirWrap: function (h, splitAt) {
+    if (!this.panelActive()) { this._panelLive = false; return h; }
+    this._capturePanelInputs();
+    this._panelLive = true;
+    return h.slice(0, splitAt) + '<div class="k-tab-wrap"><div class="k-tab-main">' + h.slice(splitAt) +
+      '</div><aside class="k-paypanel" id="kPayPanel">' + this.panelHtml() + '</aside></div>';
+  },
+  /* Isi panel = HTML keranjang yang SAMA dengan sheet (cartHtml), atau
+     keadaan kosong yang rapi bila keranjang kosong. */
+  panelHtml: function () {
+    var h = this.cartHtml('panel');
+    if (h !== null) return h;
+    return T('<h3 class="k-sheet-t">🛒 Keranjang</h3>') + UI.empty('🛒', T('Keranjang masih kosong'), '', '');
+  },
+  renderPanel: function () {
+    var el = document.getElementById('kPayPanel');
+    if (!el) return;
+    el.innerHTML = this.panelHtml();
+    this.bindPanel();
+  },
+  /* Dipanggil App.rerender sesudah #kPage terpasang: ikat handler input
+     panel + pulihkan nilai yang dipertahankan lintas rerender. */
+  bindPanel: function () {
+    if (!this._panelLive) return;
+    var el = document.getElementById('kPayPanel');
+    if (!el || !Object.keys(this.cart).length) { this._panelInputs = null; return; }
+    this.bindCartInputs();
+    var sv = this._panelInputs;
+    this._panelInputs = null;
+    if (sv) {
+      var map = { kDisc: 'disc', kDiscType: 'discType', kCash: 'cash', kNote: 'note', kCust: 'cust', kTable: 'table', kProj: 'proj', kDue: 'due' };
+      for (var id in map) {
+        var inp = document.getElementById(id);
+        if (inp && sv[map[id]] != null) inp.value = sv[map[id]];
+      }
+      this.recalc();
+    }
+  },
+  _capturePanelInputs: function () {
+    var disc = document.getElementById('kDisc');
+    if (!disc) { this._panelInputs = null; return; }
+    function v(id) { var e = document.getElementById(id); return e ? e.value : null; }
+    this._panelInputs = { disc: disc.value, discType: v('kDiscType'), cash: v('kCash'),
+      note: v('kNote'), cust: v('kCust'), table: v('kTable'), proj: v('kProj'), due: v('kDue') };
+  },
+  /* Segarkan panel sesudah state keranjang berubah dari luar panel
+     (ketuk grid, scan, satuan, berat, pak) — no-op di HP. */
+  syncPanel: function () {
+    if (this.panelActive()) this.renderPanel();
+  },
+  /* "Tutup keranjang" yang sadar host: di HP menutup sheet seperti
+     biasa; di tablet panel permanen digambar ulang (keranjang kosong
+     -> keadaan kosong, mode edit selesai -> tampilan normal). */
+  closeCartUi: function () {
+    if (this.panelActive()) this.renderPanel();
+    else UI.closeSheet();
+  },
+
   render: function () {
     var D = KDB.data;
     var cats = ['Semua'].concat(D.cats); // kanonis
@@ -118,6 +194,7 @@ var Kasir = {
       '<button class="' + (this.mode === 'tagihan' ? 'k-on' : '') + T('" onclick="Kasir.setMode(\'tagihan\')">⏳ Tagihan') + (nTag ? ' (' + nTag + ')' : '') + '</button></div>';
     if (this.mode === 'riwayat') { h += this.riwayatHtml(); return h; }
     if (this.mode === 'tagihan') { h += this.tagihanHtml(); return h; }
+    var splitAt = h.length; // titik pisah chip+seg dari isi mode kasir (untuk panel tablet)
     if (typeof BizMode !== 'undefined' && BizMode.id() === 'jasa') {
       h += '<div class="k-small k-muted" style="margin-bottom:10px">' +
         T('Pilih layanan di bawah, lalu ketuk Buat Order — DP & pelunasan diatur di halaman Order.') + '</div>';
@@ -135,11 +212,11 @@ var Kasir = {
     var list = this.filteredMenus();
     if (!list.length) {
       h += '</div>' + UI.empty('🍽️', T('Belum ada menu'), T('Tambah menu dulu di tab Menu, bro.'), '');
-      return h;
+      return this._kasirWrap(h, splitAt);
     }
     if (this.layout() === 'list') {
       h += '</div>' + this.scanBarHtml() + this.listHtml(list);
-      return h;
+      return this._kasirWrap(h, splitAt);
     }
     h += '</div><div class="k-grid">';
     for (var j = 0; j < list.length; j++) {
@@ -157,7 +234,7 @@ var Kasir = {
         '</button>';
     }
     h += '</div>';
-    return h;
+    return this._kasirWrap(h, splitAt);
   },
 
   /* layout kasir efektif (preset Mode Usaha menang atas pilihan tampilan) */
@@ -325,6 +402,7 @@ var Kasir = {
     if (this._uFrom === 'cart') this.openCart();
     else { UI.closeSheet(); UI.toast(m.name + ' ' + this.fmtQtyAny(q, this._uSel || m.unit) + (this._uSel ? ' ' + this._uSel : '')); }
     this.renderCartBar();
+    this.syncPanel();
   },
   unitCancel: function () {
     if (this._uFrom === 'cart') this.openCart(); else UI.closeSheet();
@@ -343,6 +421,7 @@ var Kasir = {
     this.cart[id] = cur + pq;
     this.renderCartBar();
     this.syncQtyBadge(id);
+    this.syncPanel();
     UI.toast(m.name + ' +1 ' + m.packUnit + ' (' + pq + ' pcs)');
   },
 
@@ -419,6 +498,7 @@ var Kasir = {
     this.cart[id] = cur + 1;
     this.renderCartBar();
     this.syncQtyBadge(id);
+    this.syncPanel();
     UI.toast(m.name + ' ×' + this.cart[id]);
   },
 
@@ -485,6 +565,7 @@ var Kasir = {
     if (this._wFrom === 'cart') { this.openCart(); }
     else { UI.closeSheet(); UI.toast(m.name + ' ' + K.fmtQty(w, 'kg') + ' kg'); }
     this.renderCartBar();
+    this.syncPanel();
   },
   weightCancel: function () {
     if (this._wFrom === 'cart') this.openCart(); else UI.closeSheet();
@@ -514,6 +595,10 @@ var Kasir = {
     var w = document.getElementById('kCartBar');
     var n = this.cartCount();
     if (!n || App.page !== 'kasir' || this.mode !== 'kasir') { w.innerHTML = ''; return; }
+    /* Tablet: panel bayar permanen menggantikan cart bar — kecuali mode
+       Jasa, yang keranjangnya menjadi Order lewat tombol bar ini juga. */
+    var jasaOrder = !this._editingTagId && typeof BizMode !== 'undefined' && BizMode.id() === 'jasa' && typeof Order !== 'undefined';
+    if (this.panelActive() && !jasaOrder) { w.innerHTML = ''; return; }
     var nTxt = String(Math.round(n * 100) / 100).replace('.', ',');
     /* Mode Jasa: keranjang kasir BUKAN transaksi tunai — jadi Order (DP & pelunasan di Order) */
     if (!this._editingTagId && typeof BizMode !== 'undefined' && BizMode.id() === 'jasa' && typeof Order !== 'undefined') {
@@ -562,7 +647,14 @@ var Kasir = {
   },
 
   /* ---------- sheet keranjang & bayar ---------- */
-  openCart: function () {
+  /* Bangun HTML keranjang & bayar — SATU-SATUNYA pembangun tampilan
+     keranjang, dipakai dua host: sheet bawah di HP (host 'sheet') dan
+     panel permanen di tablet (host 'panel'). Semua input & tombol
+     memakai id & handler yang sama persis; calc()/pay()/saveEdit()
+     membaca DOM yang sama, jadi TIDAK ada logika pembayaran kedua.
+     Mengembalikan null bila keranjang kosong (perilaku lama sheet:
+     ditutup; panel: diganti keadaan kosong oleh panelHtml()). */
+  cartHtml: function (host) {
     var D = KDB.data;
     var editing = !!this._editingTagId;
     var etx = editing ? this.txById(this._editingTagId) : null;
@@ -570,7 +662,7 @@ var Kasir = {
     var h = editing ? T('<h3 class="k-sheet-t">✏️ Tambah Pesanan #') + K.pad(etx.no, 4) + '</h3>'
                     : T('<h3 class="k-sheet-t">🛒 Keranjang</h3>');
     var ids = Object.keys(this.cart);
-    if (!ids.length) { UI.closeSheet(); return; }
+    if (!ids.length) return null;
     for (var i = 0; i < ids.length; i++) {
       var m = KDB.menuById(ids[i]);
       if (!m) continue;
@@ -677,16 +769,44 @@ var Kasir = {
     h += T('<div class="k-total-row"><span>Diskon</span><span id="kDiscView">Rp0</span></div>');
     h += T('<div class="k-total-row k-grand"><span>Total</span><span class="k-money" id="kGrandView">') + K.rp(sub) + '</span></div>';
     h += T('<div class="k-total-row" id="kChangeRow" style="display:none"><span>Kembalian</span><span class="k-money" id="kChangeView" style="color:var(--green)">Rp0</span></div>');
+    if (host === 'panel') {
+      /* Panel permanen tidak butuh tombol Tutup (tidak ada yang ditutup);
+         tombol utama & handler-nya fragmen yang sama persis dgn sheet. */
+      h += '<div class="k-btn-row">' + (editing
+        ? T('<button class="k-btn k-pri" onclick="Kasir.saveEdit()">💾 Simpan Perubahan</button></div></div>')
+        : T('<button class="k-btn k-pri" onclick="Kasir.pay()">') + (this.payMethod === 'Belum Dibayar' ? T('📝 Simpan Tagihan') : T('💰 Bayar')) + '</button></div></div>');
+      return h;
+    }
     h += editing
       ? T('<div class="k-btn-row"><button class="k-btn k-ghost" onclick="UI.closeSheet()">Tutup</button>') +
         T('<button class="k-btn k-pri" onclick="Kasir.saveEdit()">💾 Simpan Perubahan</button></div></div>')
       : T('<div class="k-btn-row"><button class="k-btn k-ghost" onclick="UI.closeSheet()">Tutup</button>') +
         T('<button class="k-btn k-pri" onclick="Kasir.pay()">') + (this.payMethod === 'Belum Dibayar' ? T('📝 Simpan Tagihan') : T('💰 Bayar')) + '</button></div></div>';
+    return h;
+  },
+
+  openCart: function () {
+    if (this.panelActive()) {
+      /* Tablet: keranjang tinggal di panel — sheet satuan/modal di atas
+         panel tetap ditutup seperti biasa sesudah memilih. */
+      this.renderPanel();
+      UI.closeSheet();
+      return;
+    }
+    var h = this.cartHtml('sheet');
+    if (h === null) { UI.closeSheet(); return; }
     UI.openSheet(h);
+    this.bindCartInputs();
+  },
+
+  bindCartInputs: function () {
     var self = this;
-    document.getElementById('kDisc').oninput = function () { self.recalc(); };
-    document.getElementById('kDiscType').onchange = function () { self.recalc(); };
-    document.getElementById('kCash').oninput = function () { self.recalc(); };
+    var disc = document.getElementById('kDisc');
+    if (disc) disc.oninput = function () { self.recalc(); };
+    var dt = document.getElementById('kDiscType');
+    if (dt) dt.onchange = function () { self.recalc(); };
+    var cash = document.getElementById('kCash');
+    if (cash) cash.oninput = function () { self.recalc(); };
   },
 
   cartBarTap: function () {
@@ -707,7 +827,7 @@ var Kasir = {
   },
   setPay: function (name) {
     this.payMethod = name;
-    var btns = document.querySelectorAll('#kSheet .k-pay');
+    var btns = document.querySelectorAll('#kSheet .k-pay, #kPayPanel .k-pay');
     for (var i = 0; i < btns.length; i++) btns[i].classList.remove('k-on');
     // tandai ulang via render ulang grid pay
     this.openCartKeep();
@@ -849,7 +969,7 @@ var Kasir = {
     this._editOrphans = [];
     this._editingTagId = null;
     this.lastTx = tx;
-    UI.closeSheet();
+    this.closeCartUi();
     this.mode = 'struk'; // struk langsung tampil agar bisa print/bagikan (juga untuk tagihan)
     App.rerender();
   },
@@ -1264,12 +1384,12 @@ var Kasir = {
     this.cartPrice = {};
     this._editOrphans = [];
     this._editingTagId = null;
-    UI.closeSheet();
+    this.closeCartUi();
     this.renderCartBar();
   },
   saveEdit: function () {
     var tx = this.txById(this._editingTagId);
-    if (!tx || !this.isUnpaid(tx)) { this._editingTagId = null; UI.closeSheet(); return; }
+    if (!tx || !this.isUnpaid(tx)) { this._editingTagId = null; this.closeCartUi(); return; }
     var c = this.calc();
     var ids = Object.keys(this.cart);
     if (!ids.length && !this._editOrphans.length) { UI.toast(T('Keranjang kosong')); return; }
@@ -1341,7 +1461,7 @@ var Kasir = {
     this._editOrphans = [];
     this._editingTagId = null;
     this.lastTx = tx;
-    UI.closeSheet();
+    this.closeCartUi();
     this.mode = 'struk';
     App.rerender();
     UI.toast(T('✅ Tagihan #') + K.pad(tx.no, 4) + T(' diperbarui'));
