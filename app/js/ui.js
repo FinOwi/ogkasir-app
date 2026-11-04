@@ -1,13 +1,32 @@
 /* OGKasir - shared UI primitives */
 var UI = {
+  /* Toast TUNGGAL (fix 4 Nov 2026): ketukan beruntun di halaman Kasir dulu
+     menumpuk pil .k-toast-it jadi menara di tengah layar. Sekarang elemen
+     yang sedang tampil dipakai ulang — teks diganti & timer dimulai ulang,
+     jadi #kToast maksimal berisi 1 elemen pada satu waktu. */
+  _toastEl: null,
+  _toastFadeT: null,
+  _toastKillT: null,
   toast: function (msg) {
     var w = document.getElementById('kToast');
-    var d = document.createElement('div');
-    d.className = 'k-toast-it';
+    var d = this._toastEl;
+    if (d && d.parentNode) {
+      if (this._toastFadeT) clearTimeout(this._toastFadeT);
+      if (this._toastKillT) clearTimeout(this._toastKillT);
+      d.style.opacity = '';
+    } else {
+      d = document.createElement('div');
+      d.className = 'k-toast-it';
+      w.appendChild(d);
+      this._toastEl = d;
+    }
     d.textContent = msg;
-    w.appendChild(d);
-    setTimeout(function () { d.style.opacity = '0'; }, 2200);
-    setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 2600);
+    var self = this;
+    this._toastFadeT = setTimeout(function () { d.style.opacity = '0'; }, 2200);
+    this._toastKillT = setTimeout(function () {
+      if (d.parentNode) d.parentNode.removeChild(d);
+      if (self._toastEl === d) self._toastEl = null;
+    }, 2600);
   },
 
   openSheet: function (html) {

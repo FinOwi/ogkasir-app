@@ -1,4 +1,4 @@
-/* OGKasir — mode DEMO untuk preview web (BUKAN bagian dari APK). */
+/* OGKasir — mode DEMO untuk web (BUKAN bagian dari APK). */
 window.OGK_DEMO = true;
 document.addEventListener('DOMContentLoaded', function () {
   var b = document.createElement('div');
