@@ -2,7 +2,11 @@
    Prinsip: offline-first. Lokal selalu sumber kerja; sync oportunistik.
    - Dokumen per koleksi: menus, cats, employees, feedback, settings_public,
      txs, stock_log & orders di-shard per bulan (doc_key 'YYYY-MM').
-   - PIN karyawan TIDAK pernah masuk dokumen sync (S3); foto menu & logo
+   - PIN karyawan non-pemilik TIDAK pernah masuk dokumen sync (S3);
+     khusus PIN Pemilik, HASH-nya (h1$) ikut sync agar satu PIN Pemilik
+     yang sama berlaku di semua perangkat akun — tidak "dobel" antar
+     perangkat (keputusan zgg 5 Nov 2026). PIN (termasuk Pemilik) tetap
+     TIDAK pernah masuk backup (exportData). Foto menu & logo
      dinormalkan K.safeImg saat applyDoc (X1/X2).
    - Push memakai optimistic concurrency (version di server).
    - Transaksi append-only -> pull menggabungkan union by id (yg lebih baru menang).
@@ -233,10 +237,14 @@ var Sync = {
     var D = KDB.data, docs = {}, i, t, k;
     docs['menus|'] = { type: 'menus', key: '', data: this.buildMasterData('menus', D.menus) };
     docs['cats|'] = { type: 'cats', key: '', data: this.buildMasterData('cats', D.cats) };
-    /* S3: PIN karyawan TIDAK ikut sync — yang dikirim salinan tanpa PIN;
-       PIN lokal dipasang lagi saat applyDoc. */
+    /* S3: PIN karyawan non-pemilik TIDAK ikut sync — yang dikirim
+       salinan tanpa PIN; PIN lokal dipasang lagi saat merge.
+       Pengecualian (keputusan zgg 5 Nov 2026): record Pemilik
+       (emp-owner) mengirim pin-nya apa adanya — nilai tersimpan memang
+       selalu HASH h1$ (salt+SHA-256), bukan plaintext — supaya PIN
+       Pemilik tersync antar perangkat dan tidak beda per perangkat. */
     var empItems = (D.employees || []).map(function (e) {
-      var c = {}; for (var ek in e) c[ek] = e[ek]; c.pin = ''; return c;
+      var c = {}; for (var ek in e) c[ek] = e[ek]; c.pin = e.isOwner ? (e.pin || '') : ''; return c;
     });
     docs['employees|'] = { type: 'employees', key: '', data: this.buildMasterData('employees', empItems) };
     docs['feedback|'] = { type: 'feedback', key: '', data: this.buildMasterData('feedback', D.feedback || []) };
@@ -332,14 +340,18 @@ var Sync = {
   itemStamp: function (x) { return (x && (x.updatedAt || x.at || x.createdAt)) || 0; },
 
   /* Normalkan item yang datang dari cloud sebelum tinggal lokal:
-     foto menu lewat safeImg (X1); PIN karyawan selalu dari lokal (S3). */
+     foto menu lewat safeImg (X1); PIN karyawan non-pemilik selalu dari
+     lokal (S3); PIN Pemilik memakai hash record pemenang merge —
+     satu-satunya pengecualian — karena PIN Pemilik ikut sync
+     (keputusan zgg 5 Nov 2026). */
   _adopt: function (type, win, localOrig, pins) {
     if (win === localOrig) return win;
     var c = {}, k;
     for (k in win) c[k] = win[k];
     if (type === 'menus') c.photo = K.safeImg(win.photo);
     if (type === 'employees') {
-      c.pin = (pins && Object.prototype.hasOwnProperty.call(pins, win.id)) ? pins[win.id] : '';
+      if (win.isOwner) c.pin = win.pin || '';
+      else c.pin = (pins && Object.prototype.hasOwnProperty.call(pins, win.id)) ? pins[win.id] : '';
     }
     return c;
   },
@@ -403,10 +415,12 @@ var Sync = {
     });
     if (type === 'feedback') out.sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
     /* Deteksi berubah: bandingkan kanonis per item (PIN karyawan
-       dinormalkan keluar agar pasang-lagi PIN tidak terbaca berubah). */
+       non-pemilik dinormalkan keluar agar pasang-lagi PIN tidak terbaca
+       berubah; PIN Pemilik dinilai apa adanya — hash baru dari cloud
+       HARUS terbaca berubah agar hasil merge tersimpan). */
     var norm = function (arr) {
       return arr.map(function (it) {
-        if (type === 'employees' && it) { var c = {}; for (var k in it) c[k] = it[k]; c.pin = ''; return self._canon(c); }
+        if (type === 'employees' && it) { var c = {}; for (var k in it) c[k] = it[k]; if (!it.isOwner) c.pin = ''; return self._canon(c); }
         return self._canon(it);
       }).sort().join(',');
     };

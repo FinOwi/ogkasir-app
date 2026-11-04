@@ -326,7 +326,9 @@ var K = {
    Format tersimpan: 'h1$<salt>$<sha256hex(salt:pin)>' memakai SHA-256
    sinkron yang sudah ada di LicCrypto. PIN plaintext lama tetap lolos
    verifikasi SATU kali ({needsRehash:true}) lalu ditulis ulang sebagai
-   hash oleh pemanggil. PIN TIDAK ikut Sync/backup (lihat exportData &
+   hash oleh pemanggil. PIN karyawan TIDAK ikut backup; khusus PIN
+   Pemilik, HASH-nya ikut Sync antar perangkat (keputusan zgg
+   5 Nov 2026) tetapi tetap TIDAK ikut backup (lihat exportData &
    Sync.collectDocs). */
 var PinHash = {
   isHashed: function (v) { return typeof v === 'string' && v.indexOf('h1$') === 0; },
