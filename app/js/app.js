@@ -208,10 +208,14 @@ var App = {
 
   /* ---------- Ganti Kasir (pintu darurat dari halaman Kasir) ----------
      Satu jalur verifikasi untuk sheet Kasir maupun Dashboard > Karyawan:
-     - target karyawan ber-PIN: PIN karyawan itu (PinGuard scope emp:<id>)
-     - target Pemilik: PIN APLIKASI (PinGuard scope app); tanpa PIN
-       aplikasi, perpindahan diizinkan dengan peringatan — pemilik yang
-       belum pernah mengatur PIN tidak boleh terkunci di peran kasir. */
+     - target ber-PIN (karyawan biasa MAUPUN Pemilik): PIN record target
+       itu sendiri (PinHash + PinGuard scope emp:<id>). Pemilik memakai
+       PIN Pemilik-nya sendiri (record emp-owner), BUKAN PIN aplikasi —
+       PIN aplikasi hanya untuk kunci layar (keputusan zgg 4 Nov 2026,
+       menggantikan model v1.55 yang memakai settings.pin scope 'app').
+     - target tanpa PIN: perpindahan langsung; khusus Pemilik disertai
+       peringatan — pemilik yang belum mengatur PIN Pemilik tidak boleh
+       terkunci di peran kasir. */
   switchCashierSheet: function () {
     if (typeof Dashboard !== 'undefined' && Dashboard.ensureData) Dashboard.ensureData();
     var es = (KDB.data.employees || []).filter(function (e) { return e.active; });
@@ -235,31 +239,28 @@ var App = {
   requestSwitchCashier: function (id) {
     var e = KDB.employeeById(id);
     if (!e || !e.active || e.id === KDB.data.settings.activeEmployeeId) return;
-    var kind = e.isOwner ? 'app' : (e.pin ? 'employee' : 'none');
-    if (kind === 'app' && !KDB.data.settings.pin) {
-      this._switchCashier = null;
-      UI.closeSheet();
-      UI.closeModal();
-      Dashboard._doSetActive(e);
-      UI.toast(T('PIN aplikasi belum diatur — atur PIN aplikasi agar mode Pemilik terlindungi.'));
-      return;
-    }
+    /* Kredensial target = pin record target itu sendiri — untuk Pemilik
+       berarti PIN Pemilik (emp-owner), sama seperti karyawan ber-PIN. */
+    var kind = e.pin ? 'employee' : 'none';
     if (kind === 'none') {
       this._switchCashier = null;
       UI.closeSheet();
       UI.closeModal();
       Dashboard._doSetActive(e);
+      if (e.isOwner) {
+        UI.toast(T('PIN Pemilik belum diatur — atur PIN Pemilik di Dashboard agar mode Pemilik terlindungi.'));
+      }
       return;
     }
-    var scope = kind === 'app' ? 'app' : 'emp:' + e.id;
+    var scope = 'emp:' + e.id;
     if (PinGuard.lockedMs(scope) > 0) {
       UI.toast(T('Terlalu banyak percobaan — tunggu ') + Math.ceil(PinGuard.lockedMs(scope) / 1000) + T(' dtk'));
       return;
     }
     this._switchCashier = { id: e.id, kind: kind };
     UI.closeSheet();
-    var prompt = kind === 'app'
-      ? T('Masukkan PIN aplikasi untuk kembali ke mode Pemilik.')
+    var prompt = e.isOwner
+      ? T('Masukkan PIN Pemilik untuk kembali ke mode Pemilik.')
       : T('Masukkan PIN ') + K.esc(e.name) + T(' untuk menjadikannya kasir aktif.');
     UI.openModal(T('<h3 class="k-sheet-t">') + T('Ganti Kasir Aktif') + '</h3>' +
       '<p class="k-small k-muted">' + prompt + '</p>' +
@@ -273,17 +274,18 @@ var App = {
     var targetId = id || (pending && pending.id);
     var e = targetId ? KDB.employeeById(targetId) : null;
     if (!e || !e.active) return;
-    var kind = (pending && pending.id === e.id) ? pending.kind : (e.isOwner ? 'app' : 'employee');
-    var scope = kind === 'app' ? 'app' : 'emp:' + e.id;
+    var kind = (pending && pending.id === e.id) ? pending.kind : (e.pin ? 'employee' : 'none');
+    var scope = 'emp:' + e.id;
     if (PinGuard.lockedMs(scope) > 0) {
       UI.toast(T('Terlalu banyak percobaan — tunggu ') + Math.ceil(PinGuard.lockedMs(scope) / 1000) + T(' dtk'));
       return;
     }
-    var stored = kind === 'app' ? KDB.data.settings.pin : e.pin;
+    var stored = e.pin;
     if (!stored) {
-      /* Tanpa PIN target tidak ada modal verifikasi; jalur request yang
-         memutuskan (khusus Pemilik tanpa PIN aplikasi = izin + peringatan). */
-      if (kind === 'app') this.requestSwitchCashier(e.id);
+      /* Tanpa PIN pada record target tidak ada modal verifikasi; jalur
+         request yang memutuskan (Pemilik tanpa PIN Pemilik = izin +
+         peringatan; PIN aplikasi TIDAK diterima sebagai pengganti). */
+      this.requestSwitchCashier(e.id);
       return;
     }
     var el = document.getElementById('empSwitchPin');
@@ -295,8 +297,7 @@ var App = {
     }
     PinGuard.reset(scope);
     if (vr.needsRehash) {
-      if (kind === 'app') KDB.data.settings.pin = PinHash.hash(el.value);
-      else e.pin = PinHash.hash(el.value); // migrasi plaintext warisan
+      e.pin = PinHash.hash(el.value); // migrasi plaintext warisan
     }
     this._switchCashier = null;
     UI.closeModal();

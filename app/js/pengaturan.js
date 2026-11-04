@@ -567,9 +567,14 @@ var Dashboard = {
       '<div class="k-fld" style="max-width:88px"><label>Avatar</label><input class="k-in" id="empEmoji" maxlength="4" style="text-align:center" value="' + K.esc(e ? (e.emoji || '👤') : '👤') + '"></div></div>' +
       '<div class="k-fld"><label>' + T('Nomor WhatsApp (opsional)') + '</label><input class="k-in" id="empPhone" inputmode="tel" value="' + K.esc(e ? (e.phone || '') : '') + '" placeholder="08xxxxxxxxxx"></div>' +
       /* S3: field PIN TIDAK pernah di-prefill (tersimpan sebagai hash).
-         Kosongkan = PIN lama dipertahankan; isi 6 digit = ganti PIN. */
-      '<div class="k-fld"><label>' + T('PIN karyawan (opsional, 6 digit)') + '</label><input class="k-in" id="empPin" type="password" inputmode="numeric" maxlength="6" value="" placeholder="••••••"><div class="k-small k-muted" style="margin-top:5px">' + (e && e.pin ? T('PIN sudah tersimpan (terenkripsi). Kosongkan untuk mempertahankan, isi 6 digit untuk mengganti, atau centang hapus di bawah.') : T('Dicatat untuk fondasi login staf. PIN aplikasi utama tetap terpisah di Keamanan.')) + '</div>' +
-      (e && e.pin ? '<label class="k-check" style="margin-top:6px"><input type="checkbox" id="empPinDel"> ' + T('Hapus PIN karyawan ini') + '</label>' : '') + '</div>' +
+         Kosongkan = PIN lama dipertahankan; isi 6 digit = ganti PIN.
+         Untuk record Pemilik field ini adalah PIN Pemilik — kredensial
+         berpindah ke mode Pemilik (BUKAN PIN aplikasi). Mengubah /
+         menghapus PIN Pemilik yang sudah ada wajib membuktikan PIN
+         lama (field empPinOld, diverifikasi di employeeSave). */
+      (e && e.isOwner && e.pin ? '<div class="k-fld"><label>' + T('PIN lama') + '</label><input class="k-in" id="empPinOld" type="password" inputmode="numeric" maxlength="6" value="" placeholder="••••••"><div class="k-small k-muted" style="margin-top:5px">' + T('Wajib diisi untuk mengganti atau menghapus PIN Pemilik.') + '</div></div>' : '') +
+      '<div class="k-fld"><label>' + (e && e.isOwner ? T('PIN Pemilik (opsional, 6 digit)') : T('PIN karyawan (opsional, 6 digit)')) + '</label><input class="k-in" id="empPin" type="password" inputmode="numeric" maxlength="6" value="" placeholder="••••••"><div class="k-small k-muted" style="margin-top:5px">' + (e && e.pin ? T('PIN sudah tersimpan (terenkripsi). Kosongkan untuk mempertahankan, isi 6 digit untuk mengganti, atau centang hapus di bawah.') : (e && e.isOwner ? T('PIN ini yang diminta saat berpindah ke mode Pemilik dari kasir lain.') : T('Dicatat untuk fondasi login staf. PIN aplikasi utama tetap terpisah di Keamanan.'))) + '</div>' +
+      (e && e.pin ? '<label class="k-check" style="margin-top:6px"><input type="checkbox" id="empPinDel"> ' + (e.isOwner ? T('Hapus PIN Pemilik ini') : T('Hapus PIN karyawan ini')) + '</label>' : '') + '</div>' +
       '<div class="k-fld"><label>' + T('Hak akses') + '</label><div class="k-perms">' +
       this.permCheck('kasir', 'Kasir & transaksi', !!p.kasir) +
       this.permCheck('menu', 'Menu & harga', !!p.menu) +
@@ -583,6 +588,28 @@ var Dashboard = {
     UI.openModal(h);
   },
 
+  /* Verifikasi PIN lama Pemilik untuk ubah/hapus PIN Pemilik (S3) —
+     meniru _checkOldPin (PIN aplikasi) tapi memverifikasi pin record
+     emp-owner dari field empPinOld, tunduk PinGuard scope emp:<id>. */
+  _checkOldOwnerPin: function (e) {
+    var scope = 'emp:' + e.id;
+    if (PinGuard.lockedMs(scope) > 0) {
+      UI.toast(T('Terlalu banyak percobaan — tunggu ') + Math.ceil(PinGuard.lockedMs(scope) / 1000) + T(' dtk'));
+      return false;
+    }
+    var el = document.getElementById('empPinOld');
+    var vr = PinHash.verify(e.pin, el ? el.value : '');
+    if (!vr.ok) {
+      var locked = PinGuard.fail(scope);
+      UI.toast(locked > 0
+        ? T('PIN lama salah — terkunci ') + Math.ceil(locked / 1000) + T(' dtk')
+        : T('PIN lama salah'));
+      return false;
+    }
+    PinGuard.reset(scope);
+    return true;
+  },
+
   employeeSave: function (id) {
     var name = (document.getElementById('empName').value || '').trim();
     if (!name) { UI.toast(T('Nama karyawan wajib diisi')); return; }
@@ -592,6 +619,14 @@ var Dashboard = {
        centang hapus = kosongkan PIN. */
     var delPinEl = document.getElementById('empPinDel');
     var delPin = !!(delPinEl && delPinEl.checked);
+    /* PIN Pemilik: mengganti / menghapus PIN Pemilik yang sudah ada
+       wajib membuktikan PIN lama dulu (pola S3) — tanpa ini siapa pun
+       yang sedang membuka Dashboard bisa mengambil alih mode Pemilik
+       dengan menimpa PIN-nya. */
+    var existingEmp = id ? KDB.employeeById(id) : null;
+    if (existingEmp && existingEmp.isOwner && existingEmp.pin && (pin || delPin)) {
+      if (!this._checkOldOwnerPin(existingEmp)) return;
+    }
     var perms = {
       kasir: document.getElementById('empPerm-kasir').checked,
       menu: document.getElementById('empPerm-menu').checked,
@@ -625,7 +660,9 @@ var Dashboard = {
 
   /* Pintu Dashboard memakai SATU jalur verifikasi yang sama dengan
      sheet Ganti Kasir di halaman Kasir (App.requestSwitchCashier):
-     karyawan ber-PIN -> PIN karyawan; Pemilik -> PIN aplikasi. */
+     target ber-PIN (karyawan biasa maupun Pemilik) -> PIN record target
+     itu sendiri; Pemilik memakai PIN Pemilik (emp-owner), bukan PIN
+     aplikasi. */
   setActiveEmployee: function (id) {
     App.requestSwitchCashier(id);
   },
