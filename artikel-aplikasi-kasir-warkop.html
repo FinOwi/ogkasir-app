@@ -28,49 +28,124 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --gold: #ffd54f; --gold-d: #e6a93d; --bg0: #060a15; --bg1: #0b1226; --card: rgba(255,255,255,.05); --line: rgba(255,255,255,.11); }
-  body { font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif; color: #f5f7fc; line-height: 1.7;
-    background:
-      radial-gradient(900px 480px at 12% -4%, rgba(255,213,79,.09), transparent 60%),
-      linear-gradient(180deg, var(--bg1), var(--bg0) 55%);
-    background-attachment: fixed; }
-  a { color: var(--gold); }
-  .wrap { max-width: 780px; margin: 0 auto; padding: 0 20px; }
-  nav { position: sticky; top: 0; z-index: 50; background: rgba(8,12,24,.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; padding-bottom: 12px; max-width: 1024px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; color: #fff; }
-  .brand img { width: 38px; height: 38px; border-radius: 10px; }
-  .btn { display: inline-block; background: var(--gold); color: #3b2a1e; font-weight: 800; padding: 12px 26px; border-radius: 14px; text-decoration: none; border: none; cursor: pointer; font-size: 16px; }
-  .btn:hover { background: var(--gold-d); }
-  .btn.wa { background: #25d366; color: #063; }
-  article { padding: 48px 0; }
-  article h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.2; margin-bottom: 12px; }
-  article h1 span { color: var(--gold); }
-  .meta { opacity: .6; font-size: 14px; margin-bottom: 32px; }
-  article h2 { font-size: clamp(22px, 4vw, 28px); margin: 40px 0 12px; color: var(--gold); }
-  article p { margin-bottom: 16px; opacity: .92; }
-  article ul, article ol { margin: 0 0 16px 22px; opacity: .92; }
-  article li { margin-bottom: 10px; }
-  article strong { color: #fff; }
-  .cta-box { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px; text-align: center; margin: 40px 0; }
-  .cta-box h3 { font-size: 22px; margin-bottom: 8px; }
-  .cta-box p { opacity: .8; margin-bottom: 20px; }
+  :root {
+    --navy: #0B1B2B; --navy-2: #132E49;
+    --gold: #D4A017; --gold-hi: #E3B52E; --gold-dark: #9A7408; --gold-soft: #FBF3DF; --gold-line: #EBD9A8;
+    --ink: #23272F; --muted: #68707D; --line: #E8E4D8; --bg: #FAFAF7; --card: #FFFFFF;
+    --link: #2563EB;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--ink); font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  ::selection { background: rgba(212,160,23,.28); }
+  a { color: var(--link); }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* Bilah progres baca */
+  #read-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--gold); z-index: 100; }
+
+  /* Header */
+  nav { position: sticky; top: 0; z-index: 50; background: var(--navy); border-bottom: 2px solid var(--gold); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 11px; padding-bottom: 11px; max-width: 1080px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; color: #fff; letter-spacing: .2px; }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .btn { display: inline-block; background: var(--gold); color: var(--navy); font-weight: 800; padding: 12px 26px; border-radius: 12px; text-decoration: none; border: none; cursor: pointer; font-size: 16px; transition: background .15s ease; }
+  .btn:hover { background: var(--gold-hi); }
+  .btn.wa { background: #25D366; color: #053B1E; }
+  .btn.wa:hover { background: #3BD975; }
+
+  /* Kolom baca */
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* Breadcrumb */
+  .crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; font-size: 13.5px; color: var(--muted); padding: 22px 0 4px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .crumb a:hover { color: var(--gold-dark); text-decoration: underline; }
+  .crumb .sep { color: #C9C2AE; }
+  .crumb .cur { color: var(--ink); font-weight: 600; }
+
+  /* Gambar sampul */
+  .hero { margin: 18px 0 6px; }
+  .hero img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); }
+
+  article { padding: 26px 0 10px; }
+  article h1 { font-size: clamp(30px, 5.4vw, 41px); line-height: 1.25; letter-spacing: -.01em; color: var(--navy); font-weight: 800; margin-bottom: 18px; }
+  article h1 span { background-image: linear-gradient(transparent 64%, rgba(212,160,23,.38) 64%); }
+
+  /* Baris meta penulis */
+  .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; font-size: 14.5px; color: var(--muted); padding-bottom: 18px; margin-bottom: 30px; border-bottom: 2px solid var(--gold); }
+  .meta::before { content: "N"; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-right: 5px; border-radius: 50%; background: var(--navy); color: var(--gold); font-weight: 800; font-size: 15px; flex: none; }
+  .meta strong { color: var(--navy); }
+
+  article h2 { font-size: clamp(22px, 3.6vw, 27px); line-height: 1.35; color: var(--navy); font-weight: 800; margin: 46px 0 14px; padding-left: 14px; border-left: 4px solid var(--gold); }
+  article h3 { font-size: 20px; line-height: 1.4; color: var(--navy); font-weight: 700; margin: 30px 0 10px; }
+  article p { margin-bottom: 22px; }
+  article ul, article ol { margin: 0 0 22px 24px; }
+  article li { margin-bottom: 9px; }
+  article li::marker { color: var(--gold-dark); font-weight: 700; }
+  article strong { color: var(--ink); font-weight: 700; }
+  article img { max-width: 100%; height: auto; border-radius: 12px; }
+  article a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(37,99,235,.4); }
+  article a:hover { text-decoration-color: var(--link); }
+
+  /* Kotak sorotan (rumus / contoh angka) */
+  .sorot { background: var(--gold-soft); border: 1px solid var(--gold-line); border-left: 4px solid var(--gold); border-radius: 12px; padding: 20px 24px 4px; margin: 30px 0; }
+  .sorot p { margin-bottom: 16px; }
+
+  /* Tabel bersih */
+  .tbl-wrap { overflow-x: auto; margin: 26px 0 30px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  article table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.55; }
+  article th { background: var(--navy); color: #fff; text-align: left; font-weight: 700; padding: 11px 16px; white-space: nowrap; }
+  article td { padding: 11px 16px; border-top: 1px solid #EFEAD9; vertical-align: top; }
+  article tbody tr:nth-child(even) td { background: #FBF8EF; }
+  article th.num, article td.num { text-align: right; }
+  article td.num { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* Baca juga */
+  .related { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px 28px 12px; margin: 44px 0; box-shadow: 0 1px 3px rgba(11,27,43,.05); }
+  .related h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-dark); margin: 0 0 8px; }
+  .related ul { margin: 0; list-style: none; }
+  .related li { margin: 0; border-top: 1px solid #F0EBDB; }
+  .related li:first-child { border-top: none; }
+  .related li::marker { content: none; }
+  .related a { display: block; padding: 11px 2px; color: var(--navy); font-weight: 600; text-decoration: none; line-height: 1.5; }
+  .related a::before { content: "›"; color: var(--gold); font-weight: 800; margin-right: 9px; }
+  .related a:hover { color: var(--gold-dark); }
+
+  /* CTA */
+  .cta-box { background: linear-gradient(160deg, var(--navy-2), var(--navy)); color: #fff; border-radius: 18px; padding: 36px 30px; text-align: center; margin: 44px 0; }
+  .cta-box h3 { font-size: 24px; color: #fff; margin: 0 0 10px; }
+  .cta-box p { color: rgba(255,255,255,.84); margin-bottom: 24px; }
   .cta-box .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .back { display: inline-block; margin-top: 32px; opacity: .7; font-size: 15px; }
-  footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; font-size: 14px; opacity: .65; }
-  footer .wrap { max-width: 1024px; }
+  .cta-box a { text-decoration: none; }
+
+  .back { display: inline-block; margin-top: 30px; font-size: 15px; color: var(--muted); text-decoration: none; }
+  .back:hover { color: var(--gold-dark); }
+
+  footer { border-top: 1px solid var(--line); background: #fff; padding: 28px 0; text-align: center; font-size: 14px; color: var(--muted); margin-top: 54px; }
+  footer .wrap { max-width: 1080px; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 640px) {
+    body { font-size: 17px; }
+    .cta-box { padding: 30px 22px; }
+    .related { padding: 20px 20px 8px; }
+    .sorot { padding: 16px 18px 2px; }
+  }
 </style>
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"><link rel="icon" type="image/png" sizes="144x144" href="/favicon-144.png"><link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="shortcut icon" href="/favicon.ico"></head>
 <body>
+<div id="read-progress"></div>
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="/"><img src="logo.png" alt="OGKasir"> OGKasir</a>
+    <a class="brand" href="/"><img src="https://ogkasir.my.id/logo.png" alt="OGKasir"> OGKasir</a>
     <a class="btn" href="/#download" style="padding:10px 20px;font-size:14px">Download</a>
   </div>
 </nav>
 
 <div class="wrap">
+<div class="crumb"><a href="https://ogkasir.my.id/">Beranda</a><span class="sep">›</span><a href="https://ogkasir.my.id/blog.html">Blog</a><span class="sep">›</span><span class="cur">Aplikasi Kasir Warkop: Biar Omzet Nggak Bocor</span></div>
+<figure class="hero"><img src="https://ogkasir.my.id/img/p-kasir-v2.jpg" alt="Aplikasi Kasir Warkop: Biar Omzet Nggak Bocor"></figure>
 <article>
   <h1>Aplikasi Kasir Warkop: <span>Berhenti Andalkan Buku Tulis</span></h1>
   <div class="meta">Oleh Nadia · Tim OGKasir · 11 Oktober 2026 · 5 menit baca</div>
@@ -141,6 +216,23 @@
     © 2026 OGKasir · Aplikasi Kasir UMKM · <a href="/" style="color:inherit">ogkasir.my.id</a>
   </div>
 </footer>
+
+
+<script>
+(function () {
+  var bar = document.getElementById('read-progress');
+  if (!bar) return;
+  function upd() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var y = h.scrollTop || document.body.scrollTop || 0;
+    bar.style.width = (max > 0 ? Math.min(100, y / max * 100) : 0) + '%';
+  }
+  addEventListener('scroll', upd, { passive: true });
+  addEventListener('resize', upd);
+  upd();
+})();
+</script>
 
 </body>
 </html>
