@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aplikasi Kasir Toko Kelontong: Stok Rapi | OGKasir</title>
+<meta name="description" content="Toko kelontong punya ratusan barang kecil yang gampang bocor diam-diam. Aplikasi kasir bikin stok, kasbon, dan laporan toko tercatat rapi dari HP.">
+<meta name="keywords" content="aplikasi kasir toko kelontong, kasir toko kelontong, aplikasi kasir warung sembako, stok toko kelontong, aplikasi kasir ritel">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ogkasir.my.id/artikel-aplikasi-kasir-toko-kelontong.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Aplikasi Kasir Toko Kelontong: Stok Rapi">
+<meta property="og:description" content="Stok selisih, kasbon lupa, harga berubah-ubah — masalah klasik toko kelontong yang bisa dirapikan aplikasi kasir dari HP.">
+<meta property="og:url" content="https://ogkasir.my.id/artikel-aplikasi-kasir-toko-kelontong.html">
+<meta property="og:image" content="https://ogkasir.my.id/img/artikel-aplikasi-kasir-toko-kelontong.jpg">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article",
+"headline":"Aplikasi Kasir Toko Kelontong: Stok Rapi",
+"description":"Cara aplikasi kasir membantu toko kelontong merapikan stok, kasbon pelanggan, dan laporan harian langsung dari HP.",
+"image":"https://ogkasir.my.id/img/artikel-aplikasi-kasir-toko-kelontong.jpg",
+"author":{"@type":"Person","name":"Nadia","jobTitle":"Penulis Artikel","worksFor":{"@type":"Organization","name":"Tim OGKasir"}},
+"publisher":{"@type":"Organization","name":"OGKasir"},
+"datePublished":"2026-11-05","dateModified":"2026-11-05",
+"mainEntityOfPage":"https://ogkasir.my.id/artikel-aplikasi-kasir-toko-kelontong.html"}
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0B1B2B; --navy-2: #132E49;
+    --gold: #D4A017; --gold-hi: #E3B52E; --gold-dark: #9A7408; --gold-soft: #FBF3DF; --gold-line: #EBD9A8;
+    --ink: #23272F; --muted: #68707D; --line: #E8E4D8; --bg: #FAFAF7; --card: #FFFFFF;
+    --link: #2563EB;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--ink); font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  ::selection { background: rgba(212,160,23,.28); }
+  a { color: var(--link); }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* Bilah progres baca */
+  #read-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--gold); z-index: 100; }
+
+  /* Header */
+  nav { position: sticky; top: 0; z-index: 50; background: var(--navy); border-bottom: 2px solid var(--gold); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 11px; padding-bottom: 11px; max-width: 1080px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; color: #fff; letter-spacing: .2px; }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .btn { display: inline-block; background: var(--gold); color: var(--navy); font-weight: 800; padding: 12px 26px; border-radius: 12px; text-decoration: none; border: none; cursor: pointer; font-size: 16px; transition: background .15s ease; }
+  .btn:hover { background: var(--gold-hi); }
+  .btn.wa { background: #25D366; color: #053B1E; }
+  .btn.wa:hover { background: #3BD975; }
+
+  /* Kolom baca */
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* Breadcrumb */
+  .crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; font-size: 13.5px; color: var(--muted); padding: 22px 0 4px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .crumb a:hover { color: var(--gold-dark); text-decoration: underline; }
+  .crumb .sep { color: #C9C2AE; }
+  .crumb .cur { color: var(--ink); font-weight: 600; }
+
+  /* Gambar sampul */
+  .hero { margin: 18px 0 6px; }
+  .hero img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); }
+
+  article { padding: 26px 0 10px; }
+  article h1 { font-size: clamp(30px, 5.4vw, 41px); line-height: 1.25; letter-spacing: -.01em; color: var(--navy); font-weight: 800; margin-bottom: 18px; }
+  article h1 span { background-image: linear-gradient(transparent 64%, rgba(212,160,23,.38) 64%); }
+
+  /* Baris meta penulis */
+  .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; font-size: 14.5px; color: var(--muted); padding-bottom: 18px; margin-bottom: 30px; border-bottom: 2px solid var(--gold); }
+  .meta::before { content: "N"; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-right: 5px; border-radius: 50%; background: var(--navy); color: var(--gold); font-weight: 800; font-size: 15px; flex: none; }
+  .meta strong { color: var(--navy); }
+
+  article h2 { font-size: clamp(22px, 3.6vw, 27px); line-height: 1.35; color: var(--navy); font-weight: 800; margin: 46px 0 14px; padding-left: 14px; border-left: 4px solid var(--gold); }
+  article h3 { font-size: 20px; line-height: 1.4; color: var(--navy); font-weight: 700; margin: 30px 0 10px; }
+  article p { margin-bottom: 22px; }
+  article ul, article ol { margin: 0 0 22px 24px; }
+  article li { margin-bottom: 9px; }
+  article li::marker { color: var(--gold-dark); font-weight: 700; }
+  article strong { color: var(--ink); font-weight: 700; }
+  article img { max-width: 100%; height: auto; border-radius: 12px; }
+  article a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(37,99,235,.4); }
+  article a:hover { text-decoration-color: var(--link); }
+
+  /* Kotak sorotan (rumus / contoh angka) */
+  .sorot { background: var(--gold-soft); border: 1px solid var(--gold-line); border-left: 4px solid var(--gold); border-radius: 12px; padding: 20px 24px 4px; margin: 30px 0; }
+  .sorot p { margin-bottom: 16px; }
+
+  /* Tabel bersih */
+  .tbl-wrap { overflow-x: auto; margin: 26px 0 30px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  article table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.55; }
+  article th { background: var(--navy); color: #fff; text-align: left; font-weight: 700; padding: 11px 16px; white-space: nowrap; }
+  article td { padding: 11px 16px; border-top: 1px solid #EFEAD9; vertical-align: top; }
+  article tbody tr:nth-child(even) td { background: #FBF8EF; }
+  article th.num, article td.num { text-align: right; }
+  article td.num { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* Baca juga */
+  .related { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px 28px 12px; margin: 44px 0; box-shadow: 0 1px 3px rgba(11,27,43,.05); }
+  .related h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-dark); margin: 0 0 8px; }
+  .related ul { margin: 0; list-style: none; }
+  .related li { margin: 0; border-top: 1px solid #F0EBDB; }
+  .related li:first-child { border-top: none; }
+  .related li::marker { content: none; }
+  .related a { display: block; padding: 11px 2px; color: var(--navy); font-weight: 600; text-decoration: none; line-height: 1.5; }
+  .related a::before { content: "›"; color: var(--gold); font-weight: 800; margin-right: 9px; }
+  .related a:hover { color: var(--gold-dark); }
+
+  /* CTA */
+  .cta-box { background: linear-gradient(160deg, var(--navy-2), var(--navy)); color: #fff; border-radius: 18px; padding: 36px 30px; text-align: center; margin: 44px 0; }
+  .cta-box h3 { font-size: 24px; color: #fff; margin: 0 0 10px; }
+  .cta-box p { color: rgba(255,255,255,.84); margin-bottom: 24px; }
+  .cta-box .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cta-box a { text-decoration: none; }
+
+  .back { display: inline-block; margin-top: 30px; font-size: 15px; color: var(--muted); text-decoration: none; }
+  .back:hover { color: var(--gold-dark); }
+
+  footer { border-top: 1px solid var(--line); background: #fff; padding: 28px 0; text-align: center; font-size: 14px; color: var(--muted); margin-top: 54px; }
+  footer .wrap { max-width: 1080px; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 640px) {
+    body { font-size: 17px; }
+    .cta-box { padding: 30px 22px; }
+    .related { padding: 20px 20px 8px; }
+    .sorot { padding: 16px 18px 2px; }
+  }
+</style>
+</head>
+<body>
+<div id="read-progress"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="https://ogkasir.my.id/"><img src="https://ogkasir.my.id/logo.png" alt="OGKasir"> OGKasir</a>
+    <a class="btn" href="https://ogkasir.my.id/#download" style="padding:10px 20px;font-size:14px">Download</a>
+  </div>
+</nav>
+
+<div class="wrap">
+<div class="crumb"><a href="https://ogkasir.my.id/">Beranda</a><span class="sep">›</span><a href="https://ogkasir.my.id/blog.html">Blog</a><span class="sep">›</span><span class="cur">Aplikasi Kasir Toko Kelontong: Stok Rapi</span></div>
+<figure class="hero"><img src="https://ogkasir.my.id/img/artikel-aplikasi-kasir-toko-kelontong.jpg" alt="Pemilik toko kelontong menimbang beras di timbangan tradisional, dengan rak penuh sembako dan telur di belakangnya"></figure>
+<article>
+<h1>Aplikasi Kasir Toko Kelontong: <span>Biar Stok &amp; Kasbon Nggak Bocor Lagi</span></h1>
+<div class="meta">Oleh Nadia · Tim OGKasir · 5 November 2026 · 5 menit baca</div>
+<p>Toko kelontong itu usaha yang unik: barangnya ratusan macam, harganya recehan, marginnya tipis, tapi transaksinya tidak berhenti dari pagi sampai malam. Justru karena kecil-kecil dan sering, kebocorannya juga kecil-kecil dan sering — dan jarang ketahuan sampai stok opname atau sampai uang belanja kulakan terasa kurang.</p>
+<p>Artikel ini membahas masalah khas toko kelontong dan sembako, dan bagaimana aplikasi kasir di HP membantu merapikannya tanpa mengubah cara tokomu melayani tetangga.</p>
+
+<h2>Masalah Klasik Toko Kelontong</h2>
+<ul>
+<li><strong>Stok tidak pernah cocok.</strong> Di catatan tinggal sepuluh, di rak tinggal enam. Selisih kecil tiap hari, tapi tidak pernah jelas hilang di mana.</li>
+<li><strong>Harga berubah-ubah.</strong> Harga kulakan naik, harga jual lupa disesuaikan — atau beda harga antara yang jaga pagi dan yang jaga malam.</li>
+<li><strong>Kasbon tetangga di buku khusus.</strong> Bukunya bisa hilang, basah, atau halamannya penuh coretan sampai tidak terbaca siapa utang berapa.</li>
+<li><strong>Tidak tahu barang terlaris dan stok mati.</strong> Kulakan mengandalkan perasaan: barang yang cepat habis justru sering kosong, barang yang tidak laku menumpuk di gudang.</li>
+<li><strong>Uang laci dan uang pribadi tercampur.</strong> Di akhir hari sulit menjawab toko ini sebenarnya untung berapa.</li>
+</ul>
+
+<h2>Yang Berubah Saat Toko Pakai Aplikasi Kasir</h2>
+<p><strong>Stok berkurang otomatis setiap ada penjualan</strong>, dan ada peringatan saat stok menipis — jadi kamu kulakan berdasarkan data, bukan perasaan. Karena setiap pengurangan tercatat per transaksi, selisih stok jadi bisa dilacak: kapan, barang apa, dan di transaksi mana.</p>
+<p><strong>Jual ecer dan per kilo tetap gampang.</strong> Beras, gula, minyak, dan telur memang dijual dalam banyak satuan. Di aplikasi kasir, satu barang bisa punya harga per kilo dan harga ecer sekaligus — kasir tinggal memilih satuan yang dibeli pelanggan.</p>
+<p><strong>Kasbon tercatat per nama dan tidak hilang.</strong> Piutang pelanggan tersimpan di aplikasi lengkap dengan riwayatnya; saat pelanggan membayar, catatannya tertutup rapi. Kebiasaan baik toko kelontong — boleh ngutang dulu, bayar gajian — tetap jalan, hanya bukunya yang pindah ke tempat yang aman.</p>
+<p><strong>Laporan harian menjawab pertanyaan terpenting:</strong> hari ini omzet berapa, barang apa yang paling laku, dan berapa laba kotornya. Semua tersusun sendiri dari transaksi yang memang sudah kamu catat saat melayani.</p>
+
+<h2>Di OGKasir: Mode Ritel &amp; Mode Campuran</h2>
+<p>Saat pertama mendaftar OGKasir, kamu memilih mode usaha — untuk toko kelontong pilihannya <strong>Mode Ritel</strong>: alur dan istilahnya disesuaikan untuk toko yang menjual banyak barang dengan stok sebagai pusat perhatian. Kalau tokomu juga melayani jasa (misalnya isi ulang galon, gas, atau servis kecil), ada <strong>Mode Campuran</strong> yang menjalankan alur barang dan jasa dalam satu aplikasi.</p>
+<p>Semuanya berjalan offline dari HP Android — penting buat toko yang sinyalnya pas-pasan — dan satu akun bisa dipakai sampai tiga HP kalau yang jaga toko lebih dari satu orang. Gambaran fitur lengkapnya ada di halaman <a href="https://ogkasir.my.id/aplikasi-kasir-umkm.html">aplikasi kasir UMKM</a>.</p>
+
+<h2>Cara Mulai Tanpa Mengganggu Jualan</h2>
+<ol>
+<li><strong>Masukkan 50 barang terlaris dulu.</strong> Jangan tunggu semua barang masuk — mulai dari yang paling sering dibeli (biasanya 20% barang menyumbang 80% transaksi), sisanya menyusul sambil jalan.</li>
+<li><strong>Jalankan berdampingan dengan buku selama seminggu.</strong> Bandingkan catatan aplikasi dengan cara lamamu. Setelah percaya pada angkanya, buku pelan-pelan pensiun.</li>
+<li><strong>Samakan harga dan latih yang jaga malam.</strong> Pastikan semua yang menjaga toko memakai daftar harga yang sama di aplikasi, dan tahu cara mencatat kasbon per nama.</li>
+</ol>
+
+<h2>Berapa Biaya yang Wajar Buat Toko Kelontong?</h2>
+<p>Untuk skala toko kelontong, patokannya sederhana: biaya aplikasi sebulan tidak boleh lebih besar dari kerugian stok yang berhasil dicegahnya. Di OGKasir, bulan pertama Rp8rb, lalu Rp49rb per bulan (atau Rp499rb untuk setahun penuh) — dengan trial 7 hari gratis untuk membuktikan dulu angkanya di tokomu sendiri sebelum membayar. Tidak ada potongan per transaksi, jadi margin tipis khas kelontong tidak tergerus setiap ada penjualan.</p>
+
+<h2>Kesimpulan</h2>
+<p>Toko kelontong tidak butuh sistem yang rumit — yang dibutuhkan adalah catatan yang tidak hilang: stok yang berkurang sendiri, kasbon yang tercatat per nama, dan laporan yang menjawab toko ini untung berapa. Aplikasi kasir di HP memberikan ketiganya tanpa mengubah cara tokomu melayani. Mulai dari barang terlaris, seminggu berdampingan dengan buku, dan biarkan datanya yang membuktikan.</p>
+
+<div class="related"><h3>Baca juga</h3><ul><li><a href="https://ogkasir.my.id/artikel-aplikasi-umkm.html">Aplikasi UMKM: Jenis &amp; Cara Memilihnya</a></li><li><a href="https://ogkasir.my.id/artikel-tips-mengatur-stok-warkop.html">Tips Mengatur Stok Warung Biar Nggak Ada Barang Mubazir</a></li><li><a href="https://ogkasir.my.id/artikel-kas-kecil-warkop.html">Cara Mengelola Kas Kecil (Petty Cash) Biar Nggak Bocor</a></li><li><a href="https://ogkasir.my.id/aplikasi-kasir-umkm.html">Aplikasi Kasir UMKM — Halaman Produk OGKasir</a></li></ul></div>
+<div class="cta-box">
+  <h3>Rapikan Tokomu dari HP</h3>
+  <p>Install OGKasir langsung dari situs resmi ini dan pakai 7 hari penuh. Mode Ritel buat toko kelontong: stok tercatat, jual ecer & per kilo, kasbon pelanggan rapi — semua offline.</p>
+  <div class="row">
+    <a class="btn" href="/#download">Download OGKasir</a>
+    <a class="btn wa" href="https://wa.me/6288279406268">Chat WhatsApp</a>
+  </div>
+</div>
+</article>
+</div>
+
+<footer>
+  <div class="wrap">
+    © 2026 OGKasir · Aplikasi Kasir UMKM · <a href="https://ogkasir.my.id/" style="color:inherit">ogkasir.my.id</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var bar = document.getElementById('read-progress');
+  if (!bar) return;
+  function upd() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var y = h.scrollTop || document.body.scrollTop || 0;
+    bar.style.width = (max > 0 ? Math.min(100, y / max * 100) : 0) + '%';
+  }
+  addEventListener('scroll', upd, { passive: true });
+  addEventListener('resize', upd);
+  upd();
+})();
+</script>
+
+</body>
+</html>

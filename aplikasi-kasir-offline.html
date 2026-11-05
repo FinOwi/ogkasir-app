@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aplikasi Kasir Offline: Tanpa Internet | OGKasir</title>
+<meta name="description" content="Aplikasi kasir offline 100%: jualan, struk, stok & laporan tetap jalan tanpa internet. Data aman tersimpan di HP, sinkron otomatis saat online. Trial 7 hari gratis.">
+<meta name="keywords" content="aplikasi kasir offline, kasir offline, aplikasi pos offline, aplikasi kasir tanpa internet, aplikasi kasir umkm offline">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ogkasir.my.id/aplikasi-kasir-offline.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aplikasi Kasir Offline: Jualan Tanpa Internet | OGKasir">
+<meta property="og:description" content="Kasir yang tetap jalan saat WiFi putus dan listrik byar-pet. 100% offline, data di HP kamu, sinkron otomatis saat online. Trial 7 hari gratis.">
+<meta property="og:url" content="https://ogkasir.my.id/aplikasi-kasir-offline.html">
+<meta property="og:image" content="https://ogkasir.my.id/img/p-kasir-v2.jpg">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"OGKasir",
+"applicationCategory":"BusinessApplication","operatingSystem":"Android",
+"description":"Aplikasi kasir (POS) offline Bahasa Indonesia untuk UMKM Indonesia. Semua fungsi kasir berjalan tanpa internet; data tersimpan di perangkat dan tersinkron saat online.",
+"offers":{"@type":"Offer","price":"8000","priceCurrency":"IDR"},
+"url":"https://ogkasir.my.id/aplikasi-kasir-offline.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Apakah benar-benar bisa jualan tanpa internet sama sekali?","acceptedAnswer":{"@type":"Answer","text":"Bisa. Semua fungsi harian OGKasir — mencatat penjualan, menghitung kembalian, memotong stok, mencatat bon, sampai melihat laporan — berjalan dari data yang tersimpan di HP. Internet tidak dibutuhkan sama sekali untuk jualan."}},
+{"@type":"Question","name":"Kalau tidak pernah online, apakah data penjualan aman?","acceptedAnswer":{"@type":"Answer","text":"Data tersimpan di HP dan tidak hilang hanya karena offline. Tapi HP bisa hilang atau rusak, jadi sesekali hubungkan internet untuk cloud backup dan sinkronisasi — itu pengaman datamu, bukan syarat untuk bisa jualan."}},
+{"@type":"Question","name":"Apa bedanya aplikasi kasir offline dengan aplikasi kasir online?","acceptedAnswer":{"@type":"Answer","text":"Aplikasi online menyimpan data di server: tanpa internet, kasirnya berhenti. Aplikasi kasir offline seperti OGKasir menyimpan data di perangkat: jualan jalan terus, dan data tersinkron ke cloud belakangan saat internet tersedia."}},
+{"@type":"Question","name":"Apakah perlu internet untuk mulai memakai OGKasir?","acceptedAnswer":{"@type":"Answer","text":"Perlu sebentar di awal untuk mengunduh aplikasi dan mendaftar akun. Sesudah itu operasional harian berjalan 100% offline — tidak ada kewajiban online setiap hari."}},
+{"@type":"Question","name":"Bisa dipakai di beberapa HP kalau sering offline?","acceptedAnswer":{"@type":"Answer","text":"Bisa, satu akun sampai 3 HP. Setiap HP tetap bisa jualan saat offline; begitu ada internet, data tersinkron dua arah otomatis dan perubahan terakhir yang berlaku."}},
+{"@type":"Question","name":"Bagaimana kalau listrik mati berjam-jam?","acceptedAnswer":{"@type":"Answer","text":"Kasir berjalan dari HP, jadi selama baterai HP ada, jualan jalan. Struk tetap bisa dicetak ke printer thermal Bluetooth yang juga memakai baterai. Data tidak bergantung pada listrik atau WiFi toko."}}
+]}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --gold: #ffd54f; --gold-d: #e6a93d; --bg0: #060a15; --bg1: #0b1226; --card: rgba(255,255,255,.05); --line: rgba(255,255,255,.11); }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, sans-serif; color: #f5f7fc; line-height: 1.7;
+    background: radial-gradient(900px 480px at 12% -4%, rgba(255,213,79,.09), transparent 60%), linear-gradient(180deg, var(--bg1), var(--bg0) 55%);
+    background-attachment: fixed; }
+  a { color: var(--gold); }
+  .wrap { max-width: 1024px; margin: 0 auto; padding: 0 20px; }
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(8,12,24,.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; padding-bottom: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; color: #fff; }
+  .brand img { width: 38px; height: 38px; border-radius: 10px; }
+  .btn { display: inline-block; background: var(--gold); color: #3b2a1e; font-weight: 800; padding: 14px 30px; border-radius: 14px; text-decoration: none; font-size: 16px; }
+  .btn:hover { background: var(--gold-d); }
+  .btn.wa { background: #25d366; color: #063; }
+  .hero { text-align: center; padding: 72px 0 48px; }
+  .hero .kick { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); border: 1px solid var(--line); border-radius: 99px; padding: 8px 18px; margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(30px, 5.5vw, 52px); line-height: 1.15; margin-bottom: 18px; }
+  .hero h1 span { color: var(--gold); }
+  .hero p.lead { font-size: 18px; opacity: .85; max-width: 640px; margin: 0 auto 30px; }
+  .hero .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .trust { display: flex; gap: 26px; justify-content: center; flex-wrap: wrap; margin-top: 34px; font-size: 14px; opacity: .75; }
+  section.block { padding: 40px 0; }
+  section.block h2 { font-size: clamp(24px, 4vw, 34px); margin-bottom: 14px; }
+  section.block h2 span { color: var(--gold); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .card .ic { font-size: 32px; margin-bottom: 10px; }
+  .card h3 { font-size: 18px; margin-bottom: 8px; }
+  .card p { font-size: 15px; opacity: .85; }
+  .price { background: var(--card); border: 1px solid var(--gold); border-radius: 20px; padding: 32px; text-align: center; margin-top: 24px; }
+  .price .big { font-size: 52px; font-weight: 800; color: var(--gold); }
+  .price p { opacity: .8; margin: 8px 0 20px; }
+  .faq { margin-top: 20px; }
+  .faq details { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; margin-bottom: 12px; }
+  .faq summary { font-weight: 700; cursor: pointer; font-size: 16px; }
+  .faq p { margin-top: 10px; opacity: .85; font-size: 15px; }
+  .cta-box { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 36px 28px; text-align: center; margin: 48px 0; }
+  .cta-box h3 { font-size: 24px; margin-bottom: 8px; }
+  .cta-box p { opacity: .8; margin-bottom: 22px; }
+  .cta-box .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .rel { margin-top: 16px; }
+  .rel a { display: block; padding: 12px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-weight: 600; }
+  .rel a small { display: block; font-weight: 400; opacity: .6; font-size: 13px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; font-size: 14px; opacity: .65; margin-top: 40px; }
+</style>
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"><link rel="icon" type="image/png" sizes="144x144" href="/favicon-144.png"><link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="shortcut icon" href="/favicon.ico"></head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="logo.png" alt="OGKasir"> OGKasir</a>
+    <a class="btn" href="/#download" style="padding:10px 20px;font-size:14px">Download</a>
+  </div>
+</nav>
+
+<div class="wrap">
+<header class="hero">
+  <span class="kick">100% Offline-First</span>
+  <h1>Aplikasi Kasir Offline: <span>Jualan Jalan Terus, Internet Boleh Mati</span></h1>
+  <p class="lead">Semua data tersimpan di HP kamu — bukan di server orang lain. WiFi putus, sinyal hilang, listrik byar-pet: kasir tetap mencatat, struk tetap keluar, laporan tetap rapi. Trial 7 hari gratis.</p>
+  <div class="row">
+    <a class="btn" href="/#download">⬇️ Download Gratis</a>
+    <a class="btn wa" href="https://wa.me/6288279406268?text=Halo%20OGKasir,%20saya%20mau%20tanya%20soal%20kasir%20offline">💬 Tanya via WhatsApp</a>
+  </div>
+  <div class="trust"><span>✅ Tanpa internet sama sekali</span><span>✅ Data tersimpan di HP</span><span>✅ Sinkron otomatis saat online</span><span>✅ Trial 7 hari gratis</span></div>
+</header>
+
+<section class="block">
+  <h2>Apa Artinya <span>Offline Beneran?</span></h2>
+  <p style="opacity:.85;max-width:720px">Aplikasi kasir offline adalah aplikasi kasir (POS) yang seluruh operasional hariannya berjalan dari data yang tersimpan di perangkat — bukan dari server di internet. Mencatat penjualan, menghitung kembalian, memotong stok, sampai menyusun laporan: semuanya diproses di HP kasir, saat itu juga, tanpa menunggu koneksi.</p>
+  <p style="opacity:.85;max-width:720px;margin-top:12px">Bedanya dengan aplikasi yang "bisa offline" sebagai fitur tambahan: aplikasi yang pada dasarnya online biasanya menjadikan offline sebagai mode darurat — sebagian fitur dikunci sampai koneksi kembali. OGKasir dirancang sebaliknya sejak awal: <strong style="color:#fff">offline adalah keadaan normalnya</strong>, dan internet hanya dipakai untuk hal-hal yang memang butuh internet, seperti sinkronisasi dan cadangan data.</p>
+</section>
+
+<section class="block">
+  <h2>Yang Tetap Jalan <span>Tanpa Internet</span></h2>
+  <div class="grid">
+    <div class="card"><div class="ic">⚡</div><h3>Kasir & Kembalian Otomatis</h3><p>Tap menu, tap bayar, kembalian terhitung sendiri. Antrean tidak berhenti hanya karena sinyal hilang.</p></div>
+    <div class="card"><div class="ic">🧾</div><h3>Struk Thermal Bluetooth</h3><p>Cetak struk ke printer Bluetooth 58mm atau WiFi lokal — tidak butuh internet, cukup koneksi antar perangkat.</p></div>
+    <div class="card"><div class="ic">📦</div><h3>Stok Berkurang Sendiri</h3><p>Setiap penjualan memotong stok di perangkat yang sama. Peringatan stok menipis tetap muncul walau offline.</p></div>
+    <div class="card"><div class="ic">📒</div><h3>Bon & Piutang Pelanggan</h3><p>Bon Meja dan piutang bertempo tercatat rapi di HP. Tidak ada lagi bon hilang karena buku ketinggalan atau basah.</p></div>
+    <div class="card"><div class="ic">📊</div><h3>Laporan Omzet & Laba</h3><p>Rekap harian sampai bulanan tersusun dari data lokal dan bisa dibuka kapan saja, termasuk diekspor ke Excel.</p></div>
+    <div class="card"><div class="ic">🔐</div><h3>Menu, Harga & PIN Karyawan</h3><p>Atur menu, harga, dan hak akses karyawan langsung di perangkat. PIN Pemilik & kasir bekerja penuh tanpa koneksi.</p></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Offline Bukan Berarti <span>Terkurung di Satu HP</span></h2>
+  <p style="opacity:.85;max-width:720px">Data memang tinggal di perangkat, tapi tidak terkunci di sana. Begitu ada internet, OGKasir menyinkronkan data dua arah secara otomatis — penjualan dari HP kasir muncul di HP pemilik, perubahan menu berlaku di semua perangkat, dan perubahan terakhir yang dipakai bila ada dua suntingan. Satu akun bisa dipakai sampai 3 HP.</p>
+  <p style="opacity:.85;max-width:720px;margin-top:12px">Internet memang dibutuhkan untuk empat hal ini saja: <strong style="color:#fff">mengunduh aplikasi & mendaftar di awal, sinkronisasi antar HP, cloud backup sebagai pengaman data, dan update aplikasi</strong>. Sisanya — seluruh jualan harianmu — tidak membutuhkan internet sama sekali.</p>
+</section>
+
+<section class="block">
+  <h2>Tiga Skenario yang <span>Sering Kejadian</span></h2>
+  <div class="grid">
+    <div class="card"><div class="ic">🔌</div><h3>Listrik Mati di Jam Ramai</h3><p>Listrik padam biasanya ikut mematikan WiFi. Kasir online berhenti total; kasir offline tetap melayani dari baterai HP dan printer Bluetooth. Baca juga panduan kami soal <a href="/artikel-mencatat-penjualan-saat-listrik-mati.html">mencatat penjualan saat listrik mati</a>.</p></div>
+    <div class="card"><div class="ic">📶</div><h3>Sinyal Jelek Saat Antrean Panjang</h3><p>Di banyak daerah, sinyal naik-turun justru di jam paling ramai. Karena semua diproses di perangkat, kecepatan kasir tidak pernah bergantung pada kualitas sinyal hari itu.</p></div>
+    <div class="card"><div class="ic">💸</div><h3>Kuota Habis di Tanggal Tua</h3><p>Tidak ada kuota bukan alasan berhenti mencatat. Penjualan tetap tercatat rapi, dan sinkronisasi menunggu sampai ada WiFi atau kuota lagi — datanya tidak hilang.</p></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Harga yang <span>Masuk Akal</span></h2>
+  <div class="price">
+    <div class="big">Rp8rb</div>
+    <p>bulan pertama, lalu Rp49rb/bulan · 90 hari Rp129rb · 1 tahun Rp499rb · Trial 7 hari GRATIS full fitur</p>
+    <a class="btn" href="/#download">Mulai Trial Gratis</a>
+  </div>
+  <p style="opacity:.85;max-width:720px;margin-top:16px">Semua paket membuka semua fitur, tanpa potongan per transaksi dan tanpa biaya tambahan per perangkat. OGKasir adalah aplikasi kasir offline untuk UMKM dengan lima mode usaha — Pedagang, Ritel, Campuran, Bangunan, dan Jasa; lihat gambaran lengkapnya di halaman <a href="/aplikasi-kasir-umkm.html">aplikasi kasir UMKM</a>.</p>
+</section>
+
+<section class="block">
+  <h2>Pertanyaan <span>Sering Ditanyakan</span></h2>
+  <div class="faq">
+    <details><summary>Apakah benar-benar bisa jualan tanpa internet sama sekali?</summary><p>Bisa. Semua fungsi harian OGKasir — mencatat penjualan, menghitung kembalian, memotong stok, mencatat bon, sampai melihat laporan — berjalan dari data yang tersimpan di HP. Internet tidak dibutuhkan sama sekali untuk jualan.</p></details>
+    <details><summary>Kalau tidak pernah online, apakah data penjualan aman?</summary><p>Data tersimpan di HP dan tidak hilang hanya karena offline. Tapi HP bisa hilang atau rusak, jadi sesekali hubungkan internet untuk cloud backup dan sinkronisasi — itu pengaman datamu, bukan syarat untuk bisa jualan.</p></details>
+    <details><summary>Apa bedanya aplikasi kasir offline dengan aplikasi kasir online?</summary><p>Aplikasi online menyimpan data di server: tanpa internet, kasirnya berhenti. Aplikasi kasir offline seperti OGKasir menyimpan data di perangkat: jualan jalan terus, dan data tersinkron ke cloud belakangan saat internet tersedia.</p></details>
+    <details><summary>Apakah perlu internet untuk mulai memakai OGKasir?</summary><p>Perlu sebentar di awal untuk mengunduh aplikasi dan mendaftar akun. Sesudah itu operasional harian berjalan 100% offline — tidak ada kewajiban online setiap hari.</p></details>
+    <details><summary>Bisa dipakai di beberapa HP kalau sering offline?</summary><p>Bisa, satu akun sampai 3 HP. Setiap HP tetap bisa jualan saat offline; begitu ada internet, data tersinkron dua arah otomatis dan perubahan terakhir yang berlaku.</p></details>
+    <details><summary>Bagaimana kalau listrik mati berjam-jam?</summary><p>Kasir berjalan dari HP, jadi selama baterai HP ada, jualan jalan. Struk tetap bisa dicetak ke printer thermal Bluetooth yang juga memakai baterai. Data tidak bergantung pada listrik atau WiFi toko.</p></details>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Pelajari <span>Lebih Dalam</span></h2>
+  <div class="rel">
+    <a href="/artikel-mencatat-penjualan-saat-listrik-mati.html">Catat Penjualan Saat Listrik Mati & Internet Down<small>Panduan praktis saat dua-duanya padam bersamaan</small></a>
+    <a href="/artikel-backup-data-penjualan-warkop.html">Backup Data Penjualan Biar Aman<small>Kenapa cadangan data tetap penting walau offline</small></a>
+    <a href="/aplikasi-kasir-warkop.html">Aplikasi Kasir Warkop Terbaik: Cepat, Offline, Mulai Rp8rb<small>Khusus warkop & kedai kopi</small></a>
+    <a href="/aplikasi-kasir-umkm.html">Aplikasi Kasir UMKM: Cepat, Offline, Rp8rb<small>Untuk semua jenis usaha kecil</small></a>
+  </div>
+</section>
+
+<div class="cta-box">
+  <h3>🚀 Internet Boleh Mati, Jualan Jangan</h3>
+  <p>Download OGKasir sekarang. 7 hari gratis, nggak perlu kartu kredit.</p>
+  <div class="row">
+    <a class="btn" href="/#download">⬇️ Download Gratis</a>
+    <a class="btn wa" href="https://wa.me/6288279406268?text=Halo%20OGKasir,%20saya%20mau%20tanya%20soal%20kasir%20offline">💬 Chat WhatsApp</a>
+  </div>
+</div>
+</div>
+
+<footer><div class="wrap">© 2026 OGKasir · <a href="/">Beranda</a> · <a href="/aplikasi-kasir-warkop.html">Aplikasi Kasir Warkop</a> · <a href="/aplikasi-kasir-umkm.html">Aplikasi Kasir UMKM</a> · <a href="/aplikasi-kasir-warkop-medan.html">Aplikasi Kasir Warkop Medan</a> · <a href="/blog.html">Blog</a></div></footer>
+</body>
+</html>
