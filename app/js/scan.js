@@ -13,24 +13,46 @@
    ARSITEKTUR BARU:
    (1) Mesin utama = ZXing C++ via WASM (js/zxingwasm.js + wasm tertanam
        base64 di js/zxing_reader_b64.js — TANPA fetch, supaya andal di
-       WebView file://). Per siklus baca, strategi bergilir: frame penuh
-       binarizer default -> frame penuh FixedThreshold -> crop tengah
-       default -> crop tengah FixedThreshold.
+       WebView file://). Per siklus baca, strategi bergilir — sejak putaran 3
+       crop tengah didahulukan (lihat STRATS & catatan putaran 3 di bawah).
    (2) Mesin lama (@zxing/library) tetap ada sebagai FALLBACK bila WASM
        gagal disiapkan (timeout 5 dtk / error berulang).
    (3) Penerimaan (kalibrasi dari benchmark): hasil kamera wajib lolos
-       validasi digit cek EAN/UPC DAN sama dari >=2 pembacaan dalam rentang
-       >=300ms. Mesin baru terbukti tidak mengemisikan kode salah, jadi
-       syarat lebih ringan dari 3x/900ms dan scan terasa responsif.
+       validasi digit cek EAN/UPC DAN sama dari >=2 pembacaan — dalam rentang
+       >=300ms, atau tanpa menunggu rentang bila dua bacaan itu datang dari
+       strategi berbeda (putaran 3). Mesin baru terbukti tidak mengemisikan
+       kode salah, jadi syarat lebih ringan dari 3x/900ms dan scan terasa
+       responsif.
    (4) UX anti-macet: bila >=4 detik ada kandidat valid terus-menerus tapi
        tak kunjung stabil, kandidat TERSERING ditawarkan ke kolom ketik
        manual + petunjuk cek angka tercetak di kemasan lalu tap OK — kasir
        yang memutuskan. Bacaan tak-stabil TIDAK PERNAH diterima otomatis.
    Pakai layer MODAL supaya bisa dibuka dari atas sheet form tanpa menutupnya.
-   Di APK: izin CAMERA ditangani native (MainActivity.onPermissionRequest). */
+   Di APK: izin CAMERA ditangani native (MainActivity.onPermissionRequest).
+
+   PUTARAN 3 — tuning responsivitas (vonis perangkat atas putaran 2: akurasi
+   diterima, tapi scan barcode KECIL di samping bungkus rokok terasa kurang
+   responsif). Benchmark fixture barcode kecil (frame 640/720/1080p, barcode
+   15–30% lebar frame) membuktikan: decode WASM hanya 1–26 ms — yang membuat
+   lambat adalah CADENCE putaran 2 (interval 240 ms + strategi frame-penuh
+   duluan + syarat rentang 300 ms), dan pada stream resolusi rendah barcode
+   1,1 px/modul HANYA terbaca lewat crop tengah yang di-upscale 2x. Maka:
+   (1) stream kamera diminta 1920x1080 ideal (lebih banyak piksel per batang);
+   (2) urutan strategi dibalik — crop tengah 2x duluan, frame penuh terakhir —
+       dan interval siklus 240 -> 120 ms (guard _busy tetap: maksimal satu
+       decode berjalan, jadi siklus berbasis anggaran waktu, bukan antrean);
+   (3) penerimaan lintas strategi: 2 bacaan sama dari strategi BERBEDA
+       (crop/binarizer berbeda = bukti independen) diterima tanpa menunggu
+       rentang 300 ms; strategi sama tetap aturan lama. Digit cek tetap wajib.
+       Pagar tambahan dari sapuan yang sama: bacaan yang hanya datang dari
+       input upscale-2x tidak diterima otomatis (satu fixture rotasi terbukti
+       bisa mengemisikan phantom lewat jalur upscale BILINEAR) — wajib
+       korroborasi dari input skala asli, atau jadi saran manual.
+   Opsi downscale internal zxing-cpp diuji (default / off / faktor 2):
+   TIDAK berpengaruh di semua fixture — tidak diubah. */
 var Scan = {
   _stream: null, _reader: null, _cb: null, _done: false,
-  _pendCode: null, _pendCount: 0, _pendSince: 0,
+  _pendCode: null, _pendCount: 0, _pendSince: 0, _pendStrats: null, _pendNative: false,
   NEED_READS: 2, MIN_SPAN_MS: 300,
   /* kandidat utk saran konfirmasi manual (butir 4) */
   _cand: null, _candOrder: null, _candFirstAt: 0,
@@ -46,8 +68,10 @@ var Scan = {
       BF.CODE_128, BF.CODE_39];
   },
   WASM_FORMATS: ['EAN13', 'EAN8', 'UPCA', 'UPCE', 'Code128', 'Code39', 'QRCode'],
-  /* strategi siklus baca wasm: [crop, binarizer] bergilir tiap tick */
-  STRATS: [[null, 'LocalAverage'], [null, 'FixedThreshold'], ['center', 'LocalAverage'], ['center', 'FixedThreshold']],
+  /* strategi siklus baca wasm: [crop, binarizer] bergilir tiap tick.
+     PUTARAN 3: wilayah tengah (tempat barcode diarahkan) diproses DULU —
+     crop 2x, crop 1x, baru frame penuh sebagai cadangan. */
+  STRATS: [['center2', 'LocalAverage'], ['center2', 'FixedThreshold'], ['center', 'LocalAverage'], ['center', 'FixedThreshold'], [null, 'LocalAverage'], [null, 'FixedThreshold']],
 
   /* --- normalisasi format: enum ZXing-JS ATAU nama zxing-cpp -> kunci --- */
   _fmtKey: function (format) {
@@ -102,24 +126,50 @@ var Scan = {
     return true;
   },
 
-  /* Beri satu hasil decode kamera; true bila SUDAH boleh diterima (stabil+valid). */
-  _feed: function (text, format) {
+  /* Beri satu hasil decode kamera; true bila SUDAH boleh diterima (stabil+valid).
+     strat = kunci strategi asal bacaan (crop|binarizer). PUTARAN 3: dua bacaan
+     sama dari strategi BERBEDA diterima tanpa menunggu rentang — dua jalur
+     binarisasi/crop yang independen menghasilkan kode yang sama adalah bukti
+     lebih kuat daripada dua bacaan strategi yang sama. Panggilan tanpa strat
+     (mesin JS fallback / uji lama) diperlakukan satu strategi tetap, sehingga
+     aturannya persis perilaku putaran 2. */
+  _feed: function (text, format, strat) {
     if (!this.validCode(text, format)) return false;
     var now = (typeof Date !== 'undefined' && Date.now) ? Date.now() : 0;
+    var skey = strat || 'legacy';
     /* statistik kandidat utk saran manual (butir 4) */
     if (!this._cand) { this._cand = {}; this._candOrder = []; }
     if (!this._cand[text]) { this._cand[text] = 0; this._candOrder.push(text); }
     this._cand[text]++;
     if (!this._candFirstAt) this._candFirstAt = now;
-    /* stabilitas */
-    if (text === this._pendCode) { this._pendCount++; }
-    else { this._pendCode = text; this._pendCount = 1; this._pendSince = now; }
+    /* stabilitas + pagar korroborasi skala (putaran 3): sapuan benchmark
+       menemukan input upscale-2x (interpolasi BILINEAR) bisa mengemisikan
+       phantom perangkat lama 8199168211242 pada SATU fixture rotasi —
+       emisi itu hilang total dengan interpolasi LANCZOS/NEAREST, tapi
+       interpolasi canvas peramban tidak bisa kami kendalikan. Maka bacaan
+       yang HANYA datang dari input upscale tidak pernah diterima otomatis:
+       ia wajib dikorroborasi bacaan dari input skala asli (center/full),
+       atau jatuh ke jalur saran manual (kasir mencocokkan angka tercetak).
+       Bacaan tanpa strat (mesin JS fallback) dihitung skala asli. */
+    var nativeRead = skey.indexOf('center2|') !== 0;
+    if (text === this._pendCode) {
+      this._pendCount++;
+      if (this._pendStrats) this._pendStrats[skey] = 1;
+      if (nativeRead) this._pendNative = true;
+    } else {
+      this._pendCode = text; this._pendCount = 1; this._pendSince = now;
+      this._pendStrats = {}; this._pendStrats[skey] = 1;
+      this._pendNative = nativeRead;
+    }
     this._status();
-    var accepted = this._pendCount >= this.NEED_READS && (now - this._pendSince) >= this.MIN_SPAN_MS;
+    var distinct = 0, k;
+    if (this._pendStrats) for (k in this._pendStrats) distinct++;
+    var accepted = this._pendNative && this._pendCount >= this.NEED_READS &&
+      ((now - this._pendSince) >= this.MIN_SPAN_MS || distinct >= 2);
     if (!accepted) this._maybeSuggest();
     return accepted;
   },
-  _resetPend: function () { this._pendCode = null; this._pendCount = 0; this._pendSince = 0; },
+  _resetPend: function () { this._pendCode = null; this._pendCount = 0; this._pendSince = 0; this._pendStrats = null; this._pendNative = false; },
   _resetCand: function () {
     this._cand = null; this._candOrder = null; this._candFirstAt = 0;
     this._suggested = null; this._userTyped = false;
@@ -184,8 +234,16 @@ var Scan = {
     var vw = video.videoWidth, vh = video.videoHeight;
     if (!vw || !vh) return null;
     var sx = 0, sy = 0, sw = vw, sh = vh;
-    if (crop === 'center') { sx = vw * 0.12; sy = vh * 0.22; sw = vw * 0.76; sh = vh * 0.56; }
-    var scale = Math.min(1, 1280 / Math.max(sw, sh));
+    if (crop === 'center' || crop === 'center2') { sx = vw * 0.12; sy = vh * 0.22; sw = vw * 0.76; sh = vh * 0.56; }
+    var scale;
+    if (crop === 'center2') {
+      /* upscale 2x wilayah tengah: modul batang tipis (barcode kecil di
+         samping bungkus) jadi terbaca; hasil dibatasi maks 1600px agar
+         biaya decode tetap ringan. */
+      scale = Math.min(2, 1600 / Math.max(sw, sh));
+    } else {
+      scale = Math.min(1, 1280 / Math.max(sw, sh));
+    }
     var tw = Math.max(2, Math.round(sw * scale)), th = Math.max(2, Math.round(sh * scale));
     if (!this._canvas) this._canvas = document.createElement('canvas');
     this._canvas.width = tw; this._canvas.height = th;
@@ -210,7 +268,7 @@ var Scan = {
       self._errCount = 0;
       if (res && res.length) {
         var code = String(res[0].text || '').trim();
-        if (code && self._feed(code, res[0].format)) self._accept(code);
+        if (code && self._feed(code, res[0].format, (strat[0] || 'full') + '|' + strat[1])) self._accept(code);
       }
     }, function () {
       self._busy = false;
@@ -285,7 +343,9 @@ var Scan = {
     if (!cam) return;
     var self = this;
     try {
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
+      /* ideal (bukan exact): perangkat yang tak sanggup 1080p tetap memberi
+         resolusi terbaiknya tanpa OverconstrainedError. */
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false })
         .then(function (s) { self._start(s); }, function (e) { self._fail(e); });
     } catch (e) { this._fail(e); }
   },
@@ -307,7 +367,10 @@ var Scan = {
         if (self._wasmState === 'ready') {
           clearInterval(pick);
           self._engine = 'wasm';
-          self._loopTimer = setInterval(function () { self._loopTick(); }, 240);
+          /* 120 ms (putaran 3): guard _busy di _loopTick memastikan maksimal
+             satu decode berjalan — siklus efektif = maks(120ms, lama decode),
+             jadi frame yang sudah memberi hasil tidak menunggu antrean. */
+          self._loopTimer = setInterval(function () { self._loopTick(); }, 120);
         } else if (self._wasmState === 'failed' || waited >= 5000) {
           clearInterval(pick);
           self._engine = 'js';
