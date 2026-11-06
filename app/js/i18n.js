@@ -530,6 +530,8 @@ var I18N = {
     "Restore akan MENGGANTI semua data saat ini dengan file backup. Lanjut?": "Restore will REPLACE all current data with the backup file. Continue?",
     "Restore berhasil": "Restore successful",
     "Scan tidak bisa dimulai": "Can't start the scanner",
+    "Terbaca: ": "Read: ",
+    " — tahan posisi sebentar (memastikan ": " — hold position for a moment (confirming ",
     "Semua": "All",
     "Semua data dihapus": "All data deleted",
     "Stok": "Stock",
