@@ -63,6 +63,8 @@ var I18N = {
     "Coba kata kunci lain — cari dari nomor meja atau nama pelanggan.": "Try another keyword — search by table number or customer name.",
     "Bayar & Tutup": "Pay & Close",
     "Belum ada Bon Meja terbuka": "No open Table Tabs",
+    "Belum stabil terbaca. Kandidat: ": "Not reading stably yet. Candidate: ",
+    " — cek angka tercetak di kemasan; kalau sama persis, tap OK. Kalau beda, perbaiki angkanya dulu.": " — check the digits printed on the package; if they match exactly, tap OK. If not, fix the digits first.",
     "Pelanggan yang pesan dulu dan bayar pas mau pulang muncul di sini, terurut per meja.": "Customers who order first and pay when they leave appear here, sorted by table.",
     "Total tab terbuka": "Total open tabs",
     "tab belum ditutup": "tabs still open",

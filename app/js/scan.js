@@ -1,25 +1,66 @@
 /* OGKasir - Scan kode produk via kamera (live viewfinder).
-   Mesin: @zxing/library (BrowserMultiFormatReader) — format dibatasi ke
-   keluarga ritel: EAN-13/8, UPC-A/E, Code-128/39, QR.
-   PERBAIKAN 6 Nov 2026 (bug salah baca barcode ESSE 8999168211248 terbaca
-   jadi kode sampah): reader EAN/UPC bisa mengeluarkan kode SALAH yang lolos
-   digit cek bila batang terdistorsi (miring/blur di feed video), dan dulu
-   hasil frame pertama langsung diterima. Sekarang hasil scan kamera wajib:
-   (1) lolos validasi digit cek untuk EAN-13/EAN-8/UPC-A/UPC-E, dan
-   (2) sama persis dari >=3 pembacaan berurutan dalam rentang >=900ms
-   sebelum diteruskan ke pemanggil. Ketik manual tetap bebas seperti dulu.
+   PUTARAN 2 — 6 Nov 2026 (perombakan mesin, bukan tambal validasi):
+   Fix v1.60 (ZXing-JS + validasi digit cek + baca-stabil 3x) TERBUKTI GAGAL
+   di tablet nyata zgg: phantom DETERMINISTIK "8199168211242" (beda 2 digit
+   dari asli 8999168211248, tapi lolos digit cek) tembus syarat 3x sama, dan
+   bacaan yang berganti-ganti membuat penghitung macet di 1/3 ("ga responsif").
+   Benchmark offline (38 fixture foto/render + 41 fixture transformasi +
+   36 frame rolling-shutter + 24 fixture silau/glare): pada set glare —
+   model kegagalan kemasan mengilap — ZXing-JS mengeluarkan kode SALAH utuh
+   (7993145001014 utk 8993199001014), sedangkan ZXing C++ (zxing-wasm 3.1.6)
+   mengeluarkan 0 kode salah di SELURUH 139 fixture dan membaca lebih banyak
+   fixture perangkat asli (ensemble 9/11 vs 4/11).
+   ARSITEKTUR BARU:
+   (1) Mesin utama = ZXing C++ via WASM (js/zxingwasm.js + wasm tertanam
+       base64 di js/zxing_reader_b64.js — TANPA fetch, supaya andal di
+       WebView file://). Per siklus baca, strategi bergilir: frame penuh
+       binarizer default -> frame penuh FixedThreshold -> crop tengah
+       default -> crop tengah FixedThreshold.
+   (2) Mesin lama (@zxing/library) tetap ada sebagai FALLBACK bila WASM
+       gagal disiapkan (timeout 5 dtk / error berulang).
+   (3) Penerimaan (kalibrasi dari benchmark): hasil kamera wajib lolos
+       validasi digit cek EAN/UPC DAN sama dari >=2 pembacaan dalam rentang
+       >=300ms. Mesin baru terbukti tidak mengemisikan kode salah, jadi
+       syarat lebih ringan dari 3x/900ms dan scan terasa responsif.
+   (4) UX anti-macet: bila >=4 detik ada kandidat valid terus-menerus tapi
+       tak kunjung stabil, kandidat TERSERING ditawarkan ke kolom ketik
+       manual + petunjuk cek angka tercetak di kemasan lalu tap OK — kasir
+       yang memutuskan. Bacaan tak-stabil TIDAK PERNAH diterima otomatis.
    Pakai layer MODAL supaya bisa dibuka dari atas sheet form tanpa menutupnya.
    Di APK: izin CAMERA ditangani native (MainActivity.onPermissionRequest). */
 var Scan = {
   _stream: null, _reader: null, _cb: null, _done: false,
   _pendCode: null, _pendCount: 0, _pendSince: 0,
-  NEED_READS: 3, MIN_SPAN_MS: 900,
+  NEED_READS: 2, MIN_SPAN_MS: 300,
+  /* kandidat utk saran konfirmasi manual (butir 4) */
+  _cand: null, _candOrder: null, _candFirstAt: 0,
+  _suggested: null, _userTyped: false, SUGGEST_AFTER_MS: 4000,
+  /* mesin wasm */
+  _engine: null, _wasmState: 'idle', _wasmBytes: null,
+  _loopTimer: null, _busy: false, _stratIdx: 0, _errCount: 0, _canvas: null,
 
   FORMATS: function () {
     var BF = ZXing.BarcodeFormat;
     return [BF.QR_CODE,
       BF.EAN_13, BF.EAN_8, BF.UPC_A, BF.UPC_E,
       BF.CODE_128, BF.CODE_39];
+  },
+  WASM_FORMATS: ['EAN13', 'EAN8', 'UPCA', 'UPCE', 'Code128', 'Code39', 'QRCode'],
+  /* strategi siklus baca wasm: [crop, binarizer] bergilir tiap tick */
+  STRATS: [[null, 'LocalAverage'], [null, 'FixedThreshold'], ['center', 'LocalAverage'], ['center', 'FixedThreshold']],
+
+  /* --- normalisasi format: enum ZXing-JS ATAU nama zxing-cpp -> kunci --- */
+  _fmtKey: function (format) {
+    if (typeof format === 'string') {
+      var s = format.replace(/[-\s]/g, '').toUpperCase();
+      var map = { EAN13: 'EAN_13', EAN8: 'EAN_8', UPCA: 'UPC_A', UPCE: 'UPC_E', CODE128: 'CODE_128', CODE39: 'CODE_39', QRCODE: 'QR_CODE' };
+      return map[s] || s;
+    }
+    if (typeof ZXing !== 'undefined' && ZXing.BarcodeFormat) {
+      var BF = ZXing.BarcodeFormat;
+      for (var k in BF) if (BF[k] === format) return k;
+    }
+    return '';
   },
 
   /* --- validasi digit cek (mod-10) untuk keluarga EAN/UPC --- */
@@ -39,25 +80,25 @@ var Scan = {
     return ns + mid + c;
   },
   validCode: function (text, format) {
-    var BF = ZXing.BarcodeFormat;
+    var key = this._fmtKey(format);
     if (!text) return false;
-    if (format === BF.EAN_13) {
+    if (key === 'EAN_13') {
       if (!/^\d{13}$/.test(text)) return false;
       return this._mod10(text, [1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3]);
     }
-    if (format === BF.UPC_A) {
+    if (key === 'UPC_A') {
       if (!/^\d{12}$/.test(text)) return false;
       return this._mod10(text, [3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3]);
     }
-    if (format === BF.EAN_8) {
+    if (key === 'EAN_8') {
       if (!/^\d{8}$/.test(text)) return false;
       return this._mod10(text, [3, 1, 3, 1, 3, 1, 3]);
     }
-    if (format === BF.UPC_E) {
+    if (key === 'UPC_E') {
       if (!/^\d{8}$/.test(text)) return false;
       return this._mod10(this._upceToUpca(text), [3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3]);
     }
-    // QR / Code-128 / Code-39: checksum internal library + syarat baca-stabil di _feed
+    // QR / Code-128 / Code-39: checksum internal mesin + syarat baca-stabil di _feed
     return true;
   },
 
@@ -65,12 +106,24 @@ var Scan = {
   _feed: function (text, format) {
     if (!this.validCode(text, format)) return false;
     var now = (typeof Date !== 'undefined' && Date.now) ? Date.now() : 0;
+    /* statistik kandidat utk saran manual (butir 4) */
+    if (!this._cand) { this._cand = {}; this._candOrder = []; }
+    if (!this._cand[text]) { this._cand[text] = 0; this._candOrder.push(text); }
+    this._cand[text]++;
+    if (!this._candFirstAt) this._candFirstAt = now;
+    /* stabilitas */
     if (text === this._pendCode) { this._pendCount++; }
     else { this._pendCode = text; this._pendCount = 1; this._pendSince = now; }
     this._status();
-    return this._pendCount >= this.NEED_READS && (now - this._pendSince) >= this.MIN_SPAN_MS;
+    var accepted = this._pendCount >= this.NEED_READS && (now - this._pendSince) >= this.MIN_SPAN_MS;
+    if (!accepted) this._maybeSuggest();
+    return accepted;
   },
   _resetPend: function () { this._pendCode = null; this._pendCount = 0; this._pendSince = 0; },
+  _resetCand: function () {
+    this._cand = null; this._candOrder = null; this._candFirstAt = 0;
+    this._suggested = null; this._userTyped = false;
+  },
   _status: function () {
     var el = (typeof document !== 'undefined') ? document.getElementById('scanStatus') : null;
     if (el && this._pendCode) {
@@ -78,19 +131,141 @@ var Scan = {
     }
   },
 
-  open: function (cb) {
-    if (!window.ZXing || !ZXing.BrowserMultiFormatReader) { UI.toast(T('Pustaka scan belum termuat')); return; }
-    this._cb = cb; this._done = false; this._resetPend();
-    var cam = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  /* Butir 4: tawarkan kandidat tersering ke kolom manual setelah 4 dtk tak stabil.
+     Tidak pernah menimpa ketikan pengguna; tidak pernah menerima otomatis. */
+  _maybeSuggest: function () {
+    if (this._done || !this._cand || !this._candFirstAt) return;
+    var now = (typeof Date !== 'undefined' && Date.now) ? Date.now() : 0;
+    if (now - this._candFirstAt < this.SUGGEST_AFTER_MS) return;
+    var best = null, bestN = 0, i;
+    for (i = 0; i < this._candOrder.length; i++) {
+      var c = this._candOrder[i];
+      if (this._cand[c] > bestN) { best = c; bestN = this._cand[c]; }
+    }
+    if (!best || bestN < 2 || best === this._suggested) return;
+    var el = (typeof document !== 'undefined') ? document.getElementById('scanManual') : null;
+    if (!el) return;
+    if (el.value && el.value !== this._suggested) { this._userTyped = true; return; }
+    if (this._userTyped) return;
+    el.value = best;
+    this._suggested = best;
+    var hint = document.getElementById('scanHint');
+    if (hint) {
+      hint.textContent = T('Belum stabil terbaca. Kandidat: ') + best + T(' — cek angka tercetak di kemasan; kalau sama persis, tap OK. Kalau beda, perbaiki angkanya dulu.');
+      hint.style.display = 'block';
+    }
+    this._status();
+  },
+
+  /* ================= mesin WASM (utama) ================= */
+  _initWasm: function () {
+    if (this._wasmState === 'ready' || this._wasmState === 'failed' || this._wasmState === 'loading') return;
+    if (typeof ZXingWASM === 'undefined' || !ZXingWASM.readBarcodes ||
+        typeof ZXING_READER_WASM_B64 === 'undefined') { this._wasmState = 'failed'; return; }
+    this._wasmState = 'loading';
+    var self = this;
+    try {
+      if (!this._wasmBytes) {
+        var bin = atob(ZXING_READER_WASM_B64);
+        var bytes = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        this._wasmBytes = bytes;
+      }
+      ZXingWASM.setZXingModuleOverrides({ wasmBinary: this._wasmBytes });
+      ZXingWASM.prepareZXingModule({ fireImmediately: true }).then(function () {
+        self._wasmState = 'ready';
+      }, function () { self._wasmState = 'failed'; });
+    } catch (e) { this._wasmState = 'failed'; }
+  },
+  _wasmOpts: function (bin) {
+    return { formats: this.WASM_FORMATS, tryHarder: true, tryRotate: true, maxNumberOfSymbols: 1, binarizer: bin };
+  },
+  _capture: function (video, crop) {
+    var vw = video.videoWidth, vh = video.videoHeight;
+    if (!vw || !vh) return null;
+    var sx = 0, sy = 0, sw = vw, sh = vh;
+    if (crop === 'center') { sx = vw * 0.12; sy = vh * 0.22; sw = vw * 0.76; sh = vh * 0.56; }
+    var scale = Math.min(1, 1280 / Math.max(sw, sh));
+    var tw = Math.max(2, Math.round(sw * scale)), th = Math.max(2, Math.round(sh * scale));
+    if (!this._canvas) this._canvas = document.createElement('canvas');
+    this._canvas.width = tw; this._canvas.height = th;
+    var ctx = this._canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, tw, th);
+    return ctx.getImageData(0, 0, tw, th);
+  },
+  _loopTick: function () {
+    if (this._done || this._busy) return;
+    this._maybeSuggest();
+    var v = document.getElementById('scanVideo');
+    if (!v || !v.videoWidth) return;
+    var strat = this.STRATS[this._stratIdx++ % this.STRATS.length];
+    var img;
+    try { img = this._capture(v, strat[0]); } catch (e) { img = null; }
+    if (!img) return;
+    this._busy = true;
+    var self = this;
+    ZXingWASM.readBarcodes(img, this._wasmOpts(strat[1])).then(function (res) {
+      self._busy = false;
+      if (self._done) return;
+      self._errCount = 0;
+      if (res && res.length) {
+        var code = String(res[0].text || '').trim();
+        if (code && self._feed(code, res[0].format)) self._accept(code);
+      }
+    }, function () {
+      self._busy = false;
+      if (self._done) return;
+      /* WASM bermasalah di perangkat ini -> jatuhkan ke mesin JS utk sesi ini */
+      if (++self._errCount >= 3 && self._engine === 'wasm') {
+        self._engine = 'js';
+        if (self._loopTimer) { clearInterval(self._loopTimer); self._loopTimer = null; }
+        self._startJsEngine();
+      }
+    });
+  },
+
+  /* ================= mesin JS (fallback) ================= */
+  _startJsEngine: function () {
+    if (this._done) return;
+    if (typeof ZXing === 'undefined' || !ZXing.BrowserMultiFormatReader) return;
     var hints = new Map();
     hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, this.FORMATS());
     try { this._reader = new ZXing.BrowserMultiFormatReader(hints, 250); }
-    catch (e) { UI.toast(T('Scan tidak bisa dimulai')); return; }
+    catch (e) { return; }
+    var v = document.getElementById('scanVideo');
+    if (!v) return;
+    var self = this;
+    try {
+      this._reader.decodeFromVideoElementContinuously(v, function (result, err) {
+        if (self._done) return;
+        if (result) {
+          var code = String(result.getText()).trim();
+          if (code && self._feed(code, result.getBarcodeFormat())) self._accept(code);
+        }
+      });
+    } catch (e) {}
+  },
+
+  _accept: function (code) {
+    this._done = true;
+    try { if (navigator.vibrate) navigator.vibrate(80); } catch (e) {}
+    var cb = this._cb;
+    this.close();
+    if (cb) cb(code);
+  },
+
+  open: function (cb) {
+    if ((typeof ZXingWASM === 'undefined' || !ZXingWASM.readBarcodes) &&
+        (typeof ZXing === 'undefined' || !ZXing.BrowserMultiFormatReader)) { UI.toast(T('Pustaka scan belum termuat')); return; }
+    this._cb = cb; this._done = false; this._resetPend(); this._resetCand();
+    this._engine = null; this._stratIdx = 0; this._errCount = 0; this._busy = false;
+    this._initWasm();
+    var cam = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
     UI.openModal(
       T('<h3 class="k-sheet-t">📷 Scan Kode Produk</h3>') +
       T('<p class="k-muted" style="font-size:13px;margin:0 0 10px">Arahkan kamera ke QR / barcode produk') +
       (cam ? '' : T(' (kamera tidak tersedia di perangkat ini)')) + '</p>' +
-      (cam ? '<video id="scanVideo" playsinline muted style="width:100%;border-radius:12px;background:#000;min-height:220px"></video><div id="scanStatus" style="min-height:18px;font-size:13px;font-weight:700;color:var(--brand);margin-top:8px"></div>' : '') +
+      (cam ? '<video id="scanVideo" playsinline muted style="width:100%;border-radius:12px;background:#000;min-height:220px"></video><div id="scanStatus" style="min-height:18px;font-size:13px;font-weight:700;color:var(--brand);margin-top:8px"></div><div id="scanHint" style="display:none;font-size:13px;line-height:1.45;background:#FFF7E0;border:1px solid #E8C86A;color:#6B5310;border-radius:10px;padding:8px 10px;margin-top:8px"></div>' : '') +
       '<div style="display:flex;align-items:center;gap:10px;margin:16px 0 12px">' +
       '<div style="flex:1;height:1px;background:var(--line)"></div>' +
       '<span style="font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap">' + T('Atau ketik manual') + '</span>' +
@@ -100,6 +275,13 @@ var Scan = {
       '<button class="k-btn k-pri" onclick="Scan.manualGo()" style="flex:0 0 auto;width:auto;padding:12px 20px;box-shadow:0 2px 8px rgba(0,0,0,.18)">OK</button></div>' +
       T('<div class="k-btn-row" style="margin-top:12px"><button class="k-btn k-ghost" onclick="Scan.close()">Batal</button></div>')
     );
+    var mi = document.getElementById('scanManual');
+    if (mi && mi.addEventListener) {
+      var self0 = this;
+      mi.addEventListener('input', function () {
+        if (mi.value !== self0._suggested) self0._userTyped = true;
+      });
+    }
     if (!cam) return;
     var self = this;
     try {
@@ -116,23 +298,22 @@ var Scan = {
     var self = this;
     v.onloadedmetadata = function () {
       try { v.play(); } catch (e) {}
-      try {
-        self._reader.decodeFromVideoElementContinuously(v, function (result, err) {
-          if (self._done) return;
-          if (result) {
-            var code = String(result.getText()).trim();
-            // Tolak diam-diam hasil yang gagal digit cek / belum stabil —
-            // scanner terus memindai, JANGAN teruskan ke pemanggil dulu.
-            if (!code || !self._feed(code, result.getBarcodeFormat())) return;
-            self._done = true;
-            try { if (navigator.vibrate) navigator.vibrate(80); } catch (e) {}
-            var cb = self._cb;
-            self.close();
-            if (cb) cb(code);
-          }
-          // err (NotFoundException tiap frame) diabaikan
-        });
-      } catch (e) { self._fail(e); }
+      /* Pilih mesin: WASM bila siap <=5 dtk, selain itu JS. Polling ringan
+         hanya selama modal terbuka. */
+      var waited = 0;
+      var pick = setInterval(function () {
+        if (self._done) { clearInterval(pick); return; }
+        waited += 200;
+        if (self._wasmState === 'ready') {
+          clearInterval(pick);
+          self._engine = 'wasm';
+          self._loopTimer = setInterval(function () { self._loopTick(); }, 240);
+        } else if (self._wasmState === 'failed' || waited >= 5000) {
+          clearInterval(pick);
+          self._engine = 'js';
+          self._startJsEngine();
+        }
+      }, 200);
     };
   },
 
@@ -160,7 +341,8 @@ var Scan = {
 
   _stop: function () {
     this._done = true;
-    this._resetPend();
+    this._resetPend(); this._resetCand();
+    if (this._loopTimer) { clearInterval(this._loopTimer); this._loopTimer = null; }
     if (this._reader) {
       try { this._reader.reset(); } catch (e) {}
       this._reader = null;
