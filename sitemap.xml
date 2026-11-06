@@ -2,10 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
     <loc>https://ogkasir.my.id/</loc>
-    <lastmod>2026-11-05</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+<url>
+    <loc>https://ogkasir.my.id/artikel-aplikasi-kasir-usaha-jasa.html</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 <url>
     <loc>https://ogkasir.my.id/kalkulator.html</loc>
     <lastmod>2026-11-05</lastmod>
@@ -161,9 +168,9 @@
 <url><loc>https://ogkasir.my.id/video.html</loc>
     <lastmod>2026-11-04</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
 <url><loc>https://ogkasir.my.id/aplikasi-kasir-warkop.html</loc>
-    <lastmod>2026-11-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-<url><loc>https://ogkasir.my.id/aplikasi-kasir-warkop-medan.html</loc><lastmod>2026-11-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-<url><loc>https://ogkasir.my.id/aplikasi-kasir-umkm.html</loc><lastmod>2026-11-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+    <lastmod>2026-11-04</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+<url><loc>https://ogkasir.my.id/aplikasi-kasir-warkop-medan.html</loc><lastmod>2026-11-04</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+<url><loc>https://ogkasir.my.id/aplikasi-kasir-umkm.html</loc><lastmod>2026-11-04</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
 <url><loc>https://ogkasir.my.id/blog.html</loc>
     <lastmod>2026-11-04</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url>
@@ -175,25 +182,6 @@
 <url>
     <loc>https://ogkasir.my.id/artikel-harga-wajar-aplikasi-kasir-warkop.html</loc>
     <lastmod>2026-11-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ogkasir.my.id/artikel-pencatatan-pengeluaran-warkop.html</loc>
-    <lastmod>2026-11-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-<url><loc>https://ogkasir.my.id/aplikasi-kasir-offline.html</loc><lastmod>2026-11-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-<url>
-    <loc>https://ogkasir.my.id/artikel-aplikasi-umkm.html</loc>
-    <lastmod>2026-11-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-<url>
-    <loc>https://ogkasir.my.id/artikel-aplikasi-kasir-toko-kelontong.html</loc>
-    <lastmod>2026-11-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
