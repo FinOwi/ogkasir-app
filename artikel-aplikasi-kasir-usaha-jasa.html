@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aplikasi Kasir Jasa: Laundry, Bengkel & Salon | OGKasir</title>
+<meta name="description" content="Aplikasi kasir usaha jasa buat laundry, bengkel, salon, dan rental: order berkode, DP, status pengerjaan, sampai serah terima. Cek fitur wajibnya sebelum beli.">
+<meta name="keywords" content="aplikasi kasir usaha jasa, aplikasi kasir laundry, aplikasi kasir bengkel, aplikasi kasir salon, kasir rental, order DP">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ogkasir.my.id/artikel-aplikasi-kasir-usaha-jasa.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Aplikasi Kasir Jasa: Laundry, Bengkel & Salon">
+<meta property="og:description" content="Laundry, bengkel, salon, dan rental butuh kasir yang mengikuti perjalanan order — dari DP sampai serah terima. Ini fitur wajibnya.">
+<meta property="og:url" content="https://ogkasir.my.id/artikel-aplikasi-kasir-usaha-jasa.html">
+<meta property="og:image" content="https://ogkasir.my.id/img/artikel-aplikasi-kasir-usaha-jasa.jpg">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article",
+"headline":"Aplikasi Kasir Jasa: Laundry, Bengkel & Salon",
+"description":"Panduan memilih aplikasi kasir untuk usaha jasa: laundry, bengkel, salon, dan rental, lengkap dengan fitur wajib dan contoh alur order.",
+"image":"https://ogkasir.my.id/img/artikel-aplikasi-kasir-usaha-jasa.jpg",
+"author":{"@type":"Person","name":"Nadia","jobTitle":"Penulis Artikel","worksFor":{"@type":"Organization","name":"Tim OGKasir"}},
+"publisher":{"@type":"Organization","name":"OGKasir"},
+"datePublished":"2026-11-06","dateModified":"2026-11-06",
+"mainEntityOfPage":"https://ogkasir.my.id/artikel-aplikasi-kasir-usaha-jasa.html"}
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0B1B2B; --navy-2: #132E49;
+    --gold: #D4A017; --gold-hi: #E3B52E; --gold-dark: #9A7408; --gold-soft: #FBF3DF; --gold-line: #EBD9A8;
+    --ink: #23272F; --muted: #68707D; --line: #E8E4D8; --bg: #FAFAF7; --card: #FFFFFF;
+    --link: #2563EB;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--ink); font-size: 18px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  ::selection { background: rgba(212,160,23,.28); }
+  a { color: var(--link); }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* Bilah progres baca */
+  #read-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--gold); z-index: 100; }
+
+  /* Header */
+  nav { position: sticky; top: 0; z-index: 50; background: var(--navy); border-bottom: 2px solid var(--gold); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 11px; padding-bottom: 11px; max-width: 1080px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; color: #fff; letter-spacing: .2px; }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .btn { display: inline-block; background: var(--gold); color: var(--navy); font-weight: 800; padding: 12px 26px; border-radius: 12px; text-decoration: none; border: none; cursor: pointer; font-size: 16px; transition: background .15s ease; }
+  .btn:hover { background: var(--gold-hi); }
+  .btn.wa { background: #25D366; color: #053B1E; }
+  .btn.wa:hover { background: #3BD975; }
+
+  /* Kolom baca */
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* Breadcrumb */
+  .crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; font-size: 13.5px; color: var(--muted); padding: 22px 0 4px; }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .crumb a:hover { color: var(--gold-dark); text-decoration: underline; }
+  .crumb .sep { color: #C9C2AE; }
+  .crumb .cur { color: var(--ink); font-weight: 600; }
+
+  /* Gambar sampul */
+  .hero { margin: 18px 0 6px; }
+  .hero img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); }
+
+  article { padding: 26px 0 10px; }
+  article h1 { font-size: clamp(30px, 5.4vw, 41px); line-height: 1.25; letter-spacing: -.01em; color: var(--navy); font-weight: 800; margin-bottom: 18px; }
+  article h1 span { background-image: linear-gradient(transparent 64%, rgba(212,160,23,.38) 64%); }
+
+  /* Baris meta penulis */
+  .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; font-size: 14.5px; color: var(--muted); padding-bottom: 18px; margin-bottom: 30px; border-bottom: 2px solid var(--gold); }
+  .meta::before { content: "N"; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-right: 5px; border-radius: 50%; background: var(--navy); color: var(--gold); font-weight: 800; font-size: 15px; flex: none; }
+  .meta strong { color: var(--navy); }
+
+  article h2 { font-size: clamp(22px, 3.6vw, 27px); line-height: 1.35; color: var(--navy); font-weight: 800; margin: 46px 0 14px; padding-left: 14px; border-left: 4px solid var(--gold); }
+  article h3 { font-size: 20px; line-height: 1.4; color: var(--navy); font-weight: 700; margin: 30px 0 10px; }
+  article p { margin-bottom: 22px; }
+  article ul, article ol { margin: 0 0 22px 24px; }
+  article li { margin-bottom: 9px; }
+  article li::marker { color: var(--gold-dark); font-weight: 700; }
+  article strong { color: var(--ink); font-weight: 700; }
+  article img { max-width: 100%; height: auto; border-radius: 12px; }
+  article a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(37,99,235,.4); }
+  article a:hover { text-decoration-color: var(--link); }
+
+  /* Kotak sorotan (rumus / contoh angka) */
+  .sorot { background: var(--gold-soft); border: 1px solid var(--gold-line); border-left: 4px solid var(--gold); border-radius: 12px; padding: 20px 24px 4px; margin: 30px 0; }
+  .sorot p { margin-bottom: 16px; }
+
+  /* Tabel bersih */
+  .tbl-wrap { overflow-x: auto; margin: 26px 0 30px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  article table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.55; }
+  article th { background: var(--navy); color: #fff; text-align: left; font-weight: 700; padding: 11px 16px; white-space: nowrap; }
+  article td { padding: 11px 16px; border-top: 1px solid #EFEAD9; vertical-align: top; }
+  article tbody tr:nth-child(even) td { background: #FBF8EF; }
+  article th.num, article td.num { text-align: right; }
+  article td.num { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* Baca juga */
+  .related { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px 28px 12px; margin: 44px 0; box-shadow: 0 1px 3px rgba(11,27,43,.05); }
+  .related h3 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-dark); margin: 0 0 8px; }
+  .related ul { margin: 0; list-style: none; }
+  .related li { margin: 0; border-top: 1px solid #F0EBDB; }
+  .related li:first-child { border-top: none; }
+  .related li::marker { content: none; }
+  .related a { display: block; padding: 11px 2px; color: var(--navy); font-weight: 600; text-decoration: none; line-height: 1.5; }
+  .related a::before { content: "›"; color: var(--gold); font-weight: 800; margin-right: 9px; }
+  .related a:hover { color: var(--gold-dark); }
+
+  /* CTA */
+  .cta-box { background: linear-gradient(160deg, var(--navy-2), var(--navy)); color: #fff; border-radius: 18px; padding: 36px 30px; text-align: center; margin: 44px 0; }
+  .cta-box h3 { font-size: 24px; color: #fff; margin: 0 0 10px; }
+  .cta-box p { color: rgba(255,255,255,.84); margin-bottom: 24px; }
+  .cta-box .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cta-box a { text-decoration: none; }
+
+  .back { display: inline-block; margin-top: 30px; font-size: 15px; color: var(--muted); text-decoration: none; }
+  .back:hover { color: var(--gold-dark); }
+
+  footer { border-top: 1px solid var(--line); background: #fff; padding: 28px 0; text-align: center; font-size: 14px; color: var(--muted); margin-top: 54px; }
+  footer .wrap { max-width: 1080px; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 640px) {
+    body { font-size: 17px; }
+    .cta-box { padding: 30px 22px; }
+    .related { padding: 20px 20px 8px; }
+    .sorot { padding: 16px 18px 2px; }
+  }
+</style>
+</head>
+<body>
+<div id="read-progress"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="https://ogkasir.my.id/"><img src="https://ogkasir.my.id/logo.png" alt="OGKasir"> OGKasir</a>
+    <a class="btn" href="https://ogkasir.my.id/#download" style="padding:10px 20px;font-size:14px">Download</a>
+  </div>
+</nav>
+
+<div class="wrap">
+<div class="crumb"><a href="https://ogkasir.my.id/">Beranda</a><span class="sep">›</span><a href="https://ogkasir.my.id/blog.html">Blog</a><span class="sep">›</span><span class="cur">Aplikasi Kasir Jasa: Laundry, Bengkel & Salon</span></div>
+<figure class="hero"><img src="https://ogkasir.my.id/img/artikel-aplikasi-kasir-usaha-jasa.jpg" alt="Aplikasi Kasir Jasa: Laundry, Bengkel & Salon"></figure>
+<article>
+<h1>Aplikasi Kasir <span>Usaha Jasa</span>: Laundry, Bengkel, Salon &amp; Rental</h1>
+<div class="meta">Oleh Nadia · Tim OGKasir · 6 November 2026 · 5 menit baca</div>
+<p>Laundry, bengkel, salon, dan rental punya satu kesamaan: pelanggan tidak selalu bayar lunas di tempat. Ada cucian yang baru diambil besok, motor yang ditinggal seharian, treatment yang dibayar DP dulu, dan unit rental yang kembali tiga hari lagi. Kalau pencatatanmu masih mengandalkan buku tulis dan ingatan, cepat atau lambat ada order yang tertukar, DP yang lupa dicatat, atau pelanggan yang datang mengambil barang yang ternyata belum selesai.</p>
+<p>Di sinilah aplikasi kasir khusus usaha jasa bekerja. Bukan sekadar mencatat penjualan seperti di warkop, tapi mengikuti perjalanan satu order dari masuk sampai serah terima. Artikel ini membahas fitur wajibnya, per segmen, supaya kamu tidak salah beli.</p>
+<h2>Kenapa Usaha Jasa Butuh Kasir yang Beda</h2>
+<p>Di warkop, transaksi selesai dalam hitungan menit: pesan, bayar, selesai. Di usaha jasa, satu transaksi bisa hidup berhari-hari. Laundry kiloan masuk hari Senin, selesai Selasa, diambil Rabu. Motor masuk bengkel pagi, sparepart baru datang siang, pelanggan bayar sore. Selama jeda itu, ada banyak hal yang bisa berantakan: barang tertukar, status pengerjaan tidak jelas, dan kasir lupa pelanggan sudah bayar DP berapa.</p>
+<p>Kasir biasa yang hanya mencatat "terjual sekian, total sekian" tidak menjawab kebutuhan itu. Yang dibutuhkan adalah sistem order: setiap pekerjaan punya kode, pelanggan, rincian layanan, jumlah DP, status pengerjaan, dan sisa tagihan. Begitu order selesai dan diambil, barulah transaksi itu benar-benar tutup.</p>
+<h2>6 Fitur Wajib Aplikasi Kasir buat Usaha Jasa</h2>
+<p>Sebelum membandingkan aplikasi apa pun, cek enam hal ini. Kalau satu saja tidak ada, kamu akan kembali menambal dengan buku tulis.</p>
+<ul>
+<li><strong>Kode order otomatis.</strong> Setiap order punya kode unik, misalnya ORD-001, yang tertulis di struk dan bisa dicari dalam hitungan detik saat pelanggan datang mengambil.</li>
+<li><strong>Catat DP dan sisa tagihan.</strong> Aplikasi harus memisahkan berapa yang sudah dibayar di muka dan berapa sisanya — bukan sekadar total harga.</li>
+<li><strong>Status pengerjaan yang jelas.</strong> Alur yang paling masuk akal: Diterima, Diproses, Selesai, lalu Diambil &amp; Lunas. Pelanggan dan karyawan sama-sama tahu posisi ordernya.</li>
+<li><strong>Struk dan pengingat.</strong> Struk berisi kode order dan estimasi selesai. Lebih bagus lagi kalau ada pengingat saat order sudah selesai tapi belum diambil.</li>
+<li><strong>Laporan per layanan.</strong> Kamu perlu tahu layanan mana yang paling laku dan paling menguntungkan — cuci kiloan atau cuci satuan, ganti oli atau servis besar, potong rambut atau creambath.</li>
+<li><strong>Bekerja offline.</strong> Laundry dan bengkel sering berada di ruko yang sinyalnya tidak stabil. Kasir yang berhenti saat internet mati sama saja dengan kasir yang rusak.</li>
+</ul>
+<h2>Laundry, Bengkel, Salon, Rental: Beda Segmen, Beda Kebutuhan</h2>
+<p>Meski sama-sama usaha jasa, tiap segmen punya titik rawan masing-masing.</p>
+<p><strong>Laundry</strong> bermain di volume dan ketelitian. Cucian kiloan dihitung per kilogram, cucian satuan per potong. Titik rawannya: pakaian pelanggan tertukar atau hilang. Kode order yang menempel di setiap kantong cucian dan status yang tercatat rapi adalah pengaman paling murah.</p>
+<p><strong>Bengkel</strong> bermain di sparepart dan kepercayaan. Pelanggan menitipkan motor seharian dan butuh kepastian: apa saja yang diganti, berapa harganya, kapan selesai. Rincian order yang jelas di struk mencegah tuduhan "kok tiba-tiba mahal" di akhir.</p>
+<p><strong>Salon</strong> bermain di jadwal dan langganan. Treatment punya durasi, pelanggan punya jam janji. Kasir yang mencatat layanan per pelanggan memudahkanmu melihat siapa pelanggan setia dan treatment apa yang paling sering diambil.</p>
+<p><strong>Rental</strong> bermain di durasi dan pengembalian. Unit yang keluar harus kembali — lengkap dan tepat waktu. Tanpa pencatatan status, kamu baru sadar ada unit yang belum kembali saat pelanggan berikutnya sudah menunggu.</p>
+<h2>Cara Kerja Order yang Rapi: Kode, DP, Status, Serah Terima</h2>
+<p>Alur yang rapi sebenarnya sederhana. Begini contohnya di laundry:</p>
+<ol>
+<li>Pelanggan datang membawa cucian 5 kg. Kasir membuat order <strong>ORD-023</strong>, total Rp50.000, DP Rp25.000.</li>
+<li>Order berstatus <strong>Diterima</strong>. Cucian masuk proses, status berubah jadi <strong>Diproses</strong>.</li>
+<li>Cucian selesai, status jadi <strong>Selesai</strong>. Pelanggan dihubungi atau datang sendiri.</li>
+<li>Saat pengambilan, kasir mencari ORD-023, pelanggan melunasi sisa Rp25.000, status jadi <strong>Diambil &amp; Lunas</strong>.</li>
+</ol>
+<div class="sorot">
+<p><strong>Contoh hitungan DP:</strong> order Rp200.000 dengan DP 50% berarti Rp100.000 masuk di awal dan Rp100.000 sisanya dibayar saat serah terima. Tanpa pencatatan DP, kasir gampang lupa — dan pelanggan yang merasa sudah bayar lunas padahal baru DP adalah awal dari keributan.</p>
+</div>
+<p>Alur yang sama berlaku di bengkel (motor masuk, servis, diambil), salon (treatment dipesan, dikerjakan, selesai), dan rental (unit keluar, dipakai, kembali). Bedanya hanya isi layanannya.</p>
+<h2>Kenapa Banyak Usaha Jasa Pilih OGKasir</h2>
+<p>OGKasir punya Mode Jasa yang memang dibuat untuk pola kerja seperti di atas: order berkode ORD, pencatatan DP, dan status Diterima sampai Diambil &amp; Lunas. Ada sub-preset untuk Laundry, Bengkel, Salon, dan Rental, jadi kamu tidak perlu mengatur semuanya dari nol — pilih jenis usahamu, lalu sesuaikan layanan dan harganya.</p>
+<p>Yang juga penting: aplikasi ini bekerja offline, jadi kasir tetap jalan saat internet mati, dan ada laporan omzet plus ekspor Excel untuk melihat layanan mana yang paling menguntungkan. Trial 7 hari gratis, bulan pertama Rp8rb, lalu Rp49rb per 30 hari. Satu akun bisa dipakai sampai 3 HP, jadi pemilik dan karyawan bisa mencatat dari perangkat masing-masing.</p>
+<h2>Kesimpulan</h2>
+<p>Usaha jasa tidak butuh kasir yang paling canggih — butuh kasir yang paham cara kerja order. Kode order, DP, status pengerjaan, dan serah terima adalah empat hal yang menentukan apakah usahamu rapi atau berantakan di mata pelanggan. Cek enam fitur wajib di atas sebelum langganan, uji dengan trial gratis selama seminggu, dan pilih yang benar-benar dipakai karyawanmu sehari-hari, bukan yang paling banyak fiturnya di brosur.</p>
+<div class="related"><h3>Baca juga</h3><ul><li><a href="https://ogkasir.my.id/artikel-aplikasi-kasir-toko-bangunan.html">Aplikasi Kasir Toko Bangunan: 7 Fitur Wajib Sebelum Beli</a></li><li><a href="https://ogkasir.my.id/artikel-biaya-langganan-aplikasi-kasir.html">Biaya Langganan Aplikasi Kasir: Apa yang Sebenarnya Kamu Bayar?</a></li><li><a href="https://ogkasir.my.id/artikel-fitur-wajib-aplikasi-kasir-warkop.html">Fitur Wajib Aplikasi Kasir Warkop: Checklist Sebelum Beli</a></li><li><a href="https://ogkasir.my.id/aplikasi-kasir-umkm.html">OGKasir — Aplikasi Kasir UMKM Offline</a></li></ul></div>
+<div class="cta-box">
+  <h3>Coba 7 Hari, Buktikan Sendiri</h3>
+  <p>Install OGKasir langsung dari situs resmi ini dan pakai 7 hari penuh tanpa daftar. Aplikasi kasir offline buat usaha jasa: order berkode, catat DP, status pengerjaan, struk thermal Bluetooth, laporan omzet + ekspor Excel.</p>
+  <div class="row">
+    <a class="btn" href="/#download">Download OGKasir</a>
+    <a class="btn wa" href="https://wa.me/6288279406268">Chat WhatsApp</a>
+  </div>
+</div>
+
+</article>
+</div>
+
+<footer>
+  <div class="wrap">
+    © 2026 OGKasir · Aplikasi Kasir UMKM · <a href="https://ogkasir.my.id/" style="color:inherit">ogkasir.my.id</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var bar = document.getElementById('read-progress');
+  if (!bar) return;
+  function upd() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var y = h.scrollTop || document.body.scrollTop || 0;
+    bar.style.width = (max > 0 ? Math.min(100, y / max * 100) : 0) + '%';
+  }
+  addEventListener('scroll', upd, { passive: true });
+  addEventListener('resize', upd);
+  upd();
+})();
+</script>
+
+</body>
+</html>
