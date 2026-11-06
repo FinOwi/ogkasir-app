@@ -17,6 +17,8 @@ var Account = {
 
   /* ---------- sesi lokal ---------- */
   init: function () {
+    /* C-2026-04: di demo web sesi akun TIDAK dipulihkan sama sekali */
+    if (typeof window !== 'undefined' && window.OGK_DEMO) { this.session = null; this.license = null; return; }
     try {
       var raw = localStorage.getItem(this.SKEY);
       if (raw) this.session = JSON.parse(raw);
@@ -347,6 +349,13 @@ var Account = {
   },
 
   signInModal: function (fromLock) {
+    /* C-2026-04 (audit putaran 2): login akun produksi DITUTUP di demo
+       web — tanpa ini pengunjung bisa masuk dengan akun aslinya di
+       dalam demo lalu data contoh ikut tersinkron ke akunnya. */
+    if (typeof window !== 'undefined' && window.OGK_DEMO) {
+      UI.toast(T('Mode demo — masuk akun & sinkronisasi dinonaktifkan.'));
+      return;
+    }
     this._fromLock = !!fromLock;
     this._authDraft = {};
     UI.openModal(this._authHtml('in'));

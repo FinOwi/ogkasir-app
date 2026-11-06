@@ -141,6 +141,11 @@ var Kasir = {
     return T('<h3 class="k-sheet-t">🛒 Keranjang</h3>') + UI.empty('🛒', T('Keranjang masih kosong'), '', '');
   },
   renderPanel: function () {
+    /* D-02 (audit putaran 2, 7 Nov 2026): tangkap input panel SEBELUM
+       innerHTML diganti — elemen lama musnah bersama isinya (diskon,
+       uang diterima, nama/meja/proyek/tempo yang sudah diketik kasir).
+       Jalur sheet HP sudah aman lewat openCartKeep; panel dulu tidak. */
+    this._capturePanelInputs();
     var el = document.getElementById('kPayPanel');
     if (!el) return;
     el.innerHTML = this.panelHtml();
@@ -659,6 +664,11 @@ var Kasir = {
     var editing = !!this._editingTagId;
     var etx = editing ? this.txById(this._editingTagId) : null;
     if (editing && !etx) { this._editingTagId = null; editing = false; }
+    /* D-03 (audit putaran 2): panel tablet mode Jasa TIDAK boleh membuka
+       jalur tunai langsung — sama seperti cart bar HP, keranjang jasa
+       menjadi Order (Buat Order), tanpa grid metode bayar / Kasir.pay(). */
+    var jasaPanel = host === 'panel' && !editing && typeof BizMode !== 'undefined' &&
+      BizMode.id() === 'jasa' && typeof Order !== 'undefined';
     var h = editing ? T('<h3 class="k-sheet-t">✏️ Tambah Pesanan #') + K.pad(etx.no, 4) + '</h3>'
                     : T('<h3 class="k-sheet-t">🛒 Keranjang</h3>');
     var ids = Object.keys(this.cart);
@@ -713,16 +723,18 @@ var Kasir = {
     }
     var sub = this.cartTotal(); // sudah termasuk item yatim (M2)
     h += '<div style="margin-top:10px">';
-    h += T('<div class="k-fld"><label>Diskon</label><div class="k-frow">') +
-      '<input class="k-in" id="kDisc" type="number" inputmode="numeric" placeholder="0" value="' + (editing ? etx.disc : 0) + '">' +
-      '<select class="k-sel" id="kDiscType" style="max-width:110px"><option value="rp">Rp</option><option value="pct">%</option></select></div></div>';
-    h += T('<div class="k-fld"><label>Meja / Nama pelanggan (opsional)</label>') +
-      T('<input class="k-in" id="kNote" placeholder="cth: Meja 3" value="') + K.esc(editing ? (etx.note || '') : '') + '"></div>';
+    if (!jasaPanel) {
+      h += T('<div class="k-fld"><label>Diskon</label><div class="k-frow">') +
+        '<input class="k-in" id="kDisc" type="number" inputmode="numeric" placeholder="0" value="' + (editing ? etx.disc : 0) + '">' +
+        '<select class="k-sel" id="kDiscType" style="max-width:110px"><option value="rp">Rp</option><option value="pct">%</option></select></div></div>';
+      h += T('<div class="k-fld"><label>Meja / Nama pelanggan (opsional)</label>') +
+        T('<input class="k-in" id="kNote" placeholder="cth: Meja 3" value="') + K.esc(editing ? (etx.note || '') : '') + '"></div>';
+    }
     if (editing) {
       h += T('<p class="k-small k-muted" style="margin:2px 0 10px">Mode tambah pesanan — tagihan tetap <b>belum dibayar</b>. Stok dihitung ulang otomatis saat disimpan. <a style="color:var(--brand);cursor:pointer" onclick="Kasir.cancelEdit()">batalkan edit</a></p>');
       h += '<div id="kCustBox">' + T('<div class="k-fld"><label>Nama / meja (opsional)</label>') +
         T('<input class="k-in" id="kCust" placeholder="cth: Meja 3, Bang Joko" value="') + K.esc(etx.customer || '') + '"></div></div>';
-    } else {
+    } else if (!jasaPanel) {
       h += T('<div class="k-fld"><label>Metode pembayaran</label><div class="k-paygrid">') +
         this.payBtn('Tunai', '💵') + this.payBtn('QRIS', '📱') +
         this.payBtn('Transfer', '🏦') + this.payBtn('E-Wallet', '👛') +
@@ -756,7 +768,7 @@ var Kasir = {
           '<input class="k-in" id="kDue" type="date"></div></div>';
       }
     }
-    h += '<div id="kCashBox" style="display:' + (!editing && this.payMethod === 'Tunai' ? 'block' : 'none') + T('"><div class="k-fld"><label>Uang diterima</label>') +
+    h += '<div id="kCashBox" style="display:' + (!editing && !jasaPanel && this.payMethod === 'Tunai' ? 'block' : 'none') + T('"><div class="k-fld"><label>Uang diterima</label>') +
       '<input class="k-in" id="kCash" type="number" inputmode="numeric" placeholder="' + sub + '">' +
       '<div class="k-cashgrid">' +
       T('<button class="k-cash" onclick="Kasir.setCash(') + sub + T(')">Uang pas</button>') +
@@ -766,7 +778,7 @@ var Kasir = {
       T('<button class="k-cash" onclick="Kasir.setCash(100000)">100rb</button>') +
       T('<button class="k-cash" onclick="Kasir.setCash(150000)">150rb</button></div></div></div>');
     h += T('<div class="k-total-row"><span>Subtotal</span><span>') + K.rp(sub) + '</span></div>';
-    h += T('<div class="k-total-row"><span>Diskon</span><span id="kDiscView">Rp0</span></div>');
+    if (!jasaPanel) h += T('<div class="k-total-row"><span>Diskon</span><span id="kDiscView">Rp0</span></div>');
     h += T('<div class="k-total-row k-grand"><span>Total</span><span class="k-money" id="kGrandView">') + K.rp(sub) + '</span></div>';
     h += T('<div class="k-total-row" id="kChangeRow" style="display:none"><span>Kembalian</span><span class="k-money" id="kChangeView" style="color:var(--green)">Rp0</span></div>');
     if (host === 'panel') {
@@ -774,7 +786,10 @@ var Kasir = {
          tombol utama & handler-nya fragmen yang sama persis dgn sheet. */
       h += '<div class="k-btn-row">' + (editing
         ? T('<button class="k-btn k-pri" onclick="Kasir.saveEdit()">💾 Simpan Perubahan</button></div></div>')
-        : T('<button class="k-btn k-pri" onclick="Kasir.pay()">') + (this.payMethod === 'Belum Dibayar' ? T('📝 Simpan Tagihan') : T('💰 Bayar')) + '</button></div></div>');
+        : (jasaPanel
+          /* D-03: mode Jasa di panel = Buat Order, BUKAN Bayar tunai */
+          ? T('<button class="k-btn k-pri" onclick="Order.openCheckout()">🧾 Buat Order</button></div></div>')
+          : T('<button class="k-btn k-pri" onclick="Kasir.pay()">') + (this.payMethod === 'Belum Dibayar' ? T('📝 Simpan Tagihan') : T('💰 Bayar')) + '</button></div></div>'));
       return h;
     }
     h += editing
@@ -1579,22 +1594,40 @@ var Kasir = {
     for (var i = 0; i < txs.length; i++) if (txs[i].id === id) tx = txs[i];
     if (!tx || tx.voided) return;
     var self = this;
-    UI.confirm(T('Batalkan transaksi #') + K.pad(tx.no, 4) + ' (' + K.rp(tx.total) + T(')? Stok akan dikembalikan.'), T('Batalkan'), function () {
+    /* D-07 (audit putaran 2): tx hasil pelunasan order BUKAN void biasa */
+    var ordTx = (tx.orderId && typeof Order !== 'undefined') ? Order.byId(tx.orderId) : null;
+    var confirmMsg = ordTx
+      ? T('Batalkan transaksi #') + K.pad(tx.no, 4) + ' (' + K.rp(tx.total) + T(')? Pelunasan order dibatalkan: order kembali ke Selesai & bisa dilunasi ulang. Stok TIDAK dikembalikan (barang sudah dibawa pelanggan).')
+      : T('Batalkan transaksi #') + K.pad(tx.no, 4) + ' (' + K.rp(tx.total) + T(')? Stok akan dikembalikan.');
+    UI.confirm(confirmMsg, T('Batalkan'), function () {
       if (tx.voided) return; // cegah eksekusi ganda
-      for (var j = 0; j < tx.items.length; j++) {
-        var it = tx.items[j];
-        var m = KDB.menuById(it.id);
-        if (m && m.track) {
-          var bq = (it.baseQty != null ? it.baseQty : it.qty); // stok kembali dalam satuan DASAR
-          m.stock = Math.round((m.stock + bq) * 1000) / 1000;
-          KDB.addStockLog(m.id, m.name, 'in', bq, m.stock, T('Void #') + K.pad(tx.no, 4));
+      if (ordTx) {
+        /* D-07: pembatalan pelunasan TERKOORDINASI — stok order dipotong
+           saat order DIBUAT (bukan saat settle), jadi stok TIDAK
+           dikembalikan dari tx.items. Order kembali ke 'selesai',
+           txId dikosongkan, paidTotal kembali ke DP — order bisa
+           dilunasi ulang (settle membuat tx deterministik baru). */
+        ordTx.status = 'selesai';
+        ordTx.txId = '';
+        ordTx.paidTotal = ordTx.dp || 0;
+        ordTx.takenAt = 0;
+        ordTx.updatedAt = Date.now();
+      } else {
+        for (var j = 0; j < tx.items.length; j++) {
+          var it = tx.items[j];
+          var m = KDB.menuById(it.id);
+          if (m && m.track) {
+            var bq = (it.baseQty != null ? it.baseQty : it.qty); // stok kembali dalam satuan DASAR
+            m.stock = Math.round((m.stock + bq) * 1000) / 1000;
+            KDB.addStockLog(m.id, m.name, 'in', bq, m.stock, T('Void #') + K.pad(tx.no, 4));
+          }
         }
       }
       tx.voided = true;
       tx.updatedAt = Date.now();
       KDB.save();
       UI.closeSheet();
-      UI.toast(T('Transaksi dibatalkan, stok dikembalikan'));
+      UI.toast(ordTx ? T('Pelunasan dibatalkan — order kembali menunggu diambil') : T('Transaksi dibatalkan, stok dikembalikan'));
       App.rerender();
     });
   }

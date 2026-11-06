@@ -55,11 +55,11 @@ var Scan = {
   _pendCode: null, _pendCount: 0, _pendSince: 0, _pendStrats: null, _pendNative: false,
   NEED_READS: 2, MIN_SPAN_MS: 300,
   /* kandidat utk saran konfirmasi manual (butir 4) */
-  _cand: null, _candOrder: null, _candFirstAt: 0,
+  _cand: null, _candOrder: null, _candFirstAt: 0, _candAt: null,
   _suggested: null, _userTyped: false, SUGGEST_AFTER_MS: 4000,
   /* mesin wasm */
-  _engine: null, _wasmState: 'idle', _wasmBytes: null,
-  _loopTimer: null, _busy: false, _stratIdx: 0, _errCount: 0, _canvas: null,
+  _engine: null, _wasmState: 'idle', _wasmBytes: null, _wasmOverrides: null,
+  _loopTimer: null, _busy: false, _busyAt: 0, _stratIdx: 0, _errCount: 0, _canvas: null,
 
   FORMATS: function () {
     var BF = ZXing.BarcodeFormat;
@@ -138,8 +138,15 @@ var Scan = {
     var now = (typeof Date !== 'undefined' && Date.now) ? Date.now() : 0;
     var skey = strat || 'legacy';
     /* statistik kandidat utk saran manual (butir 4) */
-    if (!this._cand) { this._cand = {}; this._candOrder = []; }
-    if (!this._cand[text]) { this._cand[text] = 0; this._candOrder.push(text); }
+    if (!this._cand) { this._cand = {}; this._candOrder = []; this._candAt = {}; }
+    if (!this._cand[text]) {
+      this._cand[text] = 0; this._candOrder.push(text);
+      /* R-09 (audit putaran 2): catat waktu pertama PER KANDIDAT —
+         jam saran 4 dtk berjalan per kandidat, bukan per sesi, jadi
+         satu bacaan nyasar di awal sesi tidak membuat saran untuk
+         produk berikutnya muncul terlalu dini. */
+      if (this._candAt) this._candAt[text] = now;
+    }
     this._cand[text]++;
     if (!this._candFirstAt) this._candFirstAt = now;
     /* stabilitas + pagar korroborasi skala (putaran 3): sapuan benchmark
@@ -171,7 +178,7 @@ var Scan = {
   },
   _resetPend: function () { this._pendCode = null; this._pendCount = 0; this._pendSince = 0; this._pendStrats = null; this._pendNative = false; },
   _resetCand: function () {
-    this._cand = null; this._candOrder = null; this._candFirstAt = 0;
+    this._cand = null; this._candOrder = null; this._candFirstAt = 0; this._candAt = null;
     this._suggested = null; this._userTyped = false;
   },
   _status: function () {
@@ -186,13 +193,16 @@ var Scan = {
   _maybeSuggest: function () {
     if (this._done || !this._cand || !this._candFirstAt) return;
     var now = (typeof Date !== 'undefined' && Date.now) ? Date.now() : 0;
-    if (now - this._candFirstAt < this.SUGGEST_AFTER_MS) return;
     var best = null, bestN = 0, i;
     for (i = 0; i < this._candOrder.length; i++) {
       var c = this._candOrder[i];
       if (this._cand[c] > bestN) { best = c; bestN = this._cand[c]; }
     }
     if (!best || bestN < 2 || best === this._suggested) return;
+    /* R-09: ambang 4 dtk dihitung dari kemunculan pertama KANDIDAT
+       TERPILIH ini, bukan kandidat pertama sesi. */
+    var firstAt = (this._candAt && this._candAt[best]) || this._candFirstAt;
+    if (now - firstAt < this.SUGGEST_AFTER_MS) return;
     var el = (typeof document !== 'undefined') ? document.getElementById('scanManual') : null;
     if (!el) return;
     if (el.value && el.value !== this._suggested) { this._userTyped = true; return; }
@@ -221,7 +231,16 @@ var Scan = {
         for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
         this._wasmBytes = bytes;
       }
-      ZXingWASM.setZXingModuleOverrides({ wasmBinary: this._wasmBytes });
+      /* A2-05 (audit putaran 2): locateFile DITIMPA agar tidak pernah
+         menunjuk CDN — bawaan pustaka menunjuk jsDelivr; jalur aplikasi
+         memakai wasmBinary lokal, dan bila suatu saat locateFile tetap
+         dipanggil, ia GAGAL TEGAS (lempar) bukan diam-diam fetch CDN.
+         Janji offline tidak bergantung pada urutan muat skrip saja. */
+      this._wasmOverrides = {
+        wasmBinary: this._wasmBytes,
+        locateFile: function () { throw new Error('locateFile ZXing dinonaktifkan — WASM hanya dari biner lokal (offline)'); }
+      };
+      ZXingWASM.setZXingModuleOverrides(this._wasmOverrides);
       ZXingWASM.prepareZXingModule({ fireImmediately: true }).then(function () {
         self._wasmState = 'ready';
       }, function () { self._wasmState = 'failed'; });
@@ -251,8 +270,29 @@ var Scan = {
     ctx.drawImage(video, sx, sy, sw, sh, 0, 0, tw, th);
     return ctx.getImageData(0, 0, tw, th);
   },
+  /* R-07 (audit putaran 2): satu-satunya jalur pencatat error decode
+     WASM — dipakai rejection handler, lemparan sinkron, dan watchdog.
+     3x beruntun -> jatuhkan ke mesin JS untuk sesi ini. */
+  _noteWasmError: function () {
+    if (this._done) return;
+    if (++this._errCount >= 3 && this._engine === 'wasm') {
+      this._engine = 'js';
+      if (this._loopTimer) { clearInterval(this._loopTimer); this._loopTimer = null; }
+      this._startJsEngine();
+    }
+  },
   _loopTick: function () {
-    if (this._done || this._busy) return;
+    if (this._done) return;
+    if (this._busy) {
+      /* R-07 watchdog: decode yang tidak pernah settle (> ±2 dtk)
+         dianggap error — _busy dilepas & penghitung fallback berjalan,
+         scanner tidak membeku permanen dalam satu sesi. */
+      if (this._busyAt && Date.now() - this._busyAt > 2000) {
+        this._busy = false; this._busyAt = 0;
+        this._noteWasmError();
+        return; // frame berikutnya memulai decode segar
+      } else return;
+    }
     this._maybeSuggest();
     var v = document.getElementById('scanVideo');
     if (!v || !v.videoWidth) return;
@@ -261,9 +301,19 @@ var Scan = {
     try { img = this._capture(v, strat[0]); } catch (e) { img = null; }
     if (!img) return;
     this._busy = true;
+    this._busyAt = Date.now();
     var self = this;
-    ZXingWASM.readBarcodes(img, this._wasmOpts(strat[1])).then(function (res) {
-      self._busy = false;
+    var promise;
+    try {
+      promise = ZXingWASM.readBarcodes(img, this._wasmOpts(strat[1]));
+    } catch (e) {
+      /* R-07: lemparan SINKRON tidak boleh meninggalkan _busy terkunci */
+      this._busy = false; this._busyAt = 0;
+      this._noteWasmError();
+      return;
+    }
+    promise.then(function (res) {
+      self._busy = false; self._busyAt = 0;
       if (self._done) return;
       self._errCount = 0;
       if (res && res.length) {
@@ -271,14 +321,8 @@ var Scan = {
         if (code && self._feed(code, res[0].format, (strat[0] || 'full') + '|' + strat[1])) self._accept(code);
       }
     }, function () {
-      self._busy = false;
-      if (self._done) return;
-      /* WASM bermasalah di perangkat ini -> jatuhkan ke mesin JS utk sesi ini */
-      if (++self._errCount >= 3 && self._engine === 'wasm') {
-        self._engine = 'js';
-        if (self._loopTimer) { clearInterval(self._loopTimer); self._loopTimer = null; }
-        self._startJsEngine();
-      }
+      self._busy = false; self._busyAt = 0;
+      self._noteWasmError();
     });
   },
 
@@ -316,7 +360,7 @@ var Scan = {
     if ((typeof ZXingWASM === 'undefined' || !ZXingWASM.readBarcodes) &&
         (typeof ZXing === 'undefined' || !ZXing.BrowserMultiFormatReader)) { UI.toast(T('Pustaka scan belum termuat')); return; }
     this._cb = cb; this._done = false; this._resetPend(); this._resetCand();
-    this._engine = null; this._stratIdx = 0; this._errCount = 0; this._busy = false;
+    this._engine = null; this._stratIdx = 0; this._errCount = 0; this._busy = false; this._busyAt = 0;
     this._initWasm();
     var cam = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
     UI.openModal(
@@ -351,9 +395,14 @@ var Scan = {
   },
 
   _start: function (stream) {
-    var v = document.getElementById('scanVideo');
-    if (!v) { this._stop(); return; }
+    /* D-04 (audit putaran 2): simpan stream DULU sebelum cek elemen /
+       _done — sheet bisa sudah ditutup selagi getUserMedia pending;
+       tanpa ini stream yang baru diberikan tidak pernah dihentikan
+       (kamera menyala tanpa UI sampai halaman dimuat ulang). _stop()
+       di cabang bawah kini benar-benar melepas track stream ini. */
     this._stream = stream;
+    var v = document.getElementById('scanVideo');
+    if (!v || this._done) { this._stop(); return; }
     v.srcObject = stream;
     var self = this;
     v.onloadedmetadata = function () {

@@ -779,6 +779,14 @@ var I18N = {
     "Masukkan PIN ": "Enter the PIN of ",
     " untuk menjadikannya kasir aktif.": " to make them the active cashier.",
     "⚠️ Data tersimpan rusak — salinan aslinya disimpan & aplikasi mulai dari data contoh. Hubungi FinOwi untuk pemulihan.": "⚠️ Saved data was corrupted — the original was kept aside & the app starts from sample data. Contact FinOwi for recovery.",
+    /* ---- Perbaikan audit putaran 2 (7 Nov 2026) ---- */
+    "Sebagian data belum tersinkron — akan dicoba lagi": "Some data is not synced yet — it will be retried",
+    "Unduhan pembaruan tidak cocok dengan data rilis resmi — unduhan dibatalkan demi keamanan.": "The update download did not match the official release data — the download was cancelled for safety.",
+    "<div style=\"font-size:28px\">🛡️</div><b>Unduhan dibatalkan</b>": "<div style=\"font-size:28px\">🛡️</div><b>Download cancelled</b>",
+    "<div class=\"k-small k-muted\">File yang terunduh tidak cocok dengan data rilis resmi, jadi tidak dipasang. Coba lagi nanti — bila terus berulang, unduh dari link resmi FinOwi.</div>": "<div class=\"k-small k-muted\">The downloaded file did not match the official release data, so it was not installed. Try again later — if it keeps happening, download from FinOwi's official link.</div>",
+    "Mode demo — masuk akun & sinkronisasi dinonaktifkan.": "Demo mode — account sign-in & sync are disabled.",
+    ")? Pelunasan order dibatalkan: order kembali ke Selesai & bisa dilunasi ulang. Stok TIDAK dikembalikan (barang sudah dibawa pelanggan).": ")? The order settlement will be cancelled: the order returns to Done & can be settled again. Stock is NOT returned (the customer already took the goods).",
+    "Pelunasan dibatalkan — order kembali menunggu diambil": "Settlement cancelled — the order is waiting for pickup again",
   },
   t: function (k, vars) {
     var s = (this.lang === 'en' && Object.prototype.hasOwnProperty.call(this.en, k)) ? this.en[k] : k;

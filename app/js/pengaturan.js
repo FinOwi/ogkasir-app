@@ -645,6 +645,12 @@ var Dashboard = {
     e.phone = (document.getElementById('empPhone').value || '').trim();
     if (delPin) e.pin = '';
     else if (pin) e.pin = PinHash.hash(pin); // S3: simpan hash + salt
+    /* R-05 (audit putaran 2): PIN Pemilik yang benar-benar berubah
+       menaikkan penanda versi monoton pinVer — merge sync
+       memprioritaskan pinVer di atas updatedAt/jam dinding, jadi PIN
+       baru tidak bisa dibatalkan perangkat offline berstempel lebih
+       baru yang mengganti PIN dari basis lama. */
+    if (e.isOwner && (delPin || pin)) e.pinVer = (e.pinVer || 0) + 1;
     /* pin kosong & tanpa centang hapus: e.pin lama dipertahankan apa adanya */
     if (typeof e.pin === 'undefined') e.pin = '';
     e.permissions = perms;

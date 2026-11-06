@@ -114,6 +114,10 @@ var Lap = {
       var fDisc = txs[a].sub > 0 ? (txs[a].total || 0) / txs[a].sub : 1;
       for (var b = 0; b < txs[a].items.length; b++) {
         var it2 = txs[a].items[b];
+        /* D-08 (audit putaran 2): item semu denda keterlambatan order
+           (id 'fee') TIDAK ikut Menu Terlaris — tetap terhitung di
+           omzet & laba kartu atas, hanya dilewati agregasi ini. */
+        if (it2.id === 'fee') continue;
         if (!agg[it2.id]) agg[it2.id] = { name: it2.name, qty: 0, omzet: 0, unit: it2.unit || 'pcs' };
         agg[it2.id].qty += it2.qty;
         agg[it2.id].omzet += it2.price * it2.qty * fDisc;
@@ -248,9 +252,14 @@ var Lap = {
     function q(s) { return '"' + String(s).replace(/"/g, '""') + '"'; }
     for (var i = 0; i < txs.length; i++) {
       var t = txs[i];
+      /* D-09 (audit putaran 2): kolom Tanggal/Jam memakai waktu EFEKTIF
+         (effTs = paidAt || at) — konsisten dengan saringan periode
+         txsIn; bon lintas bulan tidak lagi bertanggal bulan lama di
+         berkas periode barunya. */
+      var ets = this.effTs(t);
       for (var j = 0; j < t.items.length; j++) {
         var it = t.items[j];
-        rows.push(['#' + K.pad(t.no, 4), K.fmtDate(t.at), K.fmtTime(t.at), q(it.name), it.qty,
+        rows.push(['#' + K.pad(t.no, 4), K.fmtDate(ets), K.fmtTime(ets), q(it.name), it.qty,
           it.price, it.price * it.qty, j === 0 ? t.disc : 0, j === 0 ? t.total : '',
           j === 0 ? q(t.pay) : '', j === 0 ? t.change : '']);
       }

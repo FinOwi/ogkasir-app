@@ -31,6 +31,11 @@ var Sync = {
     'lang', 'userName', 'userEmoji', 'notePresets', 'phone', 'shopType', 'bizMode', 'bizSub'],
   MASTER: { menus: 1, cats: 1, employees: 1, feedback: 1 },
   DEL_KEEP_MS: 90 * 864e5,
+  /* R-04 (audit putaran 2, 7 Nov 2026): koleksi kecil (menus/employees)
+     tombstone-nya disimpan jauh lebih lama (365 hari) — perangkat lama
+     yang offline > 90 hari tidak lagi membangkitkan menu/karyawan yang
+     sudah dihapus di semua perangkat lain saat akhirnya sync. */
+  DEL_KEEP_SMALL_MS: 365 * 864e5,
   meta: null,      // {versions:{}, hashes:{}, conflicts:[], lastSyncTs:0, lastError:'', dels:{}, catAdd:{}, settingsTs:0}
   _timer: null,
   _pullTimer: null,
@@ -40,6 +45,20 @@ var Sync = {
 
   init: function () {
     this.loadMeta();
+    /* C-2026-04 (audit putaran 2): di demo web (OGK_DEMO) Sync TIDAK
+       dimulai sama sekali — pengunjung demo tidak bisa login lalu
+       menggabungkan data contoh ke akun produksinya. Perilaku app
+       non-demo tidak berubah. */
+    if (typeof window !== 'undefined' && window.OGK_DEMO) { this._demo = true; return; }
+    /* R-06 (audit putaran 2): KDB lokal terdeteksi hasil karantina/
+       reseed (store.js menandai corruptRecovered) sementara meta sync
+       utuh -> reset versi & hash agar pull penuh terjadi SEBELUM push
+       apa pun; tanpa ini push pertama menimpa cloud dengan data seed. */
+    if (typeof KDB !== 'undefined' && KDB.corruptRecovered) {
+      this.meta.versions = {};
+      this.meta.hashes = {};
+      this.saveMeta();
+    }
     var orig = KDB.save.bind(KDB);
     var self = this;
     KDB.save = function () {
@@ -76,6 +95,11 @@ var Sync = {
     }
     if (!this.meta.catAdd || typeof this.meta.catAdd !== 'object') this.meta.catAdd = {};
     if (typeof this.meta.settingsTs !== 'number') this.meta.settingsTs = this.meta.lastSyncTs || 0;
+    /* R-03: jangkar jam server untuk settings_public — updated_at baris
+       server terakhir yang benar-benar diterapkan perangkat ini, dan
+       nilai jangkar itu pada saat edit lokal terakhir mulai menumpuk. */
+    if (typeof this.meta.settingsBaseTs !== 'number') this.meta.settingsBaseTs = 0;
+    if (typeof this.meta.settingsEditBase !== 'number') this.meta.settingsEditBase = 0;
   },
   saveMeta: function () {
     try { localStorage.setItem(this.MKEY, JSON.stringify(this.meta)); } catch (e) {}
@@ -139,10 +163,16 @@ var Sync = {
   _takeShadow: function () {
     var D = KDB.data;
     if (!D) { this._shadow = null; return; }
-    var sh = { menus: {}, employees: {}, feedback: {}, cats: {}, settings: '' };
+    var sh = { menus: {}, employees: {}, feedback: {}, cats: {}, settings: '', orders: {}, txs: {}, stockLog: {} };
     (D.menus || []).forEach(function (m) { if (m && m.id) sh.menus[m.id] = Sync._stripJson(m); });
     (D.employees || []).forEach(function (e) { if (e && e.id) sh.employees[e.id] = Sync._stripJson(e); });
     (D.feedback || []).forEach(function (f) { if (f && f.id) sh.feedback[f.id] = Sync._stripJson(f); });
+    /* D-01: koleksi shard (orders/txs/stockLog) ikut dibayangi supaya
+       differ bisa mencap updatedAt mutasinya — orders dulu terlewat,
+       jadi status order tidak pernah punya stempel yang naik. */
+    (D.orders || []).forEach(function (o) { if (o && o.id) sh.orders[o.id] = Sync._stripJson(o); });
+    (D.txs || []).forEach(function (t) { if (t && t.id) sh.txs[t.id] = Sync._stripJson(t); });
+    (D.stockLog || []).forEach(function (t) { if (t && t.id) sh.stockLog[t.id] = Sync._stripJson(t); });
     (D.cats || []).forEach(function (c) { sh.cats[c] = 1; });
     sh.settings = JSON.stringify(this._settingsSubset());
     this._shadow = sh;
@@ -191,8 +221,30 @@ var Sync = {
         delete sh.cats[n];
       }
     }
+    /* D-01: cap updatedAt untuk mutasi koleksi shard (orders/txs/
+       stockLog). Tanpa tombstone — shard bersifat append/merge by id;
+       penghapusan fisik tidak terjadi di koleksi ini (void = mutasi
+       flag, yang tercap lewat jalur yang sama). */
+    var shardTypes = ['orders', 'txs', 'stockLog'];
+    for (var si = 0; si < shardTypes.length; si++) {
+      (function (type) {
+        var items = D[type] || [], smap = sh[type] || (sh[type] = {}), i, it, s;
+        for (i = 0; i < items.length; i++) {
+          it = items[i];
+          if (!it || !it.id) continue;
+          s = self._stripJson(it);
+          if (smap[it.id] !== s) it.updatedAt = now;
+          smap[it.id] = s;
+        }
+      })(shardTypes[si]);
+    }
     var sJson = JSON.stringify(this._settingsSubset());
-    if (sJson !== sh.settings) { this.meta.settingsTs = now; sh.settings = sJson; metaChanged = true; }
+    if (sJson !== sh.settings) {
+      this.meta.settingsTs = now;
+      /* R-03: ingat jangkar server yang menjadi basis edit ini */
+      this.meta.settingsEditBase = this.meta.settingsBaseTs || 0;
+      sh.settings = sJson; metaChanged = true;
+    }
     if (metaChanged) this.saveMeta();
   },
 
@@ -220,15 +272,18 @@ var Sync = {
     }
     return { items: items, dels: dels };
   },
-  _pruneDels: function (dels) {
-    var out = {}, cutoff = Date.now() - this.DEL_KEEP_MS, id;
+  _delKeepMs: function (type) {
+    return (type === 'menus' || type === 'employees') ? this.DEL_KEEP_SMALL_MS : this.DEL_KEEP_MS;
+  },
+  _pruneDels: function (dels, type) {
+    var out = {}, cutoff = Date.now() - this._delKeepMs(type), id;
     for (id in (dels || {})) if ((+dels[id] || 0) >= cutoff) out[id] = +dels[id];
     return out;
   },
   buildMasterData: function (type, items) {
     if (!this.meta) this.loadMeta(); // jalur langsung tanpa init (uji/darurat)
     var arr = (items || []).slice();
-    var d = this._pruneDels(this.meta.dels[type]);
+    var d = this._pruneDels(this.meta.dels[type], type);
     if (Object.keys(d).length) arr.push({ _del: d });
     return arr;
   },
@@ -308,7 +363,7 @@ var Sync = {
       var parts = [];
       for (var i = 0; i < env.items.length; i++) parts.push(this._canon(env.items[i]));
       parts.sort();
-      return this._hashStr('M[' + parts.join(',') + ']D' + this._canon(this._pruneDels(env.dels)));
+      return this._hashStr('M[' + parts.join(',') + ']D' + this._canon(this._pruneDels(env.dels, doc.type)));
     }
     if (doc && doc.type === 'settings_public') {
       return this._hashStr('S' + this._canon(doc.data || {}));
@@ -337,7 +392,33 @@ var Sync = {
   },
 
   /* ---------- gabung dokumen master (dua arah otomatis) ---------- */
-  itemStamp: function (x) { return (x && (x.updatedAt || x.at || x.createdAt)) || 0; },
+  /* R-02 (audit putaran 2): jepit stempel masa depan. Perangkat yang
+     jamnya meleset ke depan tidak boleh menang LWW selamanya: stempel
+     lebih dari 5 menit di masa depan dianggap "sekarang" oleh
+     perangkat penerima — di SEMUA jalur merge (master & shard). */
+  _clampStamp: function (ts) {
+    ts = +ts || 0;
+    var now = Date.now();
+    return ts > now + 5 * 60 * 1000 ? now : ts;
+  },
+  /* R-02 lanjutan: NORMALKAN stempel masa depan pada record yang
+     diterima, bukan hanya dijepit saat dibandingkan sesaat. Tanpa
+     normalisasi, record berstempel +1 hari tetap menang di setiap
+     merge berikutnya (dijepit ke "sekarang" yang terus maju). Dengan
+     normalisasi, stempelnya menjadi waktu penerimaan; mutasi sah
+     sesudah itu menang secara alami, dan nilai ternormalkan ikut
+     ter-push sehingga semua perangkat konvergen. Field `at` tidak
+     diubah (penentu shard bulan & tanggal tampil); bila record hanya
+     punya `at` masa depan tanpa updatedAt, updatedAt diisi sekarang
+     agar LWW memakai stempel waras. */
+  _normStamp: function (x) {
+    if (!x || typeof x !== 'object') return x;
+    var lim = Date.now() + 5 * 60 * 1000;
+    if ((x.updatedAt || 0) > lim) x.updatedAt = Date.now();
+    else if (!x.updatedAt && (x.at || 0) > lim) x.updatedAt = Date.now();
+    return x;
+  },
+  itemStamp: function (x) { return this._clampStamp(x && (x.updatedAt || x.at || x.createdAt)); },
 
   /* Normalkan item yang datang dari cloud sebelum tinggal lokal:
      foto menu lewat safeImg (X1); PIN karyawan non-pemilik selalu dari
@@ -367,10 +448,10 @@ var Sync = {
     var dels = this.meta.dels[type] || (this.meta.dels[type] = {});
     var changed = false, id;
     for (id in env.dels) {
-      var ts = +env.dels[id] || 0;
+      var ts = this._clampStamp(+env.dels[id] || 0); // R-02: tombstone masa depan dijepit juga
       if (ts > (dels[id] || 0)) { dels[id] = ts; changed = true; }
     }
-    var cutoff = Date.now() - this.DEL_KEEP_MS;
+    var cutoff = Date.now() - this._delKeepMs(type);
     for (id in dels) if (!((+dels[id] || 0) >= cutoff)) { delete dels[id]; changed = true; }
 
     if (type === 'cats') {
@@ -394,7 +475,7 @@ var Sync = {
     }
     var cloudById = {}, cloudOrder = [], i, ci;
     for (i = 0; i < env.items.length; i++) {
-      ci = env.items[i];
+      ci = self._normStamp(env.items[i]); // R-02: normalkan sebelum tinggal lokal
       if (ci && ci.id && !cloudById[ci.id]) { cloudById[ci.id] = ci; cloudOrder.push(ci.id); }
     }
     var used = {}, out = [];
@@ -404,6 +485,16 @@ var Sync = {
       if (c) used[li.id] = 1;
       var win = li;
       if (c && self.itemStamp(c) >= self.itemStamp(li)) win = c;
+      /* R-05 (audit putaran 2): PIN Pemilik memakai penanda versi
+         monoton (pinVer) di atas jam dinding — perangkat offline yang
+         mengganti PIN dari basis lama tidak bisa membatalkan PIN baru
+         hanya karena jam dindingnya lebih belakangan. Record warisan
+         tanpa pinVer sama-sama 0 -> aturan stempel lama berlaku. */
+      if (c && type === 'employees' && li.isOwner && c.isOwner) {
+        var pvL = li.pinVer || 0, pvC = c.pinVer || 0;
+        if (pvC > pvL) win = c;
+        else if (pvL > pvC) win = li;
+      }
       if (dels[li.id] && dels[li.id] >= self.itemStamp(win)) return; // terhapus (tombstone >= stempel pemenang)
       out.push(self._adopt(type, win, li, pins));
     });
@@ -439,7 +530,7 @@ var Sync = {
     var env = this.parseMasterData(cloudData), pins = null, self = this;
     var items = env.items.map(function (it) { return self._adopt(type, it, null, pins); });
     var data = items.slice();
-    var d = this._pruneDels(env.dels);
+    var d = this._pruneDels(env.dels, type);
     if (Object.keys(d).length) data.push({ _del: d });
     return this.fingerprint({ type: type, key: '', data: data });
   },
@@ -459,9 +550,23 @@ var Sync = {
       } else if (type === 'settings_public') {
         var serverTs = Date.parse(row.updated_at) || 0;
         var dirty = this.isDirty(this.collectDocs(), k);
-        if (!dirty || (this.meta.settingsTs || 0) <= serverTs) {
+        /* R-03 (audit putaran 2): jangan bandingkan jam lokal mentah vs
+           jam server secara membabi buta. Edit lokal yang dibuat DI ATAS
+           baris server yang sudah diterima perangkat ini (settingsEditBase
+           >= serverTs) tidak tertimpa oleh baris yang sama/lebih tua —
+           walau jam perangkat mundur. Baris server yang benar-benar lebih
+           baru dari basis edit tetap diputuskan dengan LWW lama
+           (settingsTs lokal vs updated_at server). */
+        var keepLocal = false;
+        if (dirty) {
+          if (serverTs <= (this.meta.settingsEditBase || 0)) keepLocal = true;
+          else if ((this.meta.settingsTs || 0) > serverTs) keepLocal = true;
+        }
+        if (!keepLocal) {
           this.applyDoc(type, key, row.data);
           this.meta.settingsTs = serverTs;
+          this.meta.settingsBaseTs = serverTs;
+          this.meta.settingsEditBase = serverTs;
           changed = true;
           var sp = {}, i, kk;
           for (i = 0; i < this.SETTINGS_KEYS.length; i++) {
@@ -513,13 +618,40 @@ var Sync = {
     var map = {}, out = [], i, it, cur, stamp;
     for (i = 0; i < local.length; i++) map[local[i].id] = local[i];
     for (i = 0; i < incoming.length; i++) {
-      it = incoming[i];
+      it = Sync._normStamp(incoming[i]); // R-02: normalkan sebelum tinggal lokal
       cur = map[it.id];
       if (!cur) { map[it.id] = it; continue; }
-      stamp = function (x) { return x.updatedAt || x.at || 0; };
+      /* R-02: stempel masa depan dijepit sebelum perbandingan LWW */
+      stamp = function (x) { return Sync._clampStamp(x.updatedAt || x.at || 0); };
       if (stamp(it) >= stamp(cur)) map[it.id] = it;
     }
     for (var id in map) out.push(map[id]);
+    /* R-01 (audit putaran 2): dedupe pelunasan order — satu order hanya
+       boleh punya SATU tx settle yang hidup (non-void). Pemenang dipilih
+       DETERMINISTIK dari data yang sama di semua perangkat: tx ber-id
+       deterministik 'txord-<orderId>' menang; selain itu yang `at`-nya
+       paling kecil (seri -> id terkecil). Yang kalah dibuang dari hasil
+       gabung di SETIAP perangkat, jadi shard menyatu (konvergen), bukan
+       ping-pong. Tx ter-void tidak ikut bertanding (riwayat sah; order
+       bisa dilunasi ulang sesudah void — lihat D-07). */
+    var keeper = {}, hasOrd = false;
+    for (i = 0; i < out.length; i++) {
+      it = out[i];
+      if (!it || !it.orderId || it.voided) continue;
+      hasOrd = true;
+      var cur2 = keeper[it.orderId];
+      if (!cur2) { keeper[it.orderId] = it; continue; }
+      var detNew = it.id === 'txord-' + it.orderId, detCur = cur2.id === 'txord-' + it.orderId;
+      if (detNew !== detCur) { if (detNew) keeper[it.orderId] = it; }
+      else if ((it.at || 0) !== (cur2.at || 0)) { if ((it.at || 0) < (cur2.at || 0)) keeper[it.orderId] = it; }
+      else if (String(it.id) < String(cur2.id)) keeper[it.orderId] = it;
+    }
+    if (hasOrd) {
+      out = out.filter(function (x) {
+        if (!x || !x.orderId || x.voided) return true;
+        return keeper[x.orderId] === x;
+      });
+    }
     out.sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
     return out;
   },
@@ -552,6 +684,37 @@ var Sync = {
       var mx = 0;
       for (var oi = 0; oi < D.orders.length; oi++) if ((D.orders[oi].no || 0) > mx) mx = D.orders[oi].no;
       if ((D.nextOrderNo || 1) < mx + 1) D.nextOrderNo = mx + 1;
+      /* D-06 (audit putaran 2): nomor yang SUDAH bertabrakan (dua order
+         berbeda, `no` sama — lahir offline di dua perangkat) dinomori
+         ulang secara DETERMINISTIK: yang mempertahankan nomor adalah
+         order dengan `at` lebih kecil (seri -> id lebih kecil); yang
+         lain dapat nomor max+1 dst menurut urutan deterministik yang
+         sama. Semua perangkat menghitung hasil yang sama dari data
+         yang sama (konvergen); order tanpa tabrakan tidak berubah. */
+      var byNo = {}, hasDup = false, di;
+      for (di = 0; di < D.orders.length; di++) {
+        var dn = D.orders[di] && D.orders[di].no;
+        if (dn == null) continue;
+        if (byNo[dn]) hasDup = true;
+        byNo[dn] = 1;
+      }
+      if (hasDup) {
+        var sorted = D.orders.slice().sort(function (a, b) {
+          var d = (a.at || 0) - (b.at || 0);
+          if (d) return d;
+          return String(a.id) < String(b.id) ? -1 : (String(a.id) > String(b.id) ? 1 : 0);
+        });
+        var seenNo = {}, nextNo = mx;
+        for (di = 0; di < sorted.length; di++) {
+          var oo = sorted[di];
+          if (!oo || oo.no == null) continue;
+          if (seenNo[oo.no]) {
+            oo.no = ++nextNo;
+            oo.updatedAt = Date.now(); // D-01: mutasi tercap agar menyebar
+          } else seenNo[oo.no] = 1;
+        }
+        if ((D.nextOrderNo || 1) < nextNo + 1) D.nextOrderNo = nextNo + 1;
+      }
     }
   },
 
@@ -601,24 +764,32 @@ var Sync = {
      Per dokumen: kirim; bila version_conflict -> tarik versi server,
      gabung, coba lagi (maks 3x). Sesudah 3x gagal catat lastError
      secara jujur dan lanjut dokumen lain (tidak menggagalkan sync). */
+  /* D-05 (audit putaran 2): push mengembalikan {pushed, failed[]} —
+     dokumen yang gagal (version_conflict habis retry / baris server
+     tak terbaca) dilaporkan JUJUR ke syncNow, tidak lagi tertelan
+     sebagai sukses. */
   push: function () {
     var self = this;
     var docs = this.collectDocs();
     var keys = Object.keys(docs).filter(function (k) { return self.isDirty(docs, k); });
+    var failed = [];
     var chain = Promise.resolve(0);
     keys.forEach(function (k) {
       chain = chain.then(function (pushed) {
-        return self._pushDoc(k, 0).then(function (n) { return pushed + n; });
+        return self._pushDoc(k, 0).then(function (res) {
+          if (res && res.failed) failed.push(k);
+          return pushed + (res ? res.n : 0);
+        });
       });
     });
-    return chain.then(function (n) { self.saveMeta(); return n; });
+    return chain.then(function (n) { self.saveMeta(); return { pushed: n, failed: failed }; });
   },
 
   _pushDoc: function (k, attempt) {
     var self = this;
     var docs = this.collectDocs();
     var doc = docs[k];
-    if (!doc || !this.isDirty(docs, k)) return Promise.resolve(0);
+    if (!doc || !this.isDirty(docs, k)) return Promise.resolve({ n: 0 });
     return Account.authed('/rest/v1/rpc/sync_push', {
       method: 'POST',
       body: {
@@ -630,18 +801,18 @@ var Sync = {
       self.meta.versions[k] = j.version;
       self.meta.hashes[k] = self.fingerprint(doc);
       self.saveMeta();
-      return 1;
+      return { n: 1 };
     }).catch(function (e) {
       if (e && /version_conflict/i.test(e.message || '')) {
         if (attempt >= 3) {
           self.meta.lastError = 'version_conflict:' + k;
           self.saveMeta();
-          return 0;
+          return { n: 0, failed: true };
         }
         return self._fetchRow(doc.type, doc.key).then(function (row) {
           if (row) self._applyServerRow(row);
           return self._pushDoc(k, attempt + 1);
-        }).catch(function () { return 0; });
+        }).catch(function () { return { n: 0, failed: true }; });
       }
       throw e;
     });
@@ -702,6 +873,7 @@ var Sync = {
   /* ---------- orkestrasi ---------- */
   syncNow: function (manual) {
     var self = this;
+    if (this._demo) return Promise.resolve(false); // C-2026-04: demo tanpa sync
     if (typeof Account === 'undefined' || !Account.signedIn()) {
       if (manual) UI.toast(T('Masuk akun dulu untuk sinkronisasi.'));
       return Promise.resolve(false);
@@ -715,14 +887,21 @@ var Sync = {
     if (manual) UI.toast(T('Menyinkronkan...'));
     return this.pull()
       .then(function () { return self.push(); })
-      .then(function (pushed) {
+      .then(function (res) {
+        var failed = (res && res.failed) || [];
         self.meta.lastSyncTs = Date.now();
-        self.meta.lastError = '';
+        /* D-05: lastError hanya dikosongkan bila TIDAK ada dokumen gagal */
+        if (!failed.length) self.meta.lastError = '';
+        else if (!/version_conflict/.test(self.meta.lastError || '')) {
+          self.meta.lastError = 'push_gagal:' + failed.join(',');
+        }
         self.saveMeta();
         if (manual) {
           UI.toast(self.meta.conflicts.length
             ? T('Sync selesai — ada ') + self.meta.conflicts.length + T(' konflik perlu pilihanmu di Dashboard.')
-            : T('Sinkronisasi selesai ✅'));
+            : (failed.length
+              ? T('Sebagian data belum tersinkron — akan dicoba lagi')
+              : T('Sinkronisasi selesai ✅')));
         }
         self._running = false;
         if (App._booted && App.page === 'set') App.rerender();

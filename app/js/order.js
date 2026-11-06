@@ -4,7 +4,12 @@
    dobel omzet). Saat order lunas & diambil, order menghasilkan SATU transaksi
    paid di txs senilai total order (+ denda rental) — laporan/omzet tetap satu
    pintu lewat txs, persis seperti penjualan biasa.
-   Data: KDB.data.orders (lokal; belum ikut sync dokumen — lihat catatan rilis). */
+   Data: KDB.data.orders — ikut sync dokumen per shard bulan (sejak
+   perbaikan A-05 audit 30 Okt 2026), merge by id di Sync.applyDoc.
+   Setiap mutasi order WAJIB menaikkan o.updatedAt (D-01, audit putaran
+   2 — 7 Nov 2026): tanpa stempel yang naik, merge LWW seri dan status
+   lokal yang lebih baru kalah oleh salinan cloud yang lama. Differ
+   terpusat Sync._stampChanges mencap juga sebagai lapis kedua. */
 var Order = {
   filter: 'aktif', // aktif | diterima | diproses | selesai | diambil | semua
   _dpMethod: 'Tunai',
@@ -173,7 +178,7 @@ var Order = {
       items: items, total: total, fee: 0,
       dp: dp, dpMethod: dp > 0 ? this._dpMethod : '',
       paidTotal: dp,
-      status: 'diterima', at: Date.now(),
+      status: 'diterima', at: Date.now(), updatedAt: Date.now(),
       eta: etaV ? (new Date(etaV).getTime() || 0) : 0,
       note: g('oNote'),
       plate: g('oPlate'), vehicle: g('oVehicle'),
@@ -378,12 +383,14 @@ var Order = {
     UI.closeSheet();
     if (o.status === 'diterima') {
       o.status = 'diproses';
+      o.updatedAt = Date.now(); // D-01
       KDB.save();
       UI.toast(this.code(o) + ' — ' + T('Diproses'));
       App.rerender();
     } else if (o.status === 'diproses') {
       o.status = 'selesai';
       o.doneAt = Date.now();
+      o.updatedAt = Date.now(); // D-01
       this.snapshotCommissions(o);
       KDB.save();
       UI.toast(this.code(o) + ' — ' + T('Selesai'));
@@ -445,6 +452,7 @@ var Order = {
           }
         }
         o.status = 'batal';
+        o.updatedAt = Date.now(); // D-01
         KDB.save();
         UI.closeSheet();
         UI.toast(T('Order dibatalkan'));
@@ -523,13 +531,34 @@ var Order = {
     o.paidTotal = grand;
     o.status = 'diambil';
     o.takenAt = Date.now();
+    o.updatedAt = Date.now(); // D-01: stempel mutasi order (termasuk ubah fee di atas)
     this.snapshotCommissions(o);
     /* satu pintu laporan: order lunas menjadi transaksi paid */
     if (!o.txId) {
       var D = KDB.data;
+      /* R-01 (audit putaran 2): penjaga idempoten antar perangkat —
+         bila tx settle untuk order ini SUDAH ada di lokal (mis. hasil
+         sync dari perangkat lain), adopsi tx itu; jangan buat baru. */
+      var existingTx = null;
+      for (var ei = 0; ei < D.txs.length; ei++) {
+        if (D.txs[ei].orderId === o.id && !D.txs[ei].voided) { existingTx = D.txs[ei]; break; }
+      }
+      if (existingTx) {
+        o.txId = existingTx.id;
+        Kasir.lastTx = existingTx;
+        KDB.save();
+        UI.closeSheet();
+        UI.toast(this.code(o) + ' — ' + T('Lunas & sudah diambil'));
+        Kasir.mode = 'struk';
+        App.go('kasir');
+        return;
+      }
       var cashier = (KDB.activeEmployee && KDB.activeEmployee()) || null;
       var tx = {
-        id: K.uid(), no: D.nextNo, at: Date.now(), updatedAt: Date.now(),
+        /* R-01: id DETERMINISTIK turunan id order — dua perangkat yang
+           melunasi order yang sama menghasilkan tx ber-id SAMA, jadi
+           merge union-by-id mendedupe secara alami (bukan dua tx). */
+        id: 'txord-' + o.id, no: D.nextNo, at: Date.now(), updatedAt: Date.now(),
         items: o.items.map(function (it) {
           return { id: it.id, name: it.name, price: it.price, cost: it.cost || 0, qty: it.qty,
             unit: it.unit || 'pcs', ws: 0, note: it.note || '' };
@@ -545,6 +574,12 @@ var Order = {
       if (o.fee > 0) {
         tx.items.push({ id: 'fee', name: T('Denda keterlambatan'), price: o.fee, cost: 0, qty: 1, unit: 'pcs', ws: 0, note: '' });
         tx.sub = grand; // sub sudah termasuk denda: items menjumlah ke grand
+      }
+      /* D-07: settle ulang sesudah void — tx ter-void ber-id
+         deterministik yang sama digantikan (id tx harus tetap unik;
+         merge by id menganggap id = satu record). */
+      for (var vi = D.txs.length - 1; vi >= 0; vi--) {
+        if (D.txs[vi].id === tx.id && D.txs[vi].voided) D.txs.splice(vi, 1);
       }
       D.nextNo++;
       D.txs.unshift(tx);

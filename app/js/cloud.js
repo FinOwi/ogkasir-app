@@ -38,6 +38,9 @@ var Cloud = {
      toggle aktif, terakhir backup > 30 hari, dan tidak sedang offline. */
   AUTO_DAYS: 30,
   autoBackup: function () {
+    /* C-2026-04 (audit putaran 2): demo web tidak menjalankan backup
+       cloud otomatis — data contoh demo tidak boleh naik ke akun. */
+    if (typeof window !== 'undefined' && window.OGK_DEMO) return;
     var s = KDB.data.settings;
     if (!s.cloudKey) return;
     if (s.cloudAuto === false) return;

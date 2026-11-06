@@ -219,14 +219,17 @@ function kasirkuExportExcelInner() {
   var alt = false;
   for (i = 0; i < txs.length; i++) {
     var t = txs[i];
+    /* D-09 (audit putaran 2): Tanggal/Jam = waktu efektif (effTs),
+       konsisten dengan saringan periode Lap.txsIn. */
+    var ets = Lap.effTs(t);
     for (j = 0; j < t.items.length; j++) {
       var it = t.items[j];
       var first = j === 0;
       var cs = alt ? 5 : 4, ns = alt ? 7 : 6;
       rows.push([
         C(first ? '#' + K.pad(t.no, 4) : '', cs),
-        C(first ? K.fmtDate(t.at) : '', cs),
-        C(first ? K.fmtTime(t.at) : '', cs),
+        C(first ? K.fmtDate(ets) : '', cs),
+        C(first ? K.fmtTime(ets) : '', cs),
         C(it.name, cs),
         C(it.qty, ns),
         C(it.price, ns),
