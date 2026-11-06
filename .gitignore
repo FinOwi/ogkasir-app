@@ -12,3 +12,10 @@ license-gen-template.html
 # Source code aplikasi — tidak dipublikasikan (web + rilis APK tidak butuh ini)
 app/
 tailwindcss
+
+# Skrip build/rilis internal — JANGAN masuk repo publik (audit 2026-11-07)
+build.sh
+preview-push.sh
+publish-release.sh
+build-aab/
+build-aab.sh
