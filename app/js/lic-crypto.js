@@ -1,29 +1,31 @@
 /* OGKasir - kripto lisensi (dipakai aplikasi & generator; offline)
    SKEMA v2 — ROTASI K1 OPSI B (audit putaran 2, 7 Nov 2026):
-   kode aktivasi BARU memakai tanda tangan asimetris Ed25519.
+   kode aktivasi memakai tanda tangan asimetris Ed25519.
    Modul client ini HANYA memuat PUBLIC key + verifikasi — private key
    TIDAK PERNAH ada di client; ia hanya hidup di generator lokal pemilik
    (license-gen.html, berkas 600 ter-gitignore) dan di tempat server pada
    berkas SQL admin (fix-audit2-2026-11-07.sql, tabel license_v2_keys
    tanpa grant untuk role API mana pun). "Verify-only" di client kini
    nyata secara arsitektur, bukan kosmetik.
-   TRANSISI v1: kode lama (HMAC, skema v1) tetap diterima SAMPAI
-   2027-05-06 (epoch-day 20944 = 7 Nov 2026 + 180 hari). Sesudah tanggal
-   itu verifyCode menolak v1 total (reason 'v1_transition_ended') —
-   secret HMAC lama yang bocor tidak lagi bisa dipakai membuat kode
-   yang lolos di aplikasi. */
+   v1 DIMATIKAN TOTAL (keputusan zgg 7 Nov 2026, menanggapi audit
+   eksternal; OGKasir belum memiliki pelanggan sehingga tidak ada
+   aktivasi berbayar pihak ketiga yang perlu dilindungi): masa transisi
+   s.d. 2027-05-06 DIBATALKAN. verifyCode menolak semua kode non-v2
+   tanpa syarat (reason 'v1_disabled'), dan secret HMAC + seluruh jalur
+   HMAC v1 DICABUT dari berkas ini — tidak ada lagi bahan pembuat/
+   pemeriksa kode v1 di client. Lisensi yang berjalan = lisensi AKUN
+   (server); kode perangkat v2 yang sudah teraktivasi tetap diverifikasi
+   ulang saat boot seperti biasa. */
 var LicCrypto = (function () {
-  /* --- v1 (warisan): secret HMAC lama, HANYA untuk verifikasi kode lama
-     selama masa transisi. Diganti/mati total sesudah 2027-05-06. --- */
-  var SECRET = ['ogka', 'sir', '-', 'lic', '-', 'pr0', 's3cr3t', '-', '2026', '!', 'og'].join('');
   var DEV_ALPHA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // tanpa I,L,O,0,1
 
   /* --- v2 (Ed25519): PUBLIC key saja. Aman publik secara desain. --- */
   var ED_PUB_HEX = 'fa7c33f3994261d9ce250dec723a50e4d82afa8b2f429b8945087573bc6db5d7';
-  var V1_TRANSITION_LAST_DAY = 20944; // 2027-05-06 (inklusif)
   var B32_ALPHA = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; // Crockford, tanpa I,L,O,U
 
-  /* SHA-256 (ASCII/Latin-1) — tidak diubah dari v1 */
+  /* SHA-256 (ASCII/Latin-1) — BUKAN untuk lisensi v1 lagi; tetap dipakai
+     deviceCode (Kode Device), hash PIN (store.js), deviceHash akun, dan
+     sidik jari dokumen sync. */
   function sha256(ascii) {
     function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
     var maxWord = Math.pow(2, 32), result = '';
@@ -76,27 +78,10 @@ var LicCrypto = (function () {
     return result;
   }
 
-  function bytesToAscii(b) {
-    var s = '';
-    for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i] & 0xFF);
-    return s;
-  }
   function hexToBytes(h) {
     var b = [];
     for (var i = 0; i < h.length; i += 2) b.push(parseInt(h.substr(i, 2), 16));
     return b;
-  }
-
-  /* HMAC-SHA256 -> hex (v1) */
-  function hmacSha256(key, msg) {
-    var bs = 64, k = [], i;
-    for (i = 0; i < key.length; i++) k.push(key.charCodeAt(i) & 0xFF);
-    if (k.length > bs) k = hexToBytes(sha256(key));
-    while (k.length < bs) k.push(0);
-    var ok = [], ik = [];
-    for (i = 0; i < bs; i++) { ok.push(k[i] ^ 0x5c); ik.push(k[i] ^ 0x36); }
-    var inner = hexToBytes(sha256(bytesToAscii(ik) + msg));
-    return sha256(bytesToAscii(ok) + bytesToAscii(inner));
   }
 
   /* Kode device 8 char dari ID mentah */
@@ -252,10 +237,12 @@ var LicCrypto = (function () {
     return out;
   }
 
-  /* ================= Verifikasi kode: v2 (Ed25519) + v1 (transisi) =================
+  /* ================= Verifikasi kode: HANYA v2 (Ed25519) =================
      Format v2 (dibersihkan dari strip): 'V2' + dev8 + expBase36(4) + sigBase32(103)
-     = 117 char, ditampilkan berkelompok 4 seperti v1.
-     Pesan yang ditandatangani: 'OGK2|' + dev8 + '|' + expDays (desimal). */
+     = 117 char, ditampilkan berkelompok 4.
+     Pesan yang ditandatangani: 'OGK2|' + dev8 + '|' + expDays (desimal).
+     Semua bentuk lain — termasuk kode v1 (24 char, HMAC) — ditolak tanpa
+     syarat dengan reason 'v1_disabled' (v1 dimatikan total 7 Nov 2026). */
   function verifyCode(code, dev8, todayDays) {
     var nowDays = (typeof todayDays === 'number' && !isNaN(todayDays))
       ? todayDays : Math.floor(Date.now() / 864e5);
@@ -272,22 +259,15 @@ var LicCrypto = (function () {
       if (exp2 < nowDays) return { ok: false, reason: 'expired' };
       return { ok: true, expDays: exp2, version: 2 };
     }
-    /* ---- v1 warisan ---- */
-    if (c.length !== 24) return { ok: false, reason: 'format' };
-    var d = c.substr(0, 8), e = c.substr(8, 4), s = c.substr(12, 12);
-    if (d !== dev8) return { ok: false, reason: 'device' };
-    if (nowDays > V1_TRANSITION_LAST_DAY) return { ok: false, reason: 'v1_transition_ended' };
-    var expDays = parseInt(e, 36);
-    if (isNaN(expDays)) return { ok: false, reason: 'format' };
-    var expect = hmacSha256(SECRET, d + '|' + expDays).substr(0, 12).toUpperCase();
-    if (expect !== s) return { ok: false, reason: 'sig' };
-    if (expDays < nowDays) return { ok: false, reason: 'expired' };
-    return { ok: true, expDays: expDays, version: 1 };
+    /* ---- v1 & semua bentuk non-v2: DITOLAK TANPA SYARAT ----
+       Jalur simetris v1 sudah dicabut total dari berkas ini — penolakan
+       ini bukan pemeriksaan tanggal, melainkan ketiadaan jalur
+       verifikasinya sama sekali. */
+    return { ok: false, reason: 'v1_disabled' };
   }
 
   return {
     sha256: sha256,
-    hmacSha256: hmacSha256,
     deviceCode: deviceCode,
     fmtDevice: fmtDevice,
     verifyCode: verifyCode,
@@ -295,8 +275,6 @@ var LicCrypto = (function () {
     ed25519Verify: edVerify,
     b32encode: b32encode,
     b32decode: b32decode,
-    ED25519_PUB_HEX: ED_PUB_HEX,
-    V1_TRANSITION_LAST_DAY: V1_TRANSITION_LAST_DAY,
-    V1_TRANSITION_END: '2027-05-06'
+    ED25519_PUB_HEX: ED_PUB_HEX
   };
 })();
