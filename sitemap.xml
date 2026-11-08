@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
     <loc>https://ogkasir.my.id/</loc>
-    <lastmod>2026-11-07</lastmod>
+    <lastmod>2026-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -188,6 +188,12 @@
   <url>
     <loc>https://ogkasir.my.id/artikel-program-loyalitas-pelanggan-warkop.html</loc>
     <lastmod>2026-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+<url>
+    <loc>https://ogkasir.my.id/artikel-trial-gratis-7-hari-kasir.html</loc>
+    <lastmod>2026-11-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
